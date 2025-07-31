@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vacation Requests - Don Miguel Vacation Manager</title>
+    <link href="../static/css/output.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body class="bg-secondary-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-soft border-b border-secondary-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo and Brand -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-xl font-bold text-primary-600">Don Miguel</h1>
+                        <p class="text-xs text-secondary-500 -mt-1">Vacation Manager</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="/dashboard" class="text-secondary-600 hover:text-secondary-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Dashboard</a>
+                        <a href="/employees" class="text-secondary-600 hover:text-secondary-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Employees</a>
+                        <a href="/vacation-requests" class="text-primary-600 bg-primary-50 px-3 py-2 rounded-md text-sm font-medium">Requests</a>
+                    </div>
+                </div>
+
+                <!-- User Menu -->
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <button id="userMenuButton" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                            <div class="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center">
+                                <span id="userInitials" class="text-white text-sm font-medium">--</span>
+                            </div>
+                            <span id="userName" class="ml-2 text-secondary-700 font-medium hidden sm:block">Loading...</span>
+                            <svg class="ml-1 h-4 w-4 text-secondary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        
+                        <!-- Dropdown Menu -->
+                        <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-large border border-secondary-200 z-50">
+                            <div class="py-1">
+                                <div class="px-4 py-2 border-b border-secondary-200">
+                                    <p class="text-sm font-medium text-secondary-900" id="userMenuName">Loading...</p>
+                                    <p class="text-sm text-secondary-500" id="userMenuEmail">Loading...</p>
+                                </div>
+                                <a href="#" class="block px-4 py-2 text-sm text-secondary-700 hover:bg-secondary-50">Profile Settings</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-secondary-700 hover:bg-secondary-50">Help Center</a>
+                                <button id="logoutButton" class="block w-full text-left px-4 py-2 text-sm text-danger-600 hover:bg-danger-50">Sign Out</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile menu button -->
+                    <div class="md:hidden">
+                        <button type="button" class="mobile-menu-button bg-secondary-100 inline-flex items-center justify-center p-2 rounded-md text-secondary-600 hover:text-secondary-700 hover:bg-secondary-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500">
+                            <span class="sr-only">Open main menu</span>
+                            <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div class="mobile-menu hidden md:hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-secondary-200">
+                <a href="/dashboard" class="text-secondary-600 hover:text-secondary-700 block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+                <a href="/employees" class="text-secondary-600 hover:text-secondary-700 block px-3 py-2 rounded-md text-base font-medium">Employees</a>
+                <a href="/vacation-requests" class="text-primary-600 bg-primary-50 block px-3 py-2 rounded-md text-base font-medium">Requests</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-secondary-900">Vacation Requests</h1>
+                <p class="mt-2 text-secondary-600">Manage and approve vacation requests from your team</p>
+            </div>
+            <button id="createRequestButton" class="btn-primary flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                Create Request
+            </button>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-warning-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-warning-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-secondary-600">Pending</p>
+                            <p id="pendingCount" class="text-xl font-bold text-secondary-900">--</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-success-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-success-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-secondary-600">Approved</p>
+                            <p id="approvedCount" class="text-xl font-bold text-secondary-900">--</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-danger-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-danger-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-secondary-600">Denied</p>
+                            <p id="deniedCount" class="text-xl font-bold text-secondary-900">--</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-secondary-600">Total Hours</p>
+                            <p id="totalHours" class="text-xl font-bold text-secondary-900">--</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="card mb-6">
+            <div class="card-body">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label for="statusFilter" class="form-label">Status</label>
+                        <select id="statusFilter" class="form-input">
+                            <option value="">All Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Denied">Denied</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="employeeFilter" class="form-label">Employee</label>
+                        <select id="employeeFilter" class="form-input">
+                            <option value="">All Employees</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="startDateFilter" class="form-label">Start Date From</label>
+                        <input type="date" id="startDateFilter" class="form-input">
+                    </div>
+                    <div>
+                        <label for="endDateFilter" class="form-label">Start Date To</label>
+                        <input type="date" id="endDateFilter" class="form-input">
+                    </div>
+                </div>
+                <div class="mt-4 flex justify-end">
+                    <button id="clearFilters" class="btn-secondary mr-3">Clear Filters</button>
+                    <button id="applyFilters" class="btn-primary">Apply Filters</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Requests Table -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-lg font-semibold text-secondary-900">Vacation Requests</h3>
+                <p class="text-sm text-secondary-600 mt-1">Total: <span id="requestCount">0</span> requests</p>
+            </div>
+            <div class="card-body p-0">
+                <div class="overflow-x-auto">
+                    <table class="table">
+                        <thead class="table-header">
+                            <tr>
+                                <th class="table-header-cell">Employee</th>
+                                <th class="table-header-cell">Dates</th>
+                                <th class="table-header-cell">Duration</th>
+                                <th class="table-header-cell">Status</th>
+                                <th class="table-header-cell">Submitted</th>
+                                <th class="table-header-cell">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="requestsTableBody" class="table-body">
+                            <!-- Loading state -->
+                            <tr>
+                                <td colspan="6" class="table-cell text-center py-8">
+                                    <div class="spinner mx-auto mb-2"></div>
+                                    <p class="text-secondary-500">Loading vacation requests...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Request Modal -->
+    <div id="createRequestModal" class="modal-overlay hidden">
+        <div class="modal-content max-w-lg">
+            <div class="px-6 py-4 border-b border-secondary-200">
+                <h3 class="text-lg font-semibold text-secondary-900">Create Vacation Request</h3>
+            </div>
+            <form id="createRequestForm" class="px-6 py-4 space-y-4">
+                <div>
+                    <label for="requestEmployee" class="form-label">Employee</label>
+                    <select id="requestEmployee" name="employeeId" required class="form-input">
+                        <option value="">Select Employee</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="requestStartDate" class="form-label">Start Date</label>
+                        <input type="date" id="requestStartDate" name="startDate" required class="form-input">
+                    </div>
+                    <div>
+                        <label for="requestEndDate" class="form-label">End Date</label>
+                        <input type="date" id="requestEndDate" name="endDate" required class="form-input">
+                    </div>
+                </div>
+                <div class="bg-secondary-50 p-4 rounded-lg">
+                    <h4 class="text-sm font-medium text-secondary-900 mb-2">Calculated Information</h4>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <span class="text-secondary-600">Business Days:</span>
+                            <span id="calculatedDays" class="font-medium text-secondary-900">--</span>
+                        </div>
+                        <div>
+                            <span class="text-secondary-600">Total Hours:</span>
+                            <span id="calculatedHours" class="font-medium text-secondary-900">--</span>
+                        </div>
+                        <div>
+                            <span class="text-secondary-600">Return Date:</span>
+                            <span id="calculatedReturnDate" class="font-medium text-secondary-900">--</span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="px-6 py-4 border-t border-secondary-200 flex justify-end space-x-3">
+                <button id="cancelCreateRequest" class="btn-secondary">Cancel</button>
+                <button id="submitRequest" class="btn-primary flex items-center">
+                    <span id="submitRequestText">Create Request</span>
+                    <div id="submitRequestSpinner" class="spinner ml-2 hidden"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Request Details Modal -->
+    <div id="requestDetailsModal" class="modal-overlay hidden">
+        <div class="modal-content max-w-2xl">
+            <div class="px-6 py-4 border-b border-secondary-200">
+                <h3 class="text-lg font-semibold text-secondary-900">Request Details</h3>
+            </div>
+            <div class="px-6 py-4">
+                <div id="requestDetailsContent">
+                    <!-- Content will be populated dynamically -->
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-secondary-200 flex justify-end space-x-3">
+                <button id="closeRequestDetails" class="btn-secondary">Close</button>
+                <div id="requestActions" class="flex space-x-3">
+                    <!-- Action buttons will be populated dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden">
+        <div class="p-4">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg id="toastIcon" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p id="toastMessage" class="text-sm font-medium"></p>
+                </div>
+                <div class="ml-auto pl-3">
+                    <button id="closeToast" class="inline-flex text-secondary-400 hover:text-secondary-600">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-RJTbmkbsOOTTt4DreNG_XhKHeypfm40",
+            authDomain: "vacation-request-84a27.firebaseapp.com",
+            projectId: "vacation-request-84a27",
+            storageBucket: "vacation-request-84a27.firebasestorage.app",
+            messagingSenderId: "231546887371",
+            appId: "1:231546887371:web:ab9668bb0c944481a9cf4e",
+            measurementId: "G-S5838440J0"
+        };
+
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Global variables
+        let currentUser = null;
+        let vacationRequests = [];
+        let employees = [];
+        let filteredRequests = [];
+
+        // DOM elements
+        const userInitials = document.getElementById('userInitials');
+        const userName = document.getElementById('userName');
+        const userMenuName = document.getElementById('userMenuName');
+        const userMenuEmail = document.getElementById('userMenuEmail');
+        const userMenuButton = document.getElementById('userMenuButton');
+        const userMenu = document.getElementById('userMenu');
+        const logoutButton = document.getElementById('logoutButton');
+        const mobileMenuButton = document.querySelector('.mobile-menu-button');
+        const mobileMenu = document.querySelector('.mobile-menu');
+
+        // Stats elements
+        const pendingCount = document.getElementById('pendingCount');
+        const approvedCount = document.getElementById('approvedCount');
+        const deniedCount = document.getElementById('deniedCount');
+        const totalHours = document.getElementById('totalHours');
+
+        // Filter elements
+        const statusFilter = document.getElementById('statusFilter');
+        const employeeFilter = document.getElementById('employeeFilter');
+        const startDateFilter = document.getElementById('startDateFilter');
+        const endDateFilter = document.getElementById('endDateFilter');
+        const clearFilters = document.getElementById('clearFilters');
+        const applyFilters = document.getElementById('applyFilters');
+
+        // Table elements
+        const requestsTableBody = document.getElementById('requestsTableBody');
+        const requestCount = document.getElementById('requestCount');
+
+        // Modal elements
+        const createRequestButton = document.getElementById('createRequestButton');
+        const createRequestModal = document.getElementById('createRequestModal');
+        const createRequestForm = document.getElementById('createRequestForm');
+        const requestDetailsModal = document.getElementById('requestDetailsModal');
+
+        // Toast elements
+        const toast = document.getElementById('toast');
+        const toastIcon = document.getElementById('toastIcon');
+        const toastMessage = document.getElementById('toastMessage');
+        const closeToast = document.getElementById('closeToast');
+
+        // Authentication state handler
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                await initializeRequestsPage();
+            } else {
+                window.location.href = '/login';
+            }
+        });
+
+        // Initialize requests page
+        async function initializeRequestsPage() {
+            try {
+                updateUserInfo();
+                await Promise.all([
+                    loadVacationRequests(),
+                    loadEmployees()
+                ]);
+                populateEmployeeFilters();
+            } catch (error) {
+                console.error('Requests page initialization error:', error);
+                showToast('Failed to load vacation requests', 'error');
+            }
+        }
+
+        // Update user info in UI
+        function updateUserInfo() {
+            const displayName = currentUser.displayName || 'User';
+            const email = currentUser.email || '';
+            
+            const names = displayName.split(' ');
+            const initials = names.map(name => name.charAt(0)).join('').toUpperCase().substring(0, 2);
+            
+            userInitials.textContent = initials;
+            userName.textContent = displayName;
+            userMenuName.textContent = displayName;
+            userMenuEmail.textContent = email;
+        }
+
+        // Load vacation requests
+        async function loadVacationRequests() {
+            try {
+                const token = await currentUser.getIdToken();
+                
+                const response = await fetch('/api/vacation-requests', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to load vacation requests');
+                }
+
+                vacationRequests = await response.json();
+                filteredRequests = [...vacationRequests];
+                updateStats();
+                renderRequestsTable();
+                
+            } catch (error) {
+                console.error('Load vacation requests error:', error);
+                showToast('Failed to load vacation requests', 'error');
+                requestsTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="table-cell text-center py-8">
+                            <p class="text-danger-500">Failed to load vacation requests</p>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Load employees
+        async function loadEmployees() {
+            try {
+                const token = await currentUser.getIdToken();
+                
+                const response = await fetch('/api/employees', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to load employees');
+                }
+
+                employees = await response.json();
+                
+            } catch (error) {
+                console.error('Load employees error:', error);
+                showToast('Failed to load employees', 'error');
+            }
+        }
+
+        // Update stats
+        function updateStats() {
+            const stats = vacationRequests.reduce((acc, request) => {
+                acc[request.status.toLowerCase()] = (acc[request.status.toLowerCase()] || 0) + 1;
+                if (request.status === 'Approved') {
+                    acc.totalHours += request.total_hours || 0;
+                }
+                return acc;
+            }, { pending: 0, approved: 0, denied: 0, cancelled: 0, totalHours: 0 });
+
+            pendingCount.textContent = stats.pending;
+            approvedCount.textContent = stats.approved;
+            deniedCount.textContent = stats.denied;
+            totalHours.textContent = stats.totalHours;
+        }
+
+        // Populate employee filters
+        function populateEmployeeFilters() {
+            const employeeOptions = employees.map(emp => 
+                `<option value="${emp.id}">${emp.first_name} ${emp.last_name}</option>`
+            ).join('');
+            
+            employeeFilter.innerHTML = '<option value="">All Employees</option>' + employeeOptions;
+            
+            const requestEmployeeSelect = document.getElementById('requestEmployee');
+            requestEmployeeSelect.innerHTML = '<option value="">Select Employee</option>' + employeeOptions;
+        }
+
+        // Render requests table
+        function renderRequestsTable() {
+            requestCount.textContent = filteredRequests.length;
+            
+            if (filteredRequests.length === 0) {
+                requestsTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="table-cell text-center py-8">
+                            <svg class="w-12 h-12 text-secondary-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <p class="text-secondary-500">No vacation requests found</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            const tableHTML = filteredRequests.map(request => {
+                const employee = employees.find(emp => emp.id === request.employee_id);
+                const employeeName = employee ? `${employee.first_name} ${employee.last_name}` : 'Unknown';
+                
+                return `
+                    <tr class="hover:bg-secondary-50">
+                        <td class="table-cell">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center mr-3">
+                                    <span class="text-primary-600 font-medium text-sm">
+                                        ${employee ? getInitials(employee.first_name, employee.last_name) : '??'}
+                                    </span>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-secondary-900">${employeeName}</p>
+                                    <p class="text-sm text-secondary-500">${employee ? employee.department : 'N/A'}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="table-cell">
+                            <div>
+                                <p class="text-secondary-900">${formatDate(request.start_date)} - ${formatDate(request.end_date)}</p>
+                                <p class="text-sm text-secondary-500">Returns: ${formatDate(request.return_date)}</p>
+                            </div>
+                        </td>
+                        <td class="table-cell">
+                            <p class="text-secondary-900">${request.total_hours} hours</p>
+                            <p class="text-sm text-secondary-500">${Math.ceil(request.total_hours / 8)} days</p>
+                        </td>
+                        <td class="table-cell">
+                            <span class="badge badge-${request.status.toLowerCase()}">${request.status}</span>
+                        </td>
+                        <td class="table-cell">
+                            <p class="text-secondary-900">${formatDate(request.created_at)}</p>
+                        </td>
+                        <td class="table-cell">
+                            <div class="flex space-x-2">
+                                <button onclick="viewRequest(${request.id})" class="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                                    View
+                                </button>
+                                ${request.status === 'Pending' ? `
+                                    <button onclick="approveRequest(${request.id})" class="text-success-600 hover:text-success-700 text-sm font-medium">
+                                        Approve
+                                    </button>
+                                    <button onclick="denyRequest(${request.id})" class="text-danger-600 hover:text-danger-700 text-sm font-medium">
+                                        Deny
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            requestsTableBody.innerHTML = tableHTML;
+        }
+
+        // Filter requests
+        function filterRequests() {
+            const statusValue = statusFilter.value;
+            const employeeValue = employeeFilter.value;
+            const startDateValue = startDateFilter.value;
+            const endDateValue = endDateFilter.value;
+
+            filteredRequests = vacationRequests.filter(request => {
+                const matchesStatus = !statusValue || request.status === statusValue;
+                const matchesEmployee = !employeeValue || request.employee_id.toString() === employeeValue;
+                const matchesStartDate = !startDateValue || new Date(request.start_date) >= new Date(startDateValue);
+                const matchesEndDate = !endDateValue || new Date(request.start_date) <= new Date(endDateValue);
+
+                return matchesStatus && matchesEmployee && matchesStartDate && matchesEndDate;
+            });
+
+            renderRequestsTable();
+        }
+
+        // View request details
+        window.viewRequest = function(requestId) {
+            const request = vacationRequests.find(req => req.id === requestId);
+            const employee = employees.find(emp => emp.id === request.employee_id);
+            
+            if (!request || !employee) return;
+
+            const detailsHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="text-sm font-medium text-secondary-900 mb-3">Employee Information</h4>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-secondary-600">Name:</span>
+                                <span class="text-sm font-medium text-secondary-900">${employee.first_name} ${employee.last_name}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-secondary-600">Department:</span>
+                                <span class="text-sm font-medium text-secondary-900">${employee.department}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-secondary-600">Shift:</span>
+                                <span class="text-sm font-medium text-secondary-900">${employee.shift}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-secondary-600">Work Area:</span>
+                                <span class="text-sm font-medium text-secondary-900">${employee.work_area || 'N/A'}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-medium text-secondary-900 mb-3">Request Details</h4>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-secondary-600">Start Date:</span>
+                                <span class="text-sm font-medium text-secondary-900">${formatDate(request.start_date)}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-secondary-600">End Date:</span>
+                                <span class="text-sm font-medium text-secondary-900">${formatDate(request.end_date)}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-secondary-600">Return Date:</span>
+                                <span class="text-sm font-medium text-secondary-900">${formatDate(request.return_date)}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-secondary-600">Total Hours:</span>
+                                <span class="text-sm font-medium text-secondary-900">${request.total_hours} hours</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-secondary-600">Status:</span>
+                                <span class="badge badge-${request.status.toLowerCase()}">${request.status}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-secondary-600">Submitted:</span>
+                                <span class="text-sm font-medium text-secondary-900">${formatDate(request.created_at)}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('requestDetailsContent').innerHTML = detailsHTML;
+            
+            // Update action buttons
+            const actionsHTML = request.status === 'Pending' ? `
+                <button onclick="approveRequestFromModal(${request.id})" class="btn-success">Approve</button>
+                <button onclick="denyRequestFromModal(${request.id})" class="btn-danger">Deny</button>
+            ` : '';
+            
+            document.getElementById('requestActions').innerHTML = actionsHTML;
+            
+            requestDetailsModal.classList.remove('hidden');
+        };
+
+        // Approve request
+        window.approveRequest = async function(requestId) {
+            await updateRequestStatus(requestId, 'approve');
+        };
+
+        window.approveRequestFromModal = async function(requestId) {
+            await updateRequestStatus(requestId, 'approve');
+            requestDetailsModal.classList.add('hidden');
+        };
+
+        // Deny request
+        window.denyRequest = async function(requestId) {
+            await updateRequestStatus(requestId, 'deny');
+        };
+
+        window.denyRequestFromModal = async function(requestId) {
+            await updateRequestStatus(requestId, 'deny');
+            requestDetailsModal.classList.add('hidden');
+        };
+
+        // Update request status
+        async function updateRequestStatus(requestId, action) {
+            try {
+                const token = await currentUser.getIdToken();
+                
+                const response = await fetch(`/api/vacation-requests/${requestId}/${action}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || `Failed to ${action} request`);
+                }
+
+                showToast(`Request ${action}d successfully`, 'success');
+                await loadVacationRequests();
+                
+            } catch (error) {
+                console.error(`${action} request error:`, error);
+                showToast(error.message, 'error');
+            }
+        }
+
+        // Create vacation request
+        async function createVacationRequest(requestData) {
+            try {
+                const token = await currentUser.getIdToken();
+                
+                const response = await fetch('/api/vacation-requests', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Failed to create request');
+                }
+
+                showToast('Vacation request created successfully', 'success');
+                await loadVacationRequests();
+                
+            } catch (error) {
+                console.error('Create request error:', error);
+                showToast(error.message, 'error');
+            }
+        }
+
+        // Calculate vacation details
+        function calculateVacationDetails() {
+            const startDate = document.getElementById('requestStartDate').value;
+            const endDate = document.getElementById('requestEndDate').value;
+            
+            if (!startDate || !endDate) {
+                document.getElementById('calculatedDays').textContent = '--';
+                document.getElementById('calculatedHours').textContent = '--';
+                document.getElementById('calculatedReturnDate').textContent = '--';
+                return;
+            }
+
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            
+            if (end < start) {
+                document.getElementById('calculatedDays').textContent = '--';
+                document.getElementById('calculatedHours').textContent = '--';
+                document.getElementById('calculatedReturnDate').textContent = '--';
+                return;
+            }
+
+            // Calculate business days
+            let businessDays = 0;
+            let currentDate = new Date(start);
+            
+            while (currentDate <= end) {
+                const dayOfWeek = currentDate.getDay();
+                if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Not Sunday (0) or Saturday (6)
+                    businessDays++;
+                }
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+
+            const totalHours = businessDays * 8;
+            const returnDate = new Date(end);
+            returnDate.setDate(returnDate.getDate() + 1);
+
+            document.getElementById('calculatedDays').textContent = businessDays;
+            document.getElementById('calculatedHours').textContent = totalHours;
+            document.getElementById('calculatedReturnDate').textContent = formatDate(returnDate.toISOString().split('T')[0]);
+        }
+
+        // Utility functions
+        function getInitials(firstName, lastName) {
+            return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        function showToast(message, type = 'success') {
+            toastMessage.textContent = message;
+            
+            toast.className = 'toast';
+            toastIcon.className = 'h-5 w-5';
+            
+            if (type === 'success') {
+                toast.classList.add('toast-success');
+                toastIcon.classList.add('text-success-400');
+                toastIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
+            } else if (type === 'error') {
+                toast.classList.add('toast-error');
+                toastIcon.classList.add('text-danger-400');
+                toastIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
+            }
+            
+            toast.classList.remove('hidden');
+            
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 5000);
+        }
+
+        function setLoading(button, textElement, spinnerElement, isLoading, loadingText, normalText) {
+            button.disabled = isLoading;
+            textElement.textContent = isLoading ? loadingText : normalText;
+            spinnerElement.classList.toggle('hidden', !isLoading);
+        }
+
+        // Event listeners
+        userMenuButton.addEventListener('click', function() {
+            userMenu.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', function(event) {
+            if (!userMenuButton.contains(event.target) && !userMenu.contains(event.target)) {
+                userMenu.classList.add('hidden');
+            }
+        });
+
+        logoutButton.addEventListener('click', async function() {
+            try {
+                await signOut(auth);
+                localStorage.removeItem('authToken');
+                window.location.href = '/login';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        });
+
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        // Filter events
+        applyFilters.addEventListener('click', filterRequests);
+        clearFilters.addEventListener('click', function() {
+            statusFilter.value = '';
+            employeeFilter.value = '';
+            startDateFilter.value = '';
+            endDateFilter.value = '';
+            filteredRequests = [...vacationRequests];
+            renderRequestsTable();
+        });
+
+        // Create request modal
+        createRequestButton.addEventListener('click', function() {
+            createRequestForm.reset();
+            calculateVacationDetails();
+            createRequestModal.classList.remove('hidden');
+        });
+
+        document.getElementById('cancelCreateRequest').addEventListener('click', function() {
+            createRequestModal.classList.add('hidden');
+        });
+
+        createRequestModal.addEventListener('click', function(event) {
+            if (event.target === createRequestModal) {
+                createRequestModal.classList.add('hidden');
+            }
+        });
+
+        // Date change events for calculation
+        document.getElementById('requestStartDate').addEventListener('change', calculateVacationDetails);
+        document.getElementById('requestEndDate').addEventListener('change', calculateVacationDetails);
+
+        // Submit request
+        document.getElementById('submitRequest').addEventListener('click', async function() {
+            const formData = new FormData(createRequestForm);
+            const requestData = Object.fromEntries(formData.entries());
+
+            if (!requestData.employeeId || !requestData.startDate || !requestData.endDate) {
+                showToast('Please fill in all required fields', 'error');
+                return;
+            }
+
+            const submitRequestText = document.getElementById('submitRequestText');
+            const submitRequestSpinner = document.getElementById('submitRequestSpinner');
+            const submitButton = document.getElementById('submitRequest');
+            
+            setLoading(submitButton, submitRequestText, submitRequestSpinner, true, 'Creating...', 'Create Request');
+
+            try {
+                await createVacationRequest({
+                    employee_id: parseInt(requestData.employeeId),
+                    start_date: requestData.startDate,
+                    end_date: requestData.endDate
+                });
+                
+                createRequestModal.classList.add('hidden');
+            } finally {
+                setLoading(submitButton, submitRequestText, submitRequestSpinner, false, 'Creating...', 'Create Request');
+            }
+        });
+
+        // Request details modal
+        document.getElementById('closeRequestDetails').addEventListener('click', function() {
+            requestDetailsModal.classList.add('hidden');
+        });
+
+        requestDetailsModal.addEventListener('click', function(event) {
+            if (event.target === requestDetailsModal) {
+                requestDetailsModal.classList.add('hidden');
+            }
+        });
+
+        // Toast close
+        closeToast.addEventListener('click', function() {
+            toast.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>

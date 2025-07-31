@@ -1,0 +1,30 @@
+* {
+    margin: 0;
+    
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    
+}
+.paragraphs{
+    
+    padding: 1rem;
+    margin: 1rem;
+    width: 25%;
+    line-height: 1.5;
+    font-size: 1.5em;
+    background-color: #d2d2db;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+   
+    
+}
+
+
+
+.h1-paragraphs {
+    padding: 1rem;
+    margin: 1rem;
+    text-align: center;
+}

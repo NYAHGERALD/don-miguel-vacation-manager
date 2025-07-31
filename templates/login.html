@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Don Miguel Vacation Manager</title>
+    <link href="../static/css/output.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body class="bg-secondary-50 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <!-- Header -->
+        <div class="text-center">
+            <div class="mx-auto mb-6">
+                <h1 class="text-2xl font-bold text-primary-600">Don Miguel</h1>
+                <p class="text-sm text-secondary-500 -mt-1">Vacation Manager</p>
+            </div>
+            <h2 class="text-3xl font-bold text-secondary-900">
+                Supervisor Login
+            </h2>
+            <p class="mt-2 text-sm text-secondary-600">
+                Sign in to your account to manage vacation requests
+            </p>
+        </div>
+
+        <!-- Login Form -->
+        <div class="card">
+            <div class="card-body">
+                <form id="loginForm" class="space-y-6">
+                    <!-- Email Field -->
+                    <div>
+                        <label for="email" class="form-label">
+                            Email Address
+                        </label>
+                        <input 
+                            id="email" 
+                            name="email" 
+                            type="email" 
+                            autocomplete="email" 
+                            required 
+                            class="form-input"
+                            placeholder="supervisor@donmiguelfoods.com"
+                        >
+                        <div id="emailError" class="form-error hidden"></div>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div>
+                        <label for="password" class="form-label">
+                            Password
+                        </label>
+                        <div class="relative">
+                            <input 
+                                id="password" 
+                                name="password" 
+                                type="password" 
+                                autocomplete="current-password" 
+                                required 
+                                class="form-input pr-10"
+                                placeholder="Enter your password"
+                            >
+                            <button 
+                                type="button" 
+                                id="togglePassword"
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-secondary-400 hover:text-secondary-600"
+                            >
+                                <svg id="eyeIcon" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                                <svg id="eyeOffIcon" class="h-5 w-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div id="passwordError" class="form-error hidden"></div>
+                    </div>
+
+                    <!-- Remember Me & Forgot Password -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input 
+                                id="remember-me" 
+                                name="remember-me" 
+                                type="checkbox" 
+                                class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-secondary-300 rounded"
+                            >
+                            <label for="remember-me" class="ml-2 block text-sm text-secondary-700">
+                                Remember me
+                            </label>
+                        </div>
+
+                        <div class="text-sm">
+                            <a href="#" class="font-medium text-primary-600 hover:text-primary-500 transition-colors duration-200">
+                                Forgot your password?
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div>
+                        <button 
+                            type="submit" 
+                            id="loginButton"
+                            class="w-full btn-primary flex justify-center items-center"
+                        >
+                            <span id="loginButtonText">Sign In</span>
+                            <div id="loginSpinner" class="spinner ml-2 hidden"></div>
+                        </button>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-secondary-300"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-2 bg-white text-secondary-500">Or continue with</span>
+                        </div>
+                    </div>
+
+                    <!-- Google Sign In -->
+                    <div>
+                        <button 
+                            type="button" 
+                            id="googleSignInButton"
+                            class="w-full flex justify-center items-center px-4 py-2 border border-secondary-300 rounded-lg shadow-sm bg-white text-sm font-medium text-secondary-700 hover:bg-secondary-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200"
+                        >
+                            <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                            </svg>
+                            <span id="googleButtonText">Sign in with Google</span>
+                            <div id="googleSpinner" class="spinner ml-2 hidden"></div>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Error Alert -->
+                <div id="errorAlert" class="hidden mt-4 p-4 bg-danger-50 border border-danger-200 rounded-lg">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-danger-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-danger-800">
+                                Login Failed
+                            </h3>
+                            <div class="mt-2 text-sm text-danger-700">
+                                <p id="errorMessage"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Success Alert -->
+                <div id="successAlert" class="hidden mt-4 p-4 bg-success-50 border border-success-200 rounded-lg">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-success-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-success-800">
+                                Login Successful
+                            </h3>
+                            <div class="mt-2 text-sm text-success-700">
+                                <p>Redirecting to dashboard...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sign Up Link -->
+        <div class="text-center">
+            <p class="text-sm text-secondary-600">
+                Don't have an account?
+                <a href="/register" class="font-medium text-primary-600 hover:text-primary-500 transition-colors duration-200">
+                    Register as a supervisor
+                </a>
+            </p>
+        </div>
+
+        <!-- Back to Home -->
+        <div class="text-center">
+            <a href="/" class="text-sm text-secondary-500 hover:text-secondary-700 transition-colors duration-200">
+                ← Back to home
+            </a>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+        // Firebase configuration (replace with your actual config)
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-RJTbmkbsOOTTt4DreNG_XhKHeypfm40",
+            authDomain: "vacation-request-84a27.firebaseapp.com",
+            projectId: "vacation-request-84a27",
+            storageBucket: "vacation-request-84a27.firebasestorage.app",
+            messagingSenderId: "231546887371",
+            appId: "1:231546887371:web:ab9668bb0c944481a9cf4e",
+            measurementId: "G-S5838440J0"
+        };
+
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        // DOM elements
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const loginButton = document.getElementById('loginButton');
+        const loginButtonText = document.getElementById('loginButtonText');
+        const loginSpinner = document.getElementById('loginSpinner');
+        const googleSignInButton = document.getElementById('googleSignInButton');
+        const googleButtonText = document.getElementById('googleButtonText');
+        const googleSpinner = document.getElementById('googleSpinner');
+        const errorAlert = document.getElementById('errorAlert');
+        const successAlert = document.getElementById('successAlert');
+        const errorMessage = document.getElementById('errorMessage');
+        const togglePassword = document.getElementById('togglePassword');
+        const eyeIcon = document.getElementById('eyeIcon');
+        const eyeOffIcon = document.getElementById('eyeOffIcon');
+
+        // Password visibility toggle
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            eyeIcon.classList.toggle('hidden');
+            eyeOffIcon.classList.toggle('hidden');
+        });
+
+        // Show/hide alerts
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorAlert.classList.remove('hidden');
+            successAlert.classList.add('hidden');
+        }
+
+        function showSuccess() {
+            successAlert.classList.remove('hidden');
+            errorAlert.classList.add('hidden');
+        }
+
+        function hideAlerts() {
+            errorAlert.classList.add('hidden');
+            successAlert.classList.add('hidden');
+        }
+
+        // Set loading state
+        function setLoading(isLoading, isGoogle = false) {
+            if (isGoogle) {
+                googleSignInButton.disabled = isLoading;
+                googleButtonText.textContent = isLoading ? 'Signing in...' : 'Sign in with Google';
+                googleSpinner.classList.toggle('hidden', !isLoading);
+            } else {
+                loginButton.disabled = isLoading;
+                loginButtonText.textContent = isLoading ? 'Signing in...' : 'Sign In';
+                loginSpinner.classList.toggle('hidden', !isLoading);
+            }
+        }
+
+        // Email/Password login
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            hideAlerts();
+            setLoading(true);
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                
+                // Get ID token
+                const idToken = await user.getIdToken();
+                
+                // Store token and redirect
+                localStorage.setItem('authToken', idToken);
+                showSuccess();
+                
+                setTimeout(() => {
+                    window.location.href = '/dashboard';
+                }, 1500);
+
+            } catch (error) {
+                console.error('Login error:', error);
+                let errorMsg = 'An error occurred during login.';
+                
+                switch (error.code) {
+                    case 'auth/user-not-found':
+                        errorMsg = 'No account found with this email address.';
+                        break;
+                    case 'auth/wrong-password':
+                        errorMsg = 'Incorrect password.';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMsg = 'Invalid email address.';
+                        break;
+                    case 'auth/user-disabled':
+                        errorMsg = 'This account has been disabled.';
+                        break;
+                    case 'auth/too-many-requests':
+                        errorMsg = 'Too many failed attempts. Please try again later.';
+                        break;
+                }
+                
+                showError(errorMsg);
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        // Google Sign In
+        googleSignInButton.addEventListener('click', async function() {
+            hideAlerts();
+            setLoading(true, true);
+
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                const user = result.user;
+                
+                // Get ID token
+                const idToken = await user.getIdToken();
+                
+                // Store token and redirect
+                localStorage.setItem('authToken', idToken);
+                showSuccess();
+                
+                setTimeout(() => {
+                    window.location.href = '/dashboard';
+                }, 1500);
+
+            } catch (error) {
+                console.error('Google sign-in error:', error);
+                let errorMsg = 'An error occurred during Google sign-in.';
+                
+                switch (error.code) {
+                    case 'auth/popup-closed-by-user':
+                        errorMsg = 'Sign-in was cancelled.';
+                        break;
+                    case 'auth/popup-blocked':
+                        errorMsg = 'Pop-up was blocked. Please allow pop-ups and try again.';
+                        break;
+                    case 'auth/account-exists-with-different-credential':
+                        errorMsg = 'An account already exists with this email using a different sign-in method.';
+                        break;
+                }
+                
+                showError(errorMsg);
+            } finally {
+                setLoading(false, true);
+            }
+        });
+
+        // Check if user is already logged in
+        auth.onAuthStateChanged(function(user) {
+            if (user) {
+                // User is signed in, redirect to dashboard
+                window.location.href = '/dashboard';
+            }
+        });
+    </script>
+</body>
+</html>

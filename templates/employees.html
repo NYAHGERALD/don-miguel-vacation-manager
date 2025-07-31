@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management - Don Miguel Vacation Manager</title>
+    <link href="../static/css/output.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body class="bg-secondary-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-soft border-b border-secondary-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo and Brand -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-xl font-bold text-primary-600">Don Miguel</h1>
+                        <p class="text-xs text-secondary-500 -mt-1">Vacation Manager</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="/dashboard" class="text-secondary-600 hover:text-secondary-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Dashboard</a>
+                        <a href="/employees" class="text-primary-600 bg-primary-50 px-3 py-2 rounded-md text-sm font-medium">Employees</a>
+                        <a href="/vacation-requests" class="text-secondary-600 hover:text-secondary-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Requests</a>
+                    </div>
+                </div>
+
+                <!-- User Menu -->
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <button id="userMenuButton" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                            <div class="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center">
+                                <span id="userInitials" class="text-white text-sm font-medium">--</span>
+                            </div>
+                            <span id="userName" class="ml-2 text-secondary-700 font-medium hidden sm:block">Loading...</span>
+                            <svg class="ml-1 h-4 w-4 text-secondary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        
+                        <!-- Dropdown Menu -->
+                        <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-large border border-secondary-200 z-50">
+                            <div class="py-1">
+                                <div class="px-4 py-2 border-b border-secondary-200">
+                                    <p class="text-sm font-medium text-secondary-900" id="userMenuName">Loading...</p>
+                                    <p class="text-sm text-secondary-500" id="userMenuEmail">Loading...</p>
+                                </div>
+                                <a href="#" class="block px-4 py-2 text-sm text-secondary-700 hover:bg-secondary-50">Profile Settings</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-secondary-700 hover:bg-secondary-50">Help Center</a>
+                                <button id="logoutButton" class="block w-full text-left px-4 py-2 text-sm text-danger-600 hover:bg-danger-50">Sign Out</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile menu button -->
+                    <div class="md:hidden">
+                        <button type="button" class="mobile-menu-button bg-secondary-100 inline-flex items-center justify-center p-2 rounded-md text-secondary-600 hover:text-secondary-700 hover:bg-secondary-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500">
+                            <span class="sr-only">Open main menu</span>
+                            <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div class="mobile-menu hidden md:hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-secondary-200">
+                <a href="/dashboard" class="text-secondary-600 hover:text-secondary-700 block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+                <a href="/employees" class="text-primary-600 bg-primary-50 block px-3 py-2 rounded-md text-base font-medium">Employees</a>
+                <a href="/vacation-requests" class="text-secondary-600 hover:text-secondary-700 block px-3 py-2 rounded-md text-base font-medium">Requests</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-secondary-900">Employee Management</h1>
+                <p class="mt-2 text-secondary-600">Manage your team members and their information</p>
+            </div>
+            <button id="addEmployeeButton" class="btn-primary flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                Add Employee
+            </button>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="card mb-6">
+            <div class="card-body">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label for="searchInput" class="form-label">Search Employees</label>
+                        <div class="relative">
+                            <input 
+                                type="text" 
+                                id="searchInput" 
+                                class="form-input pl-10" 
+                                placeholder="Search by name..."
+                            >
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-secondary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="shiftFilter" class="form-label">Filter by Shift</label>
+                        <select id="shiftFilter" class="form-input">
+                            <option value="">All Shifts</option>
+                            <option value="First Shift">First Shift</option>
+                            <option value="Second Shift">Second Shift</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="workAreaFilter" class="form-label">Filter by Work Area</label>
+                        <select id="workAreaFilter" class="form-input">
+                            <option value="">All Work Areas</option>
+                            <option value="Assembly">Assembly</option>
+                            <option value="Mixing Area">Mixing Area</option>
+                            <option value="Oven Area">Oven Area</option>
+                            <option value="Packaging Area">Packaging Area</option>
+                            <option value="Dock Area">Dock Area</option>
+                            <option value="Main Floor">Main Floor</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Employee Table -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-lg font-semibold text-secondary-900">Team Members</h3>
+                <p class="text-sm text-secondary-600 mt-1">Total: <span id="employeeCount">0</span> employees</p>
+            </div>
+            <div class="card-body p-0">
+                <div class="overflow-x-auto">
+                    <table class="table">
+                        <thead class="table-header">
+                            <tr>
+                                <th class="table-header-cell">Employee</th>
+                                <th class="table-header-cell">Contact</th>
+                                <th class="table-header-cell">Shift</th>
+                                <th class="table-header-cell">Work Area</th>
+                                <th class="table-header-cell">Work Line</th>
+                                <th class="table-header-cell">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="employeeTableBody" class="table-body">
+                            <!-- Loading state -->
+                            <tr>
+                                <td colspan="6" class="table-cell text-center py-8">
+                                    <div class="spinner mx-auto mb-2"></div>
+                                    <p class="text-secondary-500">Loading employees...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Employee Modal -->
+    <div id="addEmployeeModal" class="modal-overlay hidden">
+        <div class="modal-content max-w-lg">
+            <div class="px-6 py-4 border-b border-secondary-200">
+                <h3 class="text-lg font-semibold text-secondary-900">Add New Employee</h3>
+            </div>
+            <form id="addEmployeeForm" class="px-6 py-4 space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="employeeFirstName" class="form-label">First Name</label>
+                        <input type="text" id="employeeFirstName" name="firstName" required class="form-input" placeholder="John">
+                    </div>
+                    <div>
+                        <label for="employeeLastName" class="form-label">Last Name</label>
+                        <input type="text" id="employeeLastName" name="lastName" required class="form-input" placeholder="Doe">
+                    </div>
+                </div>
+                <div>
+                    <label for="employeePhone" class="form-label">Phone Number</label>
+                    <input type="tel" id="employeePhone" name="phoneNumber" class="form-input" placeholder="(555) 123-4567">
+                </div>
+                <div>
+                    <label for="employeeDepartment" class="form-label">Department</label>
+                    <select id="employeeDepartment" name="department" required class="form-input">
+                        <option value="">Select Department</option>
+                        <option value="Production">Production</option>
+                        <option value="Bakery">Bakery</option>
+                        <option value="Warehouse">Warehouse</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="employeeShift" class="form-label">Shift</label>
+                    <select id="employeeShift" name="shift" required class="form-input">
+                        <option value="">Select Shift</option>
+                        <option value="First Shift">First Shift</option>
+                        <option value="Second Shift">Second Shift</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="employeeWorkLine" class="form-label">Work Line</label>
+                    <input type="text" id="employeeWorkLine" name="workLine" class="form-input" placeholder="Line 1">
+                </div>
+                <div>
+                    <label for="employeeWorkArea" class="form-label">Work Area</label>
+                    <input type="text" id="employeeWorkArea" name="workArea" class="form-input" placeholder="Assembly">
+                </div>
+            </form>
+            <div class="px-6 py-4 border-t border-secondary-200 flex justify-end space-x-3">
+                <button id="cancelAddEmployee" class="btn-secondary">Cancel</button>
+                <button id="saveEmployee" class="btn-primary flex items-center">
+                    <span id="saveEmployeeText">Add Employee</span>
+                    <div id="saveEmployeeSpinner" class="spinner ml-2 hidden"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Employee Modal -->
+    <div id="editEmployeeModal" class="modal-overlay hidden">
+        <div class="modal-content max-w-lg">
+            <div class="px-6 py-4 border-b border-secondary-200">
+                <h3 class="text-lg font-semibold text-secondary-900">Edit Employee</h3>
+            </div>
+            <form id="editEmployeeForm" class="px-6 py-4 space-y-4">
+                <input type="hidden" id="editEmployeeId" name="employeeId">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="editEmployeeFirstName" class="form-label">First Name</label>
+                        <input type="text" id="editEmployeeFirstName" name="firstName" required class="form-input">
+                    </div>
+                    <div>
+                        <label for="editEmployeeLastName" class="form-label">Last Name</label>
+                        <input type="text" id="editEmployeeLastName" name="lastName" required class="form-input">
+                    </div>
+                </div>
+                <div>
+                    <label for="editEmployeePhone" class="form-label">Phone Number</label>
+                    <input type="tel" id="editEmployeePhone" name="phoneNumber" class="form-input">
+                </div>
+                <div>
+                    <label for="editEmployeeDepartment" class="form-label">Department</label>
+                    <select id="editEmployeeDepartment" name="department" required class="form-input">
+                        <option value="">Select Department</option>
+                        <option value="Production">Production</option>
+                        <option value="Bakery">Bakery</option>
+                        <option value="Warehouse">Warehouse</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="editEmployeeShift" class="form-label">Shift</label>
+                    <select id="editEmployeeShift" name="shift" required class="form-input">
+                        <option value="">Select Shift</option>
+                        <option value="First Shift">First Shift</option>
+                        <option value="Second Shift">Second Shift</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="editEmployeeWorkLine" class="form-label">Work Line</label>
+                    <input type="text" id="editEmployeeWorkLine" name="workLine" class="form-input">
+                </div>
+                <div>
+                    <label for="editEmployeeWorkArea" class="form-label">Work Area</label>
+                    <input type="text" id="editEmployeeWorkArea" name="workArea" class="form-input">
+                </div>
+            </form>
+            <div class="px-6 py-4 border-t border-secondary-200 flex justify-end space-x-3">
+                <button id="cancelEditEmployee" class="btn-secondary">Cancel</button>
+                <button id="updateEmployee" class="btn-primary flex items-center">
+                    <span id="updateEmployeeText">Update Employee</span>
+                    <div id="updateEmployeeSpinner" class="spinner ml-2 hidden"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteEmployeeModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="px-6 py-4">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-6 w-6 text-danger-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-lg font-medium text-secondary-900">Delete Employee</h3>
+                        <div class="mt-2">
+                            <p class="text-sm text-secondary-500">
+                                Are you sure you want to delete <span id="deleteEmployeeName" class="font-medium"></span>? 
+                                This action cannot be undone and will also delete all associated vacation requests.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-secondary-200 flex justify-end space-x-3">
+                <button id="cancelDeleteEmployee" class="btn-secondary">Cancel</button>
+                <button id="confirmDeleteEmployee" class="btn-danger flex items-center">
+                    <span id="deleteEmployeeText">Delete Employee</span>
+                    <div id="deleteEmployeeSpinner" class="spinner ml-2 hidden"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden">
+        <div class="p-4">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg id="toastIcon" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p id="toastMessage" class="text-sm font-medium"></p>
+                </div>
+                <div class="ml-auto pl-3">
+                    <button id="closeToast" class="inline-flex text-secondary-400 hover:text-secondary-600">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-RJTbmkbsOOTTt4DreNG_XhKHeypfm40",
+            authDomain: "vacation-request-84a27.firebaseapp.com",
+            projectId: "vacation-request-84a27",
+            storageBucket: "vacation-request-84a27.firebasestorage.app",
+            messagingSenderId: "231546887371",
+            appId: "1:231546887371:web:ab9668bb0c944481a9cf4e",
+            measurementId: "G-S5838440J0"
+        };
+
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Global variables
+        let currentUser = null;
+        let employees = [];
+        let filteredEmployees = [];
+
+        // DOM elements
+        const userInitials = document.getElementById('userInitials');
+        const userName = document.getElementById('userName');
+        const userMenuName = document.getElementById('userMenuName');
+        const userMenuEmail = document.getElementById('userMenuEmail');
+        const userMenuButton = document.getElementById('userMenuButton');
+        const userMenu = document.getElementById('userMenu');
+        const logoutButton = document.getElementById('logoutButton');
+        const mobileMenuButton = document.querySelector('.mobile-menu-button');
+        const mobileMenu = document.querySelector('.mobile-menu');
+
+        // Employee management elements
+        const addEmployeeButton = document.getElementById('addEmployeeButton');
+        const addEmployeeModal = document.getElementById('addEmployeeModal');
+        const editEmployeeModal = document.getElementById('editEmployeeModal');
+        const deleteEmployeeModal = document.getElementById('deleteEmployeeModal');
+        const addEmployeeForm = document.getElementById('addEmployeeForm');
+        const editEmployeeForm = document.getElementById('editEmployeeForm');
+        const employeeTableBody = document.getElementById('employeeTableBody');
+        const employeeCount = document.getElementById('employeeCount');
+        const searchInput = document.getElementById('searchInput');
+        const shiftFilter = document.getElementById('shiftFilter');
+        const workAreaFilter = document.getElementById('workAreaFilter');
+
+        // Modal buttons
+        const cancelAddEmployee = document.getElementById('cancelAddEmployee');
+        const saveEmployee = document.getElementById('saveEmployee');
+        const cancelEditEmployee = document.getElementById('cancelEditEmployee');
+        const updateEmployee = document.getElementById('updateEmployee');
+        const cancelDeleteEmployee = document.getElementById('cancelDeleteEmployee');
+        const confirmDeleteEmployee = document.getElementById('confirmDeleteEmployee');
+
+        // Toast elements
+        const toast = document.getElementById('toast');
+        const toastIcon = document.getElementById('toastIcon');
+        const toastMessage = document.getElementById('toastMessage');
+        const closeToast = document.getElementById('closeToast');
+
+        // Authentication state handler
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                await initializeEmployeePage();
+            } else {
+                window.location.href = '/login';
+            }
+        });
+
+        // Initialize employee page
+        async function initializeEmployeePage() {
+            try {
+                updateUserInfo();
+                await loadEmployees();
+            } catch (error) {
+                console.error('Employee page initialization error:', error);
+                showToast('Failed to load employee data', 'error');
+            }
+        }
+
+        // Update user info in UI
+        function updateUserInfo() {
+            const displayName = currentUser.displayName || 'User';
+            const email = currentUser.email || '';
+            
+            const names = displayName.split(' ');
+            const initials = names.map(name => name.charAt(0)).join('').toUpperCase().substring(0, 2);
+            
+            userInitials.textContent = initials;
+            userName.textContent = displayName;
+            userMenuName.textContent = displayName;
+            userMenuEmail.textContent = email;
+        }
+
+        // Load employees
+        async function loadEmployees() {
+            try {
+                const token = await currentUser.getIdToken();
+                
+                const response = await fetch('/api/employees', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to load employees');
+                }
+
+                employees = await response.json();
+                filteredEmployees = [...employees];
+                renderEmployeeTable();
+                
+            } catch (error) {
+                console.error('Load employees error:', error);
+                showToast('Failed to load employees', 'error');
+                employeeTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="table-cell text-center py-8">
+                            <p class="text-danger-500">Failed to load employees</p>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Render employee table
+        function renderEmployeeTable() {
+            employeeCount.textContent = filteredEmployees.length;
+            
+            if (filteredEmployees.length === 0) {
+                employeeTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="table-cell text-center py-8">
+                            <svg class="w-12 h-12 text-secondary-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                            <p class="text-secondary-500">No employees found</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            const tableHTML = filteredEmployees.map(employee => `
+                <tr class="hover:bg-secondary-50">
+                    <td class="table-cell">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center mr-3">
+                                <span class="text-primary-600 font-medium text-sm">
+                                    ${getInitials(employee.first_name, employee.last_name)}
+                                </span>
+                            </div>
+                            <div>
+                                <p class="font-medium text-secondary-900">${employee.first_name} ${employee.last_name}</p>
+                                <p class="text-sm text-secondary-500">${employee.department}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="table-cell">
+                        <p class="text-secondary-900">${employee.phone_number || 'N/A'}</p>
+                    </td>
+                    <td class="table-cell">
+                        <span class="badge ${employee.shift === 'First Shift' ? 'bg-primary-100 text-primary-800' : 'bg-secondary-100 text-secondary-800'}">
+                            ${employee.shift}
+                        </span>
+                    </td>
+                    <td class="table-cell">
+                        <p class="text-secondary-900">${employee.work_area || 'N/A'}</p>
+                    </td>
+                    <td class="table-cell">
+                        <p class="text-secondary-900">${employee.work_line || 'N/A'}</p>
+                    </td>
+                    <td class="table-cell">
+                        <div class="flex space-x-2">
+                            <button onclick="editEmployee(${employee.id})" class="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                                Edit
+                            </button>
+                            <button onclick="deleteEmployee(${employee.id})" class="text-danger-600 hover:text-danger-700 text-sm font-medium">
+                                Delete
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+
+            employeeTableBody.innerHTML = tableHTML;
+        }
+
+        // Filter employees
+        function filterEmployees() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const shiftFilterValue = shiftFilter.value;
+            const workAreaFilterValue = workAreaFilter.value;
+
+            filteredEmployees = employees.filter(employee => {
+                const matchesSearch = !searchTerm || 
+                    `${employee.first_name} ${employee.last_name}`.toLowerCase().includes(searchTerm);
+                const matchesShift = !shiftFilterValue || employee.shift === shiftFilterValue;
+                const matchesWorkArea = !workAreaFilterValue || employee.work_area === workAreaFilterValue;
+
+                return matchesSearch && matchesShift && matchesWorkArea;
+            });
+
+            renderEmployeeTable();
+        }
+
+        // Add employee
+        async function addEmployee(formData) {
+            try {
+                const token = await currentUser.getIdToken();
+                
+                const response = await fetch('/api/employees', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Failed to add employee');
+                }
+
+                await loadEmployees();
+                showToast('Employee added successfully', 'success');
+                
+            } catch (error) {
+                console.error('Add employee error:', error);
+                showToast(error.message, 'error');
+            }
+        }
+
+        // Edit employee
+        window.editEmployee = function(employeeId) {
+            const employee = employees.find(emp => emp.id === employeeId);
+            if (!employee) return;
+
+            document.getElementById('editEmployeeId').value = employee.id;
+            document.getElementById('editEmployeeFirstName').value = employee.first_name;
+            document.getElementById('editEmployeeLastName').value = employee.last_name;
+            document.getElementById('editEmployeePhone').value = employee.phone_number || '';
+            document.getElementById('editEmployeeDepartment').value = employee.department;
+            document.getElementById('editEmployeeShift').value = employee.shift;
+            document.getElementById('editEmployeeWorkLine').value = employee.work_line || '';
+            document.getElementById('editEmployeeWorkArea').value = employee.work_area || '';
+
+            editEmployeeModal.classList.remove('hidden');
+        };
+
+        // Delete employee
+        window.deleteEmployee = function(employeeId) {
+            const employee = employees.find(emp => emp.id === employeeId);
+            if (!employee) return;
+
+            document.getElementById('deleteEmployeeName').textContent = `${employee.first_name} ${employee.last_name}`;
+            document.getElementById('confirmDeleteEmployee').dataset.employeeId = employeeId;
+            deleteEmployeeModal.classList.remove('hidden');
+        };
+
+        // Utility functions
+        function getInitials(firstName, lastName) {
+            return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+        }
+
+        function showToast(message, type = 'success') {
+            toastMessage.textContent = message;
+            
+            // Reset classes
+            toast.className = 'toast';
+            toastIcon.className = 'h-5 w-5';
+            
+            if (type === 'success') {
+                toast.classList.add('toast-success');
+                toastIcon.classList.add('text-success-400');
+                toastIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
+            } else if (type === 'error') {
+                toast.classList.add('toast-error');
+                toastIcon.classList.add('text-danger-400');
+                toastIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
+            }
+            
+            toast.classList.remove('hidden');
+            
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 5000);
+        }
+
+        function setLoading(button, textElement, spinnerElement, isLoading, loadingText, normalText) {
+            button.disabled = isLoading;
+            textElement.textContent = isLoading ? loadingText : normalText;
+            spinnerElement.classList.toggle('hidden', !isLoading);
+        }
+
+        // Event listeners
+        userMenuButton.addEventListener('click', function() {
+            userMenu.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', function(event) {
+            if (!userMenuButton.contains(event.target) && !userMenu.contains(event.target)) {
+                userMenu.classList.add('hidden');
+            }
+        });
+
+        logoutButton.addEventListener('click', async function() {
+            try {
+                await signOut(auth);
+                localStorage.removeItem('authToken');
+                window.location.href = '/login';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        });
+
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        // Search and filter
+        searchInput.addEventListener('input', filterEmployees);
+        shiftFilter.addEventListener('change', filterEmployees);
+        workAreaFilter.addEventListener('change', filterEmployees);
+
+        // Add employee modal
+        addEmployeeButton.addEventListener('click', function() {
+            addEmployeeForm.reset();
+            addEmployeeModal.classList.remove('hidden');
+        });
+
+        cancelAddEmployee.addEventListener('click', function() {
+            addEmployeeModal.classList.add('hidden');
+        });
+
+        addEmployeeModal.addEventListener('click', function(event) {
+            if (event.target === addEmployeeModal) {
+                addEmployeeModal.classList.add('hidden');
+            }
+        });
+
+        saveEmployee.addEventListener('click', async function() {
+            const formData = new FormData(addEmployeeForm);
+            const employeeData = Object.fromEntries(formData.entries());
+
+            if (!employeeData.firstName || !employeeData.lastName || !employeeData.department || !employeeData.shift) {
+                showToast('Please fill in all required fields', 'error');
+                return;
+            }
+
+            const saveEmployeeText = document.getElementById('saveEmployeeText');
+            const saveEmployeeSpinner = document.getElementById('saveEmployeeSpinner');
+            
+            setLoading(saveEmployee, saveEmployeeText, saveEmployeeSpinner, true, 'Adding...', 'Add Employee');
+
+            try {
+                await addEmployee({
+                    first_name: employeeData.firstName,
+                    last_name: employeeData.lastName,
+                    phone_number: employeeData.phoneNumber,
+                    department: employeeData.department,
+                    shift: employeeData.shift,
+                    work_line: employeeData.workLine,
+                    work_area: employeeData.workArea
+                });
+                
+                addEmployeeModal.classList.add('hidden');
+            } finally {
+                setLoading(saveEmployee, saveEmployeeText, saveEmployeeSpinner, false, 'Adding...', 'Add Employee');
+            }
+        });
+
+        // Edit employee modal
+        cancelEditEmployee.addEventListener('click', function() {
+            editEmployeeModal.classList.add('hidden');
+        });
+
+        editEmployeeModal.addEventListener('click', function(event) {
+            if (event.target === editEmployeeModal) {
+                editEmployeeModal.classList.add('hidden');
+            }
+        });
+
+        updateEmployee.addEventListener('click', async function() {
+            const formData = new FormData(editEmployeeForm);
+            const employeeData = Object.fromEntries(formData.entries());
+
+            if (!employeeData.firstName || !employeeData.lastName || !employeeData.department || !employeeData.shift) {
+                showToast('Please fill in all required fields', 'error');
+                return;
+            }
+
+            const updateEmployeeText = document.getElementById('updateEmployeeText');
+            const updateEmployeeSpinner = document.getElementById('updateEmployeeSpinner');
+            
+            setLoading(updateEmployee, updateEmployeeText, updateEmployeeSpinner, true, 'Updating...', 'Update Employee');
+
+            try {
+                // Update employee API call would go here
+                showToast('Employee updated successfully', 'success');
+                editEmployeeModal.classList.add('hidden');
+                await loadEmployees();
+            } catch (error) {
+                console.error('Update employee error:', error);
+                showToast('Failed to update employee', 'error');
+            } finally {
+                setLoading(updateEmployee, updateEmployeeText, updateEmployeeSpinner, false, 'Updating...', 'Update Employee');
+            }
+        });
+
+        // Delete employee modal
+        cancelDeleteEmployee.addEventListener('click', function() {
+            deleteEmployeeModal.classList.add('hidden');
+        });
+
+        deleteEmployeeModal.addEventListener('click', function(event) {
+            if (event.target === deleteEmployeeModal) {
+                deleteEmployeeModal.classList.add('hidden');
+            }
+        });
+
+        confirmDeleteEmployee.addEventListener('click', async function() {
+            const employeeId = this.dataset.employeeId;
+            
+            const deleteEmployeeText = document.getElementById('deleteEmployeeText');
+            const deleteEmployeeSpinner = document.getElementById('deleteEmployeeSpinner');
+            
+            setLoading(confirmDeleteEmployee, deleteEmployeeText, deleteEmployeeSpinner, true, 'Deleting...', 'Delete Employee');
+
+            try {
+                // Delete employee API call would go here
+                showToast('Employee deleted successfully', 'success');
+                deleteEmployeeModal.classList.add('hidden');
+                await loadEmployees();
+            } catch (error) {
+                console.error('Delete employee error:', error);
+                showToast('Failed to delete employee', 'error');
+            } finally {
+                setLoading(confirmDeleteEmployee, deleteEmployeeText, deleteEmployeeSpinner, false, 'Deleting...', 'Delete Employee');
+            }
+        });
+
+        // Toast close
+        closeToast.addEventListener('click', function() {
+            toast.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>

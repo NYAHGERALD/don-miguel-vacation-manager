@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Don Miguel Vacation Manager</title>
+    <link href="../static/css/output.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-secondary-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-soft border-b border-secondary-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo and Brand -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-xl font-bold text-primary-600">Don Miguel</h1>
+                        <p class="text-xs text-secondary-500 -mt-1">Vacation Manager</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="/dashboard" class="text-primary-600 bg-primary-50 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                        <a href="/employees" class="text-secondary-600 hover:text-secondary-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Employees</a>
+                        <a href="/vacation-requests" class="text-secondary-600 hover:text-secondary-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Requests</a>
+                    </div>
+                </div>
+
+                <!-- User Menu -->
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <button id="userMenuButton" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                            <div class="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center">
+                                <span id="userInitials" class="text-white text-sm font-medium">--</span>
+                            </div>
+                            <span id="userName" class="ml-2 text-secondary-700 font-medium hidden sm:block">Loading...</span>
+                            <svg class="ml-1 h-4 w-4 text-secondary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        
+                        <!-- Dropdown Menu -->
+                        <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-large border border-secondary-200 z-50">
+                            <div class="py-1">
+                                <div class="px-4 py-2 border-b border-secondary-200">
+                                    <p class="text-sm font-medium text-secondary-900" id="userMenuName">Loading...</p>
+                                    <p class="text-sm text-secondary-500" id="userMenuEmail">Loading...</p>
+                                </div>
+                                <a href="#" class="block px-4 py-2 text-sm text-secondary-700 hover:bg-secondary-50">Profile Settings</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-secondary-700 hover:bg-secondary-50">Help Center</a>
+                                <button id="logoutButton" class="block w-full text-left px-4 py-2 text-sm text-danger-600 hover:bg-danger-50">Sign Out</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile menu button -->
+                    <div class="md:hidden">
+                        <button type="button" class="mobile-menu-button bg-secondary-100 inline-flex items-center justify-center p-2 rounded-md text-secondary-600 hover:text-secondary-700 hover:bg-secondary-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500">
+                            <span class="sr-only">Open main menu</span>
+                            <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div class="mobile-menu hidden md:hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-secondary-200">
+                <a href="/dashboard" class="text-primary-600 bg-primary-50 block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+                <a href="/employees" class="text-secondary-600 hover:text-secondary-700 block px-3 py-2 rounded-md text-base font-medium">Employees</a>
+                <a href="/vacation-requests" class="text-secondary-600 hover:text-secondary-700 block px-3 py-2 rounded-md text-base font-medium">Requests</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-secondary-900">Dashboard</h1>
+            <p class="mt-2 text-secondary-600">Overview of your team's vacation requests and statistics</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Total Employees -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-secondary-600">Total Employees</p>
+                            <p id="totalEmployees" class="text-2xl font-bold text-secondary-900">--</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pending Requests -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-warning-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-warning-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-secondary-600">Pending Requests</p>
+                            <p id="pendingRequests" class="text-2xl font-bold text-secondary-900">--</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Approved Requests -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-success-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-success-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-secondary-600">Approved Requests</p>
+                            <p id="approvedRequests" class="text-2xl font-bold text-secondary-900">--</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Denied Requests -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-danger-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-danger-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-secondary-600">Denied Requests</p>
+                            <p id="deniedRequests" class="text-2xl font-bold text-secondary-900">--</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Request Status Chart -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-lg font-semibold text-secondary-900">Request Status Distribution</h3>
+                </div>
+                <div class="card-body">
+                    <canvas id="statusChart" width="400" height="300"></canvas>
+                </div>
+            </div>
+
+            <!-- Monthly Requests Chart -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-lg font-semibold text-secondary-900">Monthly Request Trends</h3>
+                </div>
+                <div class="card-body">
+                    <canvas id="monthlyChart" width="400" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity and Upcoming Vacations -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Recent Requests -->
+            <div class="card">
+                <div class="card-header flex justify-between items-center">
+                    <h3 class="text-lg font-semibold text-secondary-900">Recent Requests</h3>
+                    <a href="/vacation-requests" class="text-primary-600 hover:text-primary-700 text-sm font-medium">View All</a>
+                </div>
+                <div class="card-body p-0">
+                    <div id="recentRequests" class="divide-y divide-secondary-200">
+                        <!-- Loading state -->
+                        <div class="p-6 text-center">
+                            <div class="spinner mx-auto mb-2"></div>
+                            <p class="text-secondary-500">Loading recent requests...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upcoming Vacations -->
+            <div class="card">
+                <div class="card-header flex justify-between items-center">
+                    <h3 class="text-lg font-semibold text-secondary-900">Upcoming Vacations</h3>
+                    <a href="/vacation-requests?status=approved" class="text-primary-600 hover:text-primary-700 text-sm font-medium">View All</a>
+                </div>
+                <div class="card-body p-0">
+                    <div id="upcomingVacations" class="divide-y divide-secondary-200">
+                        <!-- Loading state -->
+                        <div class="p-6 text-center">
+                            <div class="spinner mx-auto mb-2"></div>
+                            <p class="text-secondary-500">Loading upcoming vacations...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 flex items-center space-x-3">
+            <div class="spinner"></div>
+            <span class="text-secondary-700">Loading dashboard...</span>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-RJTbmkbsOOTTt4DreNG_XhKHeypfm40",
+            authDomain: "vacation-request-84a27.firebaseapp.com",
+            projectId: "vacation-request-84a27",
+            storageBucket: "vacation-request-84a27.firebasestorage.app",
+            messagingSenderId: "231546887371",
+            appId: "1:231546887371:web:ab9668bb0c944481a9cf4e",
+            measurementId: "G-S5838440J0"
+        };
+
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Global variables
+        let currentUser = null;
+        let dashboardData = null;
+
+        // DOM elements
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const userInitials = document.getElementById('userInitials');
+        const userName = document.getElementById('userName');
+        const userMenuName = document.getElementById('userMenuName');
+        const userMenuEmail = document.getElementById('userMenuEmail');
+        const userMenuButton = document.getElementById('userMenuButton');
+        const userMenu = document.getElementById('userMenu');
+        const logoutButton = document.getElementById('logoutButton');
+        const mobileMenuButton = document.querySelector('.mobile-menu-button');
+        const mobileMenu = document.querySelector('.mobile-menu');
+
+        // Stats elements
+        const totalEmployeesEl = document.getElementById('totalEmployees');
+        const pendingRequestsEl = document.getElementById('pendingRequests');
+        const approvedRequestsEl = document.getElementById('approvedRequests');
+        const deniedRequestsEl = document.getElementById('deniedRequests');
+        const recentRequestsEl = document.getElementById('recentRequests');
+        const upcomingVacationsEl = document.getElementById('upcomingVacations');
+
+        // Chart variables
+        let statusChart = null;
+        let monthlyChart = null;
+
+        // Authentication state handler
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                await initializeDashboard();
+            } else {
+                window.location.href = '/login';
+            }
+        });
+
+        // Initialize dashboard
+        async function initializeDashboard() {
+            try {
+                // Update user info
+                updateUserInfo();
+                
+                // Load dashboard data
+                await loadDashboardData();
+                
+                // Hide loading overlay
+                loadingOverlay.classList.add('hidden');
+                
+            } catch (error) {
+                console.error('Dashboard initialization error:', error);
+                showError('Failed to load dashboard data');
+                loadingOverlay.classList.add('hidden');
+            }
+        }
+
+        // Update user info in UI
+        function updateUserInfo() {
+            const displayName = currentUser.displayName || 'User';
+            const email = currentUser.email || '';
+            
+            // Get initials
+            const names = displayName.split(' ');
+            const initials = names.map(name => name.charAt(0)).join('').toUpperCase().substring(0, 2);
+            
+            userInitials.textContent = initials;
+            userName.textContent = displayName;
+            userMenuName.textContent = displayName;
+            userMenuEmail.textContent = email;
+        }
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            const token = await currentUser.getIdToken();
+            
+            const response = await fetch('/api/dashboard/stats', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to load dashboard data');
+            }
+
+            dashboardData = await response.json();
+            
+            // Update stats
+            updateStats();
+            
+            // Update charts
+            updateCharts();
+            
+            // Update recent activity
+            updateRecentActivity();
+        }
+
+        // Update stats cards
+        function updateStats() {
+            totalEmployeesEl.textContent = dashboardData.total_employees || 0;
+            pendingRequestsEl.textContent = dashboardData.pending_requests || 0;
+            approvedRequestsEl.textContent = dashboardData.approved_requests || 0;
+            deniedRequestsEl.textContent = dashboardData.denied_requests || 0;
+        }
+
+        // Update charts
+        function updateCharts() {
+            // Status distribution pie chart
+            const statusCtx = document.getElementById('statusChart').getContext('2d');
+            
+            if (statusChart) {
+                statusChart.destroy();
+            }
+            
+            statusChart = new Chart(statusCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Pending', 'Approved', 'Denied'],
+                    datasets: [{
+                        data: [
+                            dashboardData.pending_requests || 0,
+                            dashboardData.approved_requests || 0,
+                            dashboardData.denied_requests || 0
+                        ],
+                        backgroundColor: [
+                            '#f59e0b', // warning-500
+                            '#22c55e', // success-500
+                            '#ef4444'  // danger-500
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Monthly trends bar chart (mock data for now)
+            const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+            
+            if (monthlyChart) {
+                monthlyChart.destroy();
+            }
+            
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+            const monthlyData = [12, 8, 15, 10, 18, 14]; // Mock data
+            
+            monthlyChart = new Chart(monthlyCtx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Requests',
+                        data: monthlyData,
+                        backgroundColor: '#3b82f6', // primary-500
+                        borderColor: '#2563eb', // primary-600
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update recent activity
+        function updateRecentActivity() {
+            // Recent requests (mock data for now)
+            const recentRequestsHTML = `
+                <div class="p-4 hover:bg-secondary-50 transition-colors duration-200">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
+                                <span class="text-primary-600 text-sm font-medium">JD</span>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-secondary-900">John Doe</p>
+                                <p class="text-xs text-secondary-500">Dec 20-22, 2024</p>
+                            </div>
+                        </div>
+                        <span class="badge badge-pending">Pending</span>
+                    </div>
+                </div>
+                <div class="p-4 hover:bg-secondary-50 transition-colors duration-200">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-success-100 rounded-full flex items-center justify-center">
+                                <span class="text-success-600 text-sm font-medium">JS</span>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-secondary-900">Jane Smith</p>
+                                <p class="text-xs text-secondary-500">Jan 15-19, 2025</p>
+                            </div>
+                        </div>
+                        <span class="badge badge-approved">Approved</span>
+                    </div>
+                </div>
+            `;
+            
+            recentRequestsEl.innerHTML = recentRequestsHTML;
+
+            // Upcoming vacations
+            const upcomingVacationsHTML = dashboardData.upcoming_vacations && dashboardData.upcoming_vacations.length > 0 
+                ? dashboardData.upcoming_vacations.map(vacation => `
+                    <div class="p-4 hover:bg-secondary-50 transition-colors duration-200">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-success-100 rounded-full flex items-center justify-center">
+                                    <span class="text-success-600 text-sm font-medium">${getInitials(vacation.first_name, vacation.last_name)}</span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-secondary-900">${vacation.first_name} ${vacation.last_name}</p>
+                                    <p class="text-xs text-secondary-500">${formatDate(vacation.start_date)} - ${formatDate(vacation.end_date)}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs text-secondary-500">${vacation.total_hours} hours</p>
+                                <p class="text-xs text-secondary-400">Returns ${formatDate(vacation.return_date)}</p>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')
+                : `
+                    <div class="p-6 text-center">
+                        <svg class="w-12 h-12 text-secondary-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <p class="text-secondary-500">No upcoming vacations</p>
+                    </div>
+                `;
+            
+            upcomingVacationsEl.innerHTML = upcomingVacationsHTML;
+        }
+
+        // Utility functions
+        function getInitials(firstName, lastName) {
+            return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+
+        function showError(message) {
+            // Simple error display - could be enhanced with toast notifications
+            console.error(message);
+        }
+
+        // Event listeners
+        userMenuButton.addEventListener('click', function() {
+            userMenu.classList.toggle('hidden');
+        });
+
+        // Close user menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!userMenuButton.contains(event.target) && !userMenu.contains(event.target)) {
+                userMenu.classList.add('hidden');
+            }
+        });
+
+        logoutButton.addEventListener('click', async function() {
+            try {
+                await signOut(auth);
+                localStorage.removeItem('authToken');
+                window.location.href = '/login';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        });
+
+        // Mobile menu toggle
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    </script>
+</body>
+</html>

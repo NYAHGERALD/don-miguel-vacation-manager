@@ -1,0 +1,36 @@
+# Virtual environment
+venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Environment variables
+.env
+
+# Node modules
+node_modules/
+
+# Compiled Tailwind CSS
+static/css/output.css
+
+# Firebase service accounts & credentials
+firebase-service-account.json
+firebase_config.py
+firebase-config.js
+
+# System files
+.DS_Store
+Thumbs.db
+
+# VSCode project files (optional)
+.vscode/
+
+# Logs
+*.log
+
+# Coverage / test / temp
+coverage/
+*.coverage
+.env.*

@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Don Miguel Vacation Manager</title>
+    <link href="../static/css/output.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body class="bg-secondary-50 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <!-- Header -->
+        <div class="text-center">
+            <div class="mx-auto mb-6">
+                <h1 class="text-2xl font-bold text-primary-600">Don Miguel</h1>
+                <p class="text-sm text-secondary-500 -mt-1">Vacation Manager</p>
+            </div>
+            <h2 class="text-3xl font-bold text-secondary-900">
+                Supervisor Registration
+            </h2>
+            <p class="mt-2 text-sm text-secondary-600">
+                Create your account to start managing vacation requests
+            </p>
+        </div>
+
+        <!-- Registration Form -->
+        <div class="card">
+            <div class="card-body">
+                <form id="registerForm" class="space-y-6">
+                    <!-- Name Fields -->
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div>
+                            <label for="firstName" class="form-label">
+                                First Name
+                            </label>
+                            <input 
+                                id="firstName" 
+                                name="firstName" 
+                                type="text" 
+                                required 
+                                class="form-input"
+                                placeholder="John"
+                            >
+                            <div id="firstNameError" class="form-error hidden"></div>
+                        </div>
+                        <div>
+                            <label for="lastName" class="form-label">
+                                Last Name
+                            </label>
+                            <input 
+                                id="lastName" 
+                                name="lastName" 
+                                type="text" 
+                                required 
+                                class="form-input"
+                                placeholder="Smith"
+                            >
+                            <div id="lastNameError" class="form-error hidden"></div>
+                        </div>
+                    </div>
+
+                    <!-- Email Field -->
+                    <div>
+                        <label for="email" class="form-label">
+                            Email Address
+                        </label>
+                        <input 
+                            id="email" 
+                            name="email" 
+                            type="email" 
+                            autocomplete="email" 
+                            required 
+                            class="form-input"
+                            placeholder="supervisor@donmiguelfoods.com"
+                        >
+                        <div id="emailError" class="form-error hidden"></div>
+                    </div>
+
+                    <!-- Department Field -->
+                    <div>
+                        <label for="department" class="form-label">
+                            Department
+                        </label>
+                        <select 
+                            id="department" 
+                            name="department" 
+                            required 
+                            class="form-input"
+                        >
+                            <option value="">Select Department</option>
+                            <option value="Production">Production</option>
+                            <option value="Bakery">Bakery</option>
+                            <option value="Warehouse">Warehouse</option>
+                        </select>
+                        <div id="departmentError" class="form-error hidden"></div>
+                    </div>
+
+                    <!-- Shift Field -->
+                    <div>
+                        <label for="shift" class="form-label">
+                            Shift
+                        </label>
+                        <select 
+                            id="shift" 
+                            name="shift" 
+                            required 
+                            class="form-input"
+                        >
+                            <option value="">Select Shift</option>
+                            <option value="First Shift">First Shift</option>
+                            <option value="Second Shift">Second Shift</option>
+                        </select>
+                        <div id="shiftError" class="form-error hidden"></div>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div>
+                        <label for="password" class="form-label">
+                            Password
+                        </label>
+                        <div class="relative">
+                            <input 
+                                id="password" 
+                                name="password" 
+                                type="password" 
+                                autocomplete="new-password" 
+                                required 
+                                class="form-input pr-10"
+                                placeholder="Create a strong password"
+                            >
+                            <button 
+                                type="button" 
+                                id="togglePassword"
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-secondary-400 hover:text-secondary-600"
+                            >
+                                <svg id="eyeIcon" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                                <svg id="eyeOffIcon" class="h-5 w-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div id="passwordError" class="form-error hidden"></div>
+                        <!-- Password Strength Indicator -->
+                        <div class="mt-2">
+                            <div class="flex items-center space-x-2">
+                                <div class="flex-1 bg-secondary-200 rounded-full h-2">
+                                    <div id="passwordStrength" class="h-2 rounded-full transition-all duration-300" style="width: 0%;"></div>
+                                </div>
+                                <span id="passwordStrengthText" class="text-xs text-secondary-500">Weak</span>
+                            </div>
+                            <div class="mt-1 text-xs text-secondary-500">
+                                <ul id="passwordRequirements" class="space-y-1">
+                                    <li id="req-length" class="flex items-center">
+                                        <svg class="w-3 h-3 mr-1 text-secondary-400" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        At least 8 characters
+                                    </li>
+                                    <li id="req-uppercase" class="flex items-center">
+                                        <svg class="w-3 h-3 mr-1 text-secondary-400" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        One uppercase letter
+                                    </li>
+                                    <li id="req-lowercase" class="flex items-center">
+                                        <svg class="w-3 h-3 mr-1 text-secondary-400" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        One lowercase letter
+                                    </li>
+                                    <li id="req-number" class="flex items-center">
+                                        <svg class="w-3 h-3 mr-1 text-secondary-400" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        One number
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Confirm Password Field -->
+                    <div>
+                        <label for="confirmPassword" class="form-label">
+                            Confirm Password
+                        </label>
+                        <input 
+                            id="confirmPassword" 
+                            name="confirmPassword" 
+                            type="password" 
+                            autocomplete="new-password" 
+                            required 
+                            class="form-input"
+                            placeholder="Confirm your password"
+                        >
+                        <div id="confirmPasswordError" class="form-error hidden"></div>
+                    </div>
+
+                    <!-- Terms and Conditions -->
+                    <div class="flex items-start">
+                        <div class="flex items-center h-5">
+                            <input 
+                                id="terms" 
+                                name="terms" 
+                                type="checkbox" 
+                                required
+                                class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-secondary-300 rounded"
+                            >
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="terms" class="text-secondary-700">
+                                I agree to the 
+                                <a href="#" class="font-medium text-primary-600 hover:text-primary-500">Terms of Service</a>
+                                and 
+                                <a href="#" class="font-medium text-primary-600 hover:text-primary-500">Privacy Policy</a>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div>
+                        <button 
+                            type="submit" 
+                            id="registerButton"
+                            class="w-full btn-primary flex justify-center items-center"
+                        >
+                            <span id="registerButtonText">Create Account</span>
+                            <div id="registerSpinner" class="spinner ml-2 hidden"></div>
+                        </button>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-secondary-300"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-2 bg-white text-secondary-500">Or register with</span>
+                        </div>
+                    </div>
+
+                    <!-- Google Sign Up -->
+                    <div>
+                        <button 
+                            type="button" 
+                            id="googleSignUpButton"
+                            class="w-full flex justify-center items-center px-4 py-2 border border-secondary-300 rounded-lg shadow-sm bg-white text-sm font-medium text-secondary-700 hover:bg-secondary-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200"
+                        >
+                            <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                            </svg>
+                            <span id="googleSignUpButtonText">Sign up with Google</span>
+                            <div id="googleSignUpSpinner" class="spinner ml-2 hidden"></div>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Error Alert -->
+                <div id="errorAlert" class="hidden mt-4 p-4 bg-danger-50 border border-danger-200 rounded-lg">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-danger-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-danger-800">
+                                Registration Failed
+                            </h3>
+                            <div class="mt-2 text-sm text-danger-700">
+                                <p id="errorMessage"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Success Alert -->
+                <div id="successAlert" class="hidden mt-4 p-4 bg-success-50 border border-success-200 rounded-lg">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-success-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-success-800">
+                                Registration Successful
+                            </h3>
+                            <div class="mt-2 text-sm text-success-700">
+                                <p>Account created successfully! Redirecting to dashboard...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sign In Link -->
+        <div class="text-center">
+            <p class="text-sm text-secondary-600">
+                Already have an account?
+                <a href="/login" class="font-medium text-primary-600 hover:text-primary-500 transition-colors duration-200">
+                    Sign in here
+                </a>
+            </p>
+        </div>
+
+        <!-- Back to Home -->
+        <div class="text-center">
+            <a href="/" class="text-sm text-secondary-500 hover:text-secondary-700 transition-colors duration-200">
+                ← Back to home
+            </a>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+        // Firebase configuration (replace with your actual config)
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-RJTbmkbsOOTTt4DreNG_XhKHeypfm40",
+            authDomain: "vacation-request-84a27.firebaseapp.com",
+            projectId: "vacation-request-84a27",
+            storageBucket: "vacation-request-84a27.firebasestorage.app",
+            messagingSenderId: "231546887371",
+            appId: "1:231546887371:web:ab9668bb0c944481a9cf4e",
+            measurementId: "G-S5838440J0"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        // DOM elements
+        const registerForm = document.getElementById('registerForm');
+        const firstNameInput = document.getElementById('firstName');
+        const lastNameInput = document.getElementById('lastName');
+        const emailInput = document.getElementById('email');
+        const departmentInput = document.getElementById('department');
+        const shiftInput = document.getElementById('shift');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const termsCheckbox = document.getElementById('terms');
+        const registerButton = document.getElementById('registerButton');
+        const registerButtonText = document.getElementById('registerButtonText');
+        const registerSpinner = document.getElementById('registerSpinner');
+        const googleSignUpButton = document.getElementById('googleSignUpButton');
+        const googleSignUpButtonText = document.getElementById('googleSignUpButtonText');
+        const googleSignUpSpinner = document.getElementById('googleSignUpSpinner');
+        const errorAlert = document.getElementById('errorAlert');
+        const successAlert = document.getElementById('successAlert');
+        const errorMessage = document.getElementById('errorMessage');
+        const togglePassword = document.getElementById('togglePassword');
+        const eyeIcon = document.getElementById('eyeIcon');
+        const eyeOffIcon = document.getElementById('eyeOffIcon');
+        const passwordStrength = document.getElementById('passwordStrength');
+        const passwordStrengthText = document.getElementById('passwordStrengthText');
+
+        // Password visibility toggle
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            eyeIcon.classList.toggle('hidden');
+            eyeOffIcon.classList.toggle('hidden');
+        });
+
+        // Password strength checker
+        passwordInput.addEventListener('input', function() {
+            const password = passwordInput.value;
+            const requirements = {
+                length: password.length >= 8,
+                uppercase: /[A-Z]/.test(password),
+                lowercase: /[a-z]/.test(password),
+                number: /\d/.test(password)
+            };
+
+            // Update requirement indicators
+            Object.keys(requirements).forEach(req => {
+                const element = document.getElementById(`req-${req}`);
+                const svg = element.querySelector('svg');
+                if (requirements[req]) {
+                    svg.classList.remove('text-secondary-400');
+                    svg.classList.add('text-success-500');
+                } else {
+                    svg.classList.remove('text-success-500');
+                    svg.classList.add('text-secondary-400');
+                }
+            });
+
+            // Calculate strength
+            const score = Object.values(requirements).filter(Boolean).length;
+            const percentage = (score / 4) * 100;
+            
+            passwordStrength.style.width = `${percentage}%`;
+            
+            if (score === 0) {
+                passwordStrength.className = 'h-2 rounded-full transition-all duration-300 bg-secondary-300';
+                passwordStrengthText.textContent = 'Weak';
+                passwordStrengthText.className = 'text-xs text-secondary-500';
+            } else if (score <= 2) {
+                passwordStrength.className = 'h-2 rounded-full transition-all duration-300 bg-danger-500';
+                passwordStrengthText.textContent = 'Weak';
+                passwordStrengthText.className = 'text-xs text-danger-600';
+            } else if (score === 3) {
+                passwordStrength.className = 'h-2 rounded-full transition-all duration-300 bg-warning-500';
+                passwordStrengthText.textContent = 'Good';
+                passwordStrengthText.className = 'text-xs text-warning-600';
+            } else {
+                passwordStrength.className = 'h-2 rounded-full transition-all duration-300 bg-success-500';
+                passwordStrengthText.textContent = 'Strong';
+                passwordStrengthText.className = 'text-xs text-success-600';
+            }
+        });
+
+        // Show/hide alerts
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorAlert.classList.remove('hidden');
+            successAlert.classList.add('hidden');
+        }
+
+        function showSuccess() {
+            successAlert.classList.remove('hidden');
+            errorAlert.classList.add('hidden');
+        }
+
+        function hideAlerts() {
+            errorAlert.classList.add('hidden');
+            successAlert.classList.add('hidden');
+        }
+
+        // Set loading state
+        function setLoading(isLoading, isGoogle = false) {
+            if (isGoogle) {
+                googleSignUpButton.disabled = isLoading;
+                googleSignUpButtonText.textContent = isLoading ? 'Creating account...' : 'Sign up with Google';
+                googleSignUpSpinner.classList.toggle('hidden', !isLoading);
+            } else {
+                registerButton.disabled = isLoading;
+                registerButtonText.textContent = isLoading ? 'Creating account...' : 'Create Account';
+                registerSpinner.classList.toggle('hidden', !isLoading);
+            }
+        }
+
+        // Validate form
+        function validateForm() {
+            const firstName = firstNameInput.value.trim();
+            const lastName = lastNameInput.value.trim();
+            const email = emailInput.value.trim();
+            const department = departmentInput.value;
+            const shift = shiftInput.value;
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            const terms = termsCheckbox.checked;
+
+            if (!firstName || !lastName || !email || !department || !shift || !password || !confirmPassword) {
+                throw new Error('Please fill in all required fields.');
+            }
+
+            if (password !== confirmPassword) {
+                throw new Error('Passwords do not match.');
+            }
+
+            if (password.length < 8) {
+                throw new Error('Password must be at least 8 characters long.');
+            }
+
+            if (!terms) {
+                throw new Error('Please accept the Terms of Service and Privacy Policy.');
+            }
+
+            return { firstName, lastName, email, department, shift, password };
+        }
+
+        // Register supervisor in backend
+        async function registerSupervisor(userData) {
+            const response = await fetch('/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${await userData.user.getIdToken()}`
+                },
+                body: JSON.stringify({
+                    firebase_uid: userData.user.uid,
+                    email: userData.user.email,
+                    first_name: userData.firstName,
+                    last_name: userData.lastName,
+                    department: userData.department,
+                    shift: userData.shift
+                })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to register supervisor');
+            }
+
+            return response.json();
+        }
+
+        // Email/Password registration
+        registerForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            hideAlerts();
+            setLoading(true);
+
+            try {
+                const formData = validateForm();
+                
+                // Create Firebase user
+                const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+                
+                // Update profile
+                await updateProfile(userCredential.user, {
+                    displayName: `${formData.firstName} ${formData.lastName}`
+                });
+
+                // Register in backend
+                await registerSupervisor({
+                    user: userCredential.user,
+                    firstName: formData.firstName,
+                    lastName: formData.lastName,
+                    department: formData.department,
+                    shift: formData.shift
+                });
+
+                // Store token and redirect
+                const idToken = await userCredential.user.getIdToken();
+                localStorage.setItem('authToken', idToken);
+                showSuccess();
+                
+                setTimeout(() => {
+                    window.location.href = '/dashboard';
+                }, 2000);
+
+            } catch (error) {
+                console.error('Registration error:', error);
+                let errorMsg = error.message || 'An error occurred during registration.';
+                
+                if (error.code) {
+                    switch (error.code) {
+                        case 'auth/email-already-in-use':
+                            errorMsg = 'An account with this email already exists.';
+                            break;
+                        case 'auth/invalid-email':
+                            errorMsg = 'Invalid email address.';
+                            break;
+                        case 'auth/weak-password':
+                            errorMsg = 'Password is too weak. Please choose a stronger password.';
+                            break;
+                    }
+                }
+                
+                showError(errorMsg);
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        // Google Sign Up (Note: This would need additional form to collect department/shift info)
+        googleSignUpButton.addEventListener('click', async function() {
+            hideAlerts();
+            setLoading(true, true);
+
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                
+                // For Google sign-up, we'd need to show a modal to collect department and shift
+                // For now, we'll redirect to a completion page
+                showError('Google sign-up requires additional information. Please use email registration or contact your administrator.');
+
+            } catch (error) {
+                console.error('Google sign-up error:', error);
+                let errorMsg = 'An error occurred during Google sign-up.';
+                
+                switch (error.code) {
+                    case 'auth/popup-closed-by-user':
+                        errorMsg = 'Sign-up was cancelled.';
+                        break;
+                    case 'auth/popup-blocked':
+                        errorMsg = 'Pop-up was blocked. Please allow pop-ups and try again.';
+                        break;
+                    case 'auth/account-exists-with-different-credential':
+                        errorMsg = 'An account already exists with this email using a different sign-up method.';
+                        break;
+                }
+                
+                showError(errorMsg);
+            } finally {
+                setLoading(false, true);
+            }
+        });
+
+        // Check if user is already logged in
+        auth.onAuthStateChanged(function(user) {
+            if (user) {
+                // User is signed in, redirect to dashboard
+                window.location.href = '/dashboard';
+            }
+        });
+    </script>
+</body>
+</html>
