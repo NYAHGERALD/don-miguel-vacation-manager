@@ -1,67 +1,445 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        body {
+            background: linear-gradient(to bottom right, #eff6ff, #eef2ff, #faf5ff);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vacation Requests - Don Miguel Vacation Manager</title>
     <link href="../static/css/output.css" rel="stylesheet">
+    <link href="../static/css/toast-notifications.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <style>
+        /* Modern Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 1; transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200px 0; }
+            100% { background-position: calc(200px + 100%) 0; }
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.8), 0 0 30px rgba(59, 130, 246, 0.6); }
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Animation Classes */
+        .animate-fadeIn { animation: fadeIn 0.6s ease-out forwards; }
+        .animate-slideUp { animation: slideUp 0.5s ease-out forwards; }
+        .animate-bounceIn { animation: bounceIn 0.7s ease-out forwards; }
+        .animate-shimmer { animation: shimmer 2s infinite linear; }
+        .animate-pulseGlow { animation: pulseGlow 2s ease-in-out infinite; }
+        .animate-gradientShift { animation: gradientShift 3s ease infinite; }
+        
+        /* Modern Gradient Backgrounds */
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .bg-gradient-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .bg-gradient-success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .bg-gradient-warning {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+        
+        .bg-gradient-danger {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        
+        .bg-gradient-info {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+        
+        .bg-gradient-dark {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .bg-gradient-light {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        }
+        
+        /* Modern Card Styles */
+        .modern-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .modern-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Modern Button Styles */
+        .modern-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            padding: 12px 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .modern-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .modern-btn:active {
+            transform: translateY(0);
+        }
+        
+        .modern-btn-success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .modern-btn-success:hover {
+            box-shadow: 0 10px 25px rgba(79, 172, 254, 0.4);
+        }
+        
+        .modern-btn-danger {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        
+        .modern-btn-danger:hover {
+            box-shadow: 0 10px 25px rgba(250, 112, 154, 0.4);
+        }
+        
+        .modern-btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .modern-btn-secondary:hover {
+            box-shadow: 0 10px 25px rgba(240, 147, 251, 0.4);
+        }
+        
+        /* Modern Input Styles */
+        .modern-input {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-radius: 12px;
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .modern-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            outline: none;
+        }
+        
+        /* Modern Badge Styles */
+        .modern-badge {
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 6px 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .badge-pending {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            color: #d63031;
+        }
+        
+        .badge-approved {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+        }
+        
+        .badge-denied {
+            background: linear-gradient(135deg, #e17055 0%, #d63031 100%);
+            color: white;
+        }
+        
+        .badge-cancelled {
+            background: linear-gradient(135deg, #636e72 0%, #2d3436 100%);
+            color: white;
+        }
+        
+        /* Modern Avatar Styles */
+        .modern-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .modern-avatar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+        
+        .modern-avatar:hover::before {
+            opacity: 1;
+            animation: shimmer 1.5s ease-in-out;
+        }
+        
+        /* Modern Table Styles */
+        .modern-table {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .modern-table-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .modern-table-row {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .modern-table-row:hover {
+            background: rgba(102, 126, 234, 0.05);
+            transform: scale(1.01);
+        }
+        
+        /* Modern Modal Styles */
+        .modern-modal {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Modern Stats Card */
+        .stats-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+            background-size: 200% 100%;
+            animation: gradientShift 3s ease infinite;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Modern Navigation */
+        .modern-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+        
+        .nav-link:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        .nav-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        /* Loading Animation */
+        .loading-shimmer {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .modern-card {
+                border-radius: 16px;
+                margin: 8px;
+            }
+            
+            .stats-card {
+                padding: 16px;
+                border-radius: 16px;
+            }
+            
+            .modern-btn {
+                padding: 10px 20px;
+                border-radius: 10px;
+            }
+        }
+    </style>
 </head>
-<body class="bg-secondary-50 min-h-screen">
+<body class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
     <!-- Navigation -->
-    <nav class="bg-white shadow-soft border-b border-secondary-200">
+    <nav class="modern-nav sticky top-0 z-50 animate-fadeIn">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo and Brand -->
-                <div class="flex items-center">
+                <div class="flex items-center animate-slideUp">
                     <div class="flex-shrink-0">
-                        <h1 class="text-xl font-bold text-primary-600">Don Miguel</h1>
-                        <p class="text-xs text-secondary-500 -mt-1">Vacation Manager</p>
+                        <h1 class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Don Miguel</h1>
+                        <p class="text-xs text-gray-500 -mt-1">Vacation Manager</p>
                     </div>
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden md:block">
+                <div class="hidden md:block animate-slideUp" style="animation-delay: 0.1s;">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="/dashboard" class="text-secondary-600 hover:text-secondary-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Dashboard</a>
-                        <a href="/employees" class="text-secondary-600 hover:text-secondary-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Employees</a>
-                        <a href="/vacation-requests" class="text-primary-600 bg-primary-50 px-3 py-2 rounded-md text-sm font-medium">Requests</a>
+                        <a href="/dashboard" class="nav-link text-gray-600 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2 2z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v4H8V5z"></path>
+                            </svg>
+                            Dashboard
+                        </a>
+                        <a href="/employees" class="nav-link text-gray-600 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                            </svg>
+                            Employees
+                        </a>
+                        <a href="/vacation-requests" class="nav-link active px-3 py-2 rounded-md text-sm font-medium flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            Requests
+                        </a>
                     </div>
                 </div>
 
                 <!-- User Menu -->
-                <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-4 animate-slideUp" style="animation-delay: 0.2s;">
                     <div class="relative">
-                        <button id="userMenuButton" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
-                            <div class="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center">
-                                <span id="userInitials" class="text-white text-sm font-medium">--</span>
+                        <button id="userMenuButton" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 hover:scale-105">
+                            <div class="modern-avatar w-8 h-8">
+                                <span id="userInitials" class="text-sm font-medium">--</span>
                             </div>
-                            <span id="userName" class="ml-2 text-secondary-700 font-medium hidden sm:block">Loading...</span>
-                            <svg class="ml-1 h-4 w-4 text-secondary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <span id="userName" class="ml-2 text-gray-700 font-medium hidden sm:block">Loading...</span>
+                            <svg class="ml-1 h-4 w-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </button>
                         
                         <!-- Dropdown Menu -->
-                        <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-large border border-secondary-200 z-50">
+                        <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 modern-modal z-50 animate-bounceIn">
                             <div class="py-1">
-                                <div class="px-4 py-2 border-b border-secondary-200">
-                                    <p class="text-sm font-medium text-secondary-900" id="userMenuName">Loading...</p>
-                                    <p class="text-sm text-secondary-500" id="userMenuEmail">Loading...</p>
+                                <div class="px-4 py-2 border-b border-gray-200">
+                                    <p class="text-sm font-medium text-gray-900" id="userMenuName">Loading...</p>
+                                    <p class="text-sm text-gray-500" id="userMenuEmail">Loading...</p>
                                 </div>
-                                <a href="#" class="block px-4 py-2 text-sm text-secondary-700 hover:bg-secondary-50">Profile Settings</a>
-                                <a href="#" class="block px-4 py-2 text-sm text-secondary-700 hover:bg-secondary-50">Help Center</a>
-                                <button id="logoutButton" class="block w-full text-left px-4 py-2 text-sm text-danger-600 hover:bg-danger-50">Sign Out</button>
+                                <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200 flex items-center">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                    Profile Settings
+                                </a>
+                                <a href="/help" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200 flex items-center">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    Help Center
+                                </a>
+                                <button id="logoutButton" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200 flex items-center">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                    </svg>
+                                    Sign Out
+                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Mobile menu button -->
                     <div class="md:hidden">
-                        <button type="button" class="mobile-menu-button bg-secondary-100 inline-flex items-center justify-center p-2 rounded-md text-secondary-600 hover:text-secondary-700 hover:bg-secondary-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500">
+                        <button type="button" class="mobile-menu-button bg-white/80 backdrop-blur-sm inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-700 hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-all duration-200">
                             <span class="sr-only">Open main menu</span>
                             <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -74,10 +452,10 @@
 
         <!-- Mobile menu -->
         <div class="mobile-menu hidden md:hidden">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-secondary-200">
-                <a href="/dashboard" class="text-secondary-600 hover:text-secondary-700 block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
-                <a href="/employees" class="text-secondary-600 hover:text-secondary-700 block px-3 py-2 rounded-md text-base font-medium">Employees</a>
-                <a href="/vacation-requests" class="text-primary-600 bg-primary-50 block px-3 py-2 rounded-md text-base font-medium">Requests</a>
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white/95 backdrop-blur-sm border-t border-gray-200">
+                <a href="/dashboard" class="nav-link text-gray-600 hover:text-gray-700 block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+                <a href="/employees" class="nav-link text-gray-600 hover:text-gray-700 block px-3 py-2 rounded-md text-base font-medium">Employees</a>
+                <a href="/vacation-requests" class="nav-link active block px-3 py-2 rounded-md text-base font-medium">Requests</a>
             </div>
         </div>
     </nav>
@@ -85,12 +463,12 @@
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Header -->
-        <div class="flex justify-between items-center mb-8">
+        <div class="flex justify-between items-center mb-8 animate-fadeIn" style="animation-delay: 0.3s;">
             <div>
-                <h1 class="text-3xl font-bold text-secondary-900">Vacation Requests</h1>
-                <p class="mt-2 text-secondary-600">Manage and approve vacation requests from your team</p>
+                <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Vacation Requests</h1>
+                <p class="mt-2 text-gray-600">Manage and approve vacation requests from your team</p>
             </div>
-            <button id="createRequestButton" class="btn-primary flex items-center">
+            <button id="createRequestButton" class="modern-btn flex items-center animate-bounceIn" style="animation-delay: 0.5s;">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                 </svg>
@@ -100,86 +478,83 @@
 
         <!-- Stats Cards -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div class="card">
-                <div class="card-body">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <div class="w-10 h-10 bg-warning-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-5 h-5 text-warning-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
+            <div class="stats-card animate-slideUp" style="animation-delay: 0.4s;">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 bg-gradient-warning rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
                         </div>
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-secondary-600">Pending</p>
-                            <p id="pendingCount" class="text-xl font-bold text-secondary-900">--</p>
-                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Pending</p>
+                        <p id="pendingCount" class="text-2xl font-bold text-gray-900">--</p>
                     </div>
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-body">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <div class="w-10 h-10 bg-success-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-5 h-5 text-success-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
+            <div class="stats-card animate-slideUp" style="animation-delay: 0.5s;">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 bg-gradient-success rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
                         </div>
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-secondary-600">Approved</p>
-                            <p id="approvedCount" class="text-xl font-bold text-secondary-900">--</p>
-                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Approved</p>
+                        <p id="approvedCount" class="text-2xl font-bold text-gray-900">--</p>
                     </div>
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-body">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <div class="w-10 h-10 bg-danger-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-5 h-5 text-danger-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
+            <div class="stats-card animate-slideUp" style="animation-delay: 0.6s;">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 bg-gradient-danger rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
                         </div>
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-secondary-600">Denied</p>
-                            <p id="deniedCount" class="text-xl font-bold text-secondary-900">--</p>
-                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Denied</p>
+                        <p id="deniedCount" class="text-2xl font-bold text-gray-900">--</p>
                     </div>
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-body">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <div class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                                </svg>
-                            </div>
+            <div class="stats-card animate-slideUp" style="animation-delay: 0.7s;">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
                         </div>
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-secondary-600">Total Hours</p>
-                            <p id="totalHours" class="text-xl font-bold text-secondary-900">--</p>
-                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Total Hours</p>
+                        <p id="totalHours" class="text-2xl font-bold text-gray-900">--</p>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Filters -->
-        <div class="card mb-6">
-            <div class="card-body">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="modern-card mb-6 animate-slideUp" style="animation-delay: 0.8s;">
+            <div class="p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.414A1 1 0 013 6.707V4z"></path>
+                    </svg>
+                    Filter Requests
+                </h3>
                     <div>
-                        <label for="statusFilter" class="form-label">Status</label>
-                        <select id="statusFilter" class="form-input">
+                        <label for="statusFilter" class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                        <select id="statusFilter" class="modern-input w-full">
                             <option value="">All Status</option>
                             <option value="Pending">Pending</option>
                             <option value="Approved">Approved</option>
@@ -188,125 +563,155 @@
                         </select>
                     </div>
                     <div>
-                        <label for="employeeFilter" class="form-label">Employee</label>
-                        <select id="employeeFilter" class="form-input">
+                        <label for="employeeFilter" class="block text-sm font-medium text-gray-700 mb-2">Employee</label>
+                        <select id="employeeFilter" class="modern-input w-full">
                             <option value="">All Employees</option>
                         </select>
                     </div>
                     <div>
-                        <label for="startDateFilter" class="form-label">Start Date From</label>
-                        <input type="date" id="startDateFilter" class="form-input">
+                        <label for="startDateFilter" class="block text-sm font-medium text-gray-700 mb-2">Start Date From</label>
+                        <input type="date" id="startDateFilter" class="modern-input w-full">
                     </div>
                     <div>
-                        <label for="endDateFilter" class="form-label">Start Date To</label>
-                        <input type="date" id="endDateFilter" class="form-input">
+                        <label for="endDateFilter" class="block text-sm font-medium text-gray-700 mb-2">Start Date To</label>
+                        <input type="date" id="endDateFilter" class="modern-input w-full">
                     </div>
                 </div>
-                <div class="mt-4 flex justify-end">
-                    <button id="clearFilters" class="btn-secondary mr-3">Clear Filters</button>
-                    <button id="applyFilters" class="btn-primary">Apply Filters</button>
+                <div class="mt-6 flex justify-end space-x-3">
+                    <button id="clearFilters" class="modern-btn-secondary">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                        Clear Filters
+                    </button>
+                    <button id="applyFilters" class="modern-btn">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.414A1 1 0 013 6.707V4z"></path>
+                        </svg>
+                        Apply Filters
+                    </button>
                 </div>
             </div>
         </div>
 
         <!-- Requests Table -->
-        <div class="card">
-            <div class="card-header">
-                <h3 class="text-lg font-semibold text-secondary-900">Vacation Requests</h3>
-                <p class="text-sm text-secondary-600 mt-1">Total: <span id="requestCount">0</span> requests</p>
+        <div class="modern-table animate-slideUp" style="animation-delay: 0.9s;">
+            <div class="px-6 py-4 border-b border-gray-200 modern-table-header">
+                <h3 class="text-lg font-semibold text-white flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                    </svg>
+                    Vacation Requests
+                </h3>
+                <p class="text-sm text-blue-100 mt-1">Total: <span id="requestCount">0</span> requests</p>
             </div>
-            <div class="card-body p-0">
-                <div class="overflow-x-auto">
-                    <table class="table">
-                        <thead class="table-header">
-                            <tr>
-                                <th class="table-header-cell">Employee</th>
-                                <th class="table-header-cell">Dates</th>
-                                <th class="table-header-cell">Duration</th>
-                                <th class="table-header-cell">Status</th>
-                                <th class="table-header-cell">Submitted</th>
-                                <th class="table-header-cell">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="requestsTableBody" class="table-body">
-                            <!-- Loading state -->
-                            <tr>
-                                <td colspan="6" class="table-cell text-center py-8">
-                                    <div class="spinner mx-auto mb-2"></div>
-                                    <p class="text-secondary-500">Loading vacation requests...</p>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="modern-table-header">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Employee</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Dates</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Duration</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Submitted</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="requestsTableBody" class="bg-white divide-y divide-gray-200">
+                        <!-- Loading state -->
+                        <tr>
+                            <td colspan="6" class="px-6 py-8 text-center">
+                                <div class="flex flex-col items-center">
+                                    <div class="loading-shimmer w-8 h-8 rounded-full mb-4"></div>
+                                    <p class="text-gray-500">Loading vacation requests...</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
     <!-- Create Request Modal -->
-    <div id="createRequestModal" class="modal-overlay hidden">
-        <div class="modal-content max-w-lg">
-            <div class="px-6 py-4 border-b border-secondary-200">
-                <h3 class="text-lg font-semibold text-secondary-900">Create Vacation Request</h3>
+    <div id="createRequestModal" class="fixed inset-0 bg-blue-500 bg-opacity-20 backdrop-blur-md hidden z-50 flex items-center justify-center p-4" style="backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);">
+        <div class="modern-modal max-w-lg w-full max-h-screen overflow-y-auto animate-bounceIn">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Create Vacation Request
+                </h3>
             </div>
             <form id="createRequestForm" class="px-6 py-4 space-y-4">
                 <div>
-                    <label for="requestEmployee" class="form-label">Employee</label>
-                    <select id="requestEmployee" name="employeeId" required class="form-input">
+                    <label for="requestEmployee" class="block text-sm font-medium text-gray-700 mb-2">Employee</label>
+                    <select id="requestEmployee" name="employeeId" required class="modern-input w-full">
                         <option value="">Select Employee</option>
                     </select>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label for="requestStartDate" class="form-label">Start Date</label>
-                        <input type="date" id="requestStartDate" name="startDate" required class="form-input">
+                        <label for="requestStartDate" class="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+                        <input type="date" id="requestStartDate" name="startDate" required class="modern-input w-full">
                     </div>
                     <div>
-                        <label for="requestEndDate" class="form-label">End Date</label>
-                        <input type="date" id="requestEndDate" name="endDate" required class="form-input">
+                        <label for="requestEndDate" class="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+                        <input type="date" id="requestEndDate" name="endDate" required class="modern-input w-full">
                     </div>
                 </div>
-                <div class="bg-secondary-50 p-4 rounded-lg">
-                    <h4 class="text-sm font-medium text-secondary-900 mb-2">Calculated Information</h4>
+                <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-xl border border-blue-200">
+                    <h4 class="text-sm font-medium text-gray-900 mb-3 flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                        Calculated Information
+                    </h4>
                     <div class="grid grid-cols-2 gap-4 text-sm">
-                        <div>
-                            <span class="text-secondary-600">Business Days:</span>
-                            <span id="calculatedDays" class="font-medium text-secondary-900">--</span>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Business Days:</span>
+                            <span id="calculatedDays" class="font-medium text-gray-900">--</span>
                         </div>
-                        <div>
-                            <span class="text-secondary-600">Total Hours:</span>
-                            <span id="calculatedHours" class="font-medium text-secondary-900">--</span>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Total Hours:</span>
+                            <span id="calculatedHours" class="font-medium text-gray-900">--</span>
                         </div>
-                        <div>
-                            <span class="text-secondary-600">Return Date:</span>
-                            <span id="calculatedReturnDate" class="font-medium text-secondary-900">--</span>
+                        <div class="flex justify-between col-span-2">
+                            <span class="text-gray-600">Return Date:</span>
+                            <span id="calculatedReturnDate" class="font-medium text-gray-900">--</span>
                         </div>
                     </div>
                 </div>
             </form>
-            <div class="px-6 py-4 border-t border-secondary-200 flex justify-end space-x-3">
-                <button id="cancelCreateRequest" class="btn-secondary">Cancel</button>
-                <button id="submitRequest" class="btn-primary flex items-center">
+            <div class="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
+                <button id="cancelCreateRequest" class="modern-btn-secondary">Cancel</button>
+                <button id="submitRequest" class="modern-btn flex items-center">
                     <span id="submitRequestText">Create Request</span>
-                    <div id="submitRequestSpinner" class="spinner ml-2 hidden"></div>
+                    <div id="submitRequestSpinner" class="loading-shimmer w-4 h-4 rounded-full ml-2 hidden"></div>
                 </button>
             </div>
         </div>
     </div>
 
     <!-- Request Details Modal -->
-    <div id="requestDetailsModal" class="modal-overlay hidden">
-        <div class="modal-content max-w-2xl">
-            <div class="px-6 py-4 border-b border-secondary-200">
-                <h3 class="text-lg font-semibold text-secondary-900">Request Details</h3>
+    <div id="requestDetailsModal" class="fixed inset-0 bg-blue-500 bg-opacity-20 backdrop-blur-md hidden z-50 flex items-center justify-center p-4" style="backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);">
+        <div class="modern-modal max-w-2xl w-full max-h-screen overflow-y-auto animate-bounceIn">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Request Details
+                </h3>
             </div>
             <div class="px-6 py-4">
                 <div id="requestDetailsContent">
                     <!-- Content will be populated dynamically -->
                 </div>
             </div>
-            <div class="px-6 py-4 border-t border-secondary-200 flex justify-end space-x-3">
-                <button id="closeRequestDetails" class="btn-secondary">Close</button>
+            <div class="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
+                <button id="closeRequestDetails" class="modern-btn-secondary">Close</button>
                 <div id="requestActions" class="flex space-x-3">
                     <!-- Action buttons will be populated dynamically -->
                 </div>
@@ -314,28 +719,11 @@
         </div>
     </div>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="toast hidden">
-        <div class="p-4">
-            <div class="flex">
-                <div class="flex-shrink-0">
-                    <svg id="toastIcon" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                </div>
-                <div class="ml-3">
-                    <p id="toastMessage" class="text-sm font-medium"></p>
-                </div>
-                <div class="ml-auto pl-3">
-                    <button id="closeToast" class="inline-flex text-secondary-400 hover:text-secondary-600">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Toast Notifications Container -->
+    <div id="toast-container"></div>
+
+    <!-- Include Toast Notifications Script -->
+    <script src="../static/js/toast-notifications.js"></script>
 
     <!-- Firebase SDK -->
     <script type="module">
@@ -352,7 +740,6 @@
             appId: "1:231546887371:web:ab9668bb0c944481a9cf4e",
             measurementId: "G-S5838440J0"
         };
-
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
@@ -399,17 +786,38 @@
         const createRequestForm = document.getElementById('createRequestForm');
         const requestDetailsModal = document.getElementById('requestDetailsModal');
 
-        // Toast elements
-        const toast = document.getElementById('toast');
-        const toastIcon = document.getElementById('toastIcon');
-        const toastMessage = document.getElementById('toastMessage');
-        const closeToast = document.getElementById('closeToast');
-
         // Authentication state handler
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
-                await initializeRequestsPage();
+                
+                // Check if supervisor exists in database
+                try {
+                    const idToken = await user.getIdToken();
+                    const supervisorCheckResponse = await fetch(`/api/supervisor/exists/${user.uid}`, {
+                        headers: {
+                            'Authorization': `Bearer ${idToken}`
+                        }
+                    });
+                    
+                    if (supervisorCheckResponse.ok) {
+                        const supervisorCheck = await supervisorCheckResponse.json();
+                        
+                        if (supervisorCheck.exists) {
+                            // Supervisor exists, proceed to requests page
+                            await initializeRequestsPage();
+                        } else {
+                            // Supervisor doesn't exist, redirect to registration
+                            window.location.href = '/register';
+                        }
+                    } else {
+                        throw new Error('Failed to check supervisor status');
+                    }
+                } catch (error) {
+                    console.error('Error checking supervisor status:', error);
+                    // Redirect to login if there's an error
+                    window.location.href = '/login';
+                }
             } else {
                 window.location.href = '/login';
             }
@@ -426,7 +834,7 @@
                 populateEmployeeFilters();
             } catch (error) {
                 console.error('Requests page initialization error:', error);
-                showToast('Failed to load vacation requests', 'error');
+                showError('Failed to load vacation requests');
             }
         }
 
@@ -466,11 +874,11 @@
                 
             } catch (error) {
                 console.error('Load vacation requests error:', error);
-                showToast('Failed to load vacation requests', 'error');
+                showError('Failed to load vacation requests');
                 requestsTableBody.innerHTML = `
                     <tr>
-                        <td colspan="6" class="table-cell text-center py-8">
-                            <p class="text-danger-500">Failed to load vacation requests</p>
+                        <td colspan="6" class="px-6 py-8 text-center">
+                            <p class="text-red-500">Failed to load vacation requests</p>
                         </td>
                     </tr>
                 `;
@@ -496,7 +904,7 @@
                 
             } catch (error) {
                 console.error('Load employees error:', error);
-                showToast('Failed to load employees', 'error');
+                showError('Failed to load employees');
             }
         }
 
@@ -525,7 +933,9 @@
             employeeFilter.innerHTML = '<option value="">All Employees</option>' + employeeOptions;
             
             const requestEmployeeSelect = document.getElementById('requestEmployee');
-            requestEmployeeSelect.innerHTML = '<option value="">Select Employee</option>' + employeeOptions;
+            if (requestEmployeeSelect) {
+                requestEmployeeSelect.innerHTML = '<option value="">Select Employee</option>' + employeeOptions;
+            }
         }
 
         // Render requests table
@@ -535,11 +945,13 @@
             if (filteredRequests.length === 0) {
                 requestsTableBody.innerHTML = `
                     <tr>
-                        <td colspan="6" class="table-cell text-center py-8">
-                            <svg class="w-12 h-12 text-secondary-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                            </svg>
-                            <p class="text-secondary-500">No vacation requests found</p>
+                        <td colspan="6" class="px-6 py-8 text-center">
+                            <div class="flex flex-col items-center">
+                                <svg class="w-12 h-12 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                <p class="text-gray-500">No vacation requests found</p>
+                            </div>
                         </td>
                     </tr>
                 `;
@@ -551,46 +963,52 @@
                 const employeeName = employee ? `${employee.first_name} ${employee.last_name}` : 'Unknown';
                 
                 return `
-                    <tr class="hover:bg-secondary-50">
-                        <td class="table-cell">
+                    <tr class="modern-table-row">
+                        <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
-                                <div class="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center mr-3">
-                                    <span class="text-primary-600 font-medium text-sm">
+                                <div class="modern-avatar w-10 h-10 mr-3">
+                                    <span class="text-sm font-medium">
                                         ${employee ? getInitials(employee.first_name, employee.last_name) : '??'}
                                     </span>
                                 </div>
                                 <div>
-                                    <p class="font-medium text-secondary-900">${employeeName}</p>
-                                    <p class="text-sm text-secondary-500">${employee ? employee.department : 'N/A'}</p>
+                                    <p class="font-medium text-gray-900">${employeeName}</p>
+                                    <p class="text-sm text-gray-500">${employee ? employee.department : 'N/A'}</p>
+                                    ${employee && (employee.work_area || employee.work_line) ? `
+                                    <p class="text-xs text-gray-400">
+                                        ${employee.work_area ? `Area: ${employee.work_area}` : ''}
+                                        ${employee.work_line ? ` | Line: ${employee.work_line}` : ''}
+                                    </p>
+                                    ` : ''}
                                 </div>
                             </div>
                         </td>
-                        <td class="table-cell">
+                        <td class="px-6 py-4 whitespace-nowrap">
                             <div>
-                                <p class="text-secondary-900">${formatDate(request.start_date)} - ${formatDate(request.end_date)}</p>
-                                <p class="text-sm text-secondary-500">Returns: ${formatDate(request.return_date)}</p>
+                                <p class="text-gray-900">${formatDate(request.start_date)} - ${formatDate(request.end_date)}</p>
+                                <p class="text-sm text-gray-500">Returns: ${formatDate(request.return_date)}</p>
                             </div>
                         </td>
-                        <td class="table-cell">
-                            <p class="text-secondary-900">${request.total_hours} hours</p>
-                            <p class="text-sm text-secondary-500">${Math.ceil(request.total_hours / 8)} days</p>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <p class="text-gray-900">${request.total_hours} hours</p>
+                            <p class="text-sm text-gray-500">${Math.ceil(request.total_hours / 8)} days</p>
                         </td>
-                        <td class="table-cell">
-                            <span class="badge badge-${request.status.toLowerCase()}">${request.status}</span>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="modern-badge badge-${request.status.toLowerCase()}">${request.status}</span>
                         </td>
-                        <td class="table-cell">
-                            <p class="text-secondary-900">${formatDate(request.created_at)}</p>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <p class="text-gray-900">${formatDate(request.created_at)}</p>
                         </td>
-                        <td class="table-cell">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <div class="flex space-x-2">
-                                <button onclick="viewRequest(${request.id})" class="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                                <button onclick="viewRequest(${request.id})" class="text-blue-600 hover:text-blue-700 transition-colors duration-200">
                                     View
                                 </button>
                                 ${request.status === 'Pending' ? `
-                                    <button onclick="approveRequest(${request.id})" class="text-success-600 hover:text-success-700 text-sm font-medium">
+                                    <button onclick="approveRequest(${request.id})" class="text-green-600 hover:text-green-700 transition-colors duration-200">
                                         Approve
                                     </button>
-                                    <button onclick="denyRequest(${request.id})" class="text-danger-600 hover:text-danger-700 text-sm font-medium">
+                                    <button onclick="denyRequest(${request.id})" class="text-red-600 hover:text-red-700 transition-colors duration-200">
                                         Deny
                                     </button>
                                 ` : ''}
@@ -631,53 +1049,69 @@
 
             const detailsHTML = `
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <h4 class="text-sm font-medium text-secondary-900 mb-3">Employee Information</h4>
+                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-xl">
+                        <h4 class="text-sm font-medium text-gray-900 mb-3 flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                            Employee Information
+                        </h4>
                         <div class="space-y-2">
                             <div class="flex justify-between">
-                                <span class="text-sm text-secondary-600">Name:</span>
-                                <span class="text-sm font-medium text-secondary-900">${employee.first_name} ${employee.last_name}</span>
+                                <span class="text-sm text-gray-600">Name:</span>
+                                <span class="text-sm font-medium text-gray-900">${employee.first_name} ${employee.last_name}</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-sm text-secondary-600">Department:</span>
-                                <span class="text-sm font-medium text-secondary-900">${employee.department}</span>
+                                <span class="text-sm text-gray-600">Department:</span>
+                                <span class="text-sm font-medium text-gray-900">${employee.department}</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-sm text-secondary-600">Shift:</span>
-                                <span class="text-sm font-medium text-secondary-900">${employee.shift}</span>
+                                <span class="text-sm text-gray-600">Shift:</span>
+                                <span class="text-sm font-medium text-gray-900">${employee.shift}</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-sm text-secondary-600">Work Area:</span>
-                                <span class="text-sm font-medium text-secondary-900">${employee.work_area || 'N/A'}</span>
+                                <span class="text-sm text-gray-600">Work Area:</span>
+                                <span class="text-sm font-medium text-gray-900">${employee.work_area || 'N/A'}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Work Line:</span>
+                                <span class="text-sm font-medium text-gray-900">${employee.work_line || 'N/A'}</span>
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <h4 class="text-sm font-medium text-secondary-900 mb-3">Request Details</h4>
+                    <div class="bg-gradient-to-br from-purple-50 to-pink-50 p-4 rounded-xl">
+                        <h4 class="text-sm font-medium text-gray-900 mb-3 flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            Request Details
+                        </h4>
                         <div class="space-y-2">
                             <div class="flex justify-between">
-                                <span class="text-sm text-secondary-600">Start Date:</span>
-                                <span class="text-sm font-medium text-secondary-900">${formatDate(request.start_date)}</span>
+                                <span class="text-sm text-gray-600">Start Date:</span>
+                                <span class="text-sm font-medium text-gray-900">${formatDate(request.start_date)}</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-sm text-secondary-600">End Date:</span>
-                                <span class="text-sm font-medium text-secondary-900">${formatDate(request.end_date)}</span>
+                                <span class="text-sm text-gray-600">End Date:</span>
+                                <span class="text-sm font-medium text-gray-900">${formatDate(request.end_date)}</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-sm text-secondary-600">Return Date:</span>
-                                <span class="text-sm font-medium text-secondary-900">${formatDate(request.return_date)}</span>
+                                <span class="text-sm text-gray-600">Return Date:</span>
+                                <span class="text-sm font-medium text-gray-900">${formatDate(request.return_date)}</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-sm text-secondary-600">Total Hours:</span>
-                                <span class="text-sm font-medium text-secondary-900">${request.total_hours} hours</span>
+                                <span class="text-sm text-gray-600">Total Hours:</span>
+                                <span class="text-sm font-medium text-gray-900">${request.total_hours} hours</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-sm text-secondary-600">Status:</span>
-                                <span class="badge badge-${request.status.toLowerCase()}">${request.status}</span>
+                                <span class="text-sm text-gray-600">Status:</span>
+                                <span class="modern-badge badge-${request.status.toLowerCase()}">${request.status}</span>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-sm text-secondary-600">Submitted:</span>
-                                <span class="text-sm font-medium text-secondary-900">${formatDate(request.created_at)}</span>
+                            <div class="flex justify-
+                <div class="grid grid-cols-1 md:grid-cols
+between">
+                                <span class="text-sm text-gray-600">Submitted:</span>
+                                <span class="text-sm font-medium text-gray-900">${formatDate(request.created_at)}</span>
                             </div>
                         </div>
                     </div>
@@ -688,8 +1122,8 @@
             
             // Update action buttons
             const actionsHTML = request.status === 'Pending' ? `
-                <button onclick="approveRequestFromModal(${request.id})" class="btn-success">Approve</button>
-                <button onclick="denyRequestFromModal(${request.id})" class="btn-danger">Deny</button>
+                <button onclick="approveRequestFromModal(${request.id})" class="modern-btn-success">Approve</button>
+                <button onclick="denyRequestFromModal(${request.id})" class="modern-btn-danger">Deny</button>
             ` : '';
             
             document.getElementById('requestActions').innerHTML = actionsHTML;
@@ -734,12 +1168,12 @@
                     throw new Error(error.error || `Failed to ${action} request`);
                 }
 
-                showToast(`Request ${action}d successfully`, 'success');
+                showSuccess(`Request ${action}d successfully`);
                 await loadVacationRequests();
                 
             } catch (error) {
                 console.error(`${action} request error:`, error);
-                showToast(error.message, 'error');
+                showError(error.message);
             }
         }
 
@@ -762,16 +1196,186 @@
                     throw new Error(error.error || 'Failed to create request');
                 }
 
-                showToast('Vacation request created successfully', 'success');
+                showSuccess('Vacation request created successfully');
                 await loadVacationRequests();
                 
             } catch (error) {
                 console.error('Create request error:', error);
-                showToast(error.message, 'error');
+                showError(error.message);
             }
         }
 
-        // Calculate vacation details
+        // US Federal Holidays function
+        function getUSHolidays(year) {
+            const holidays = [];
+            
+            // New Year's Day - January 1
+            holidays.push(new Date(year, 0, 1));
+            
+            // Martin Luther King Jr. Day - Third Monday in January
+            const mlkDay = new Date(year, 0, 1);
+            mlkDay.setDate(1 + (7 - mlkDay.getDay() + 1) % 7 + 14); // Third Monday
+            holidays.push(mlkDay);
+            
+            // Presidents' Day - Third Monday in February
+            const presidentsDay = new Date(year, 1, 1);
+            presidentsDay.setDate(1 + (7 - presidentsDay.getDay() + 1) % 7 + 14); // Third Monday
+            holidays.push(presidentsDay);
+            
+            // Memorial Day - Last Monday in May
+            const memorialDay = new Date(year, 4, 31);
+            memorialDay.setDate(31 - (memorialDay.getDay() + 6) % 7); // Last Monday
+            holidays.push(memorialDay);
+            
+            // Independence Day - July 4
+            holidays.push(new Date(year, 6, 4));
+            
+            // Labor Day - First Monday in September
+            const laborDay = new Date(year, 8, 1);
+            laborDay.setDate(1 + (7 - laborDay.getDay() + 1) % 7); // First Monday
+            holidays.push(laborDay);
+            
+            // Veterans Day - November 11
+            holidays.push(new Date(year, 10, 11));
+            
+            // Thanksgiving Day - Fourth Thursday in November
+            const thanksgiving = new Date(year, 10, 1);
+            thanksgiving.setDate(1 + (7 - thanksgiving.getDay() + 4) % 7 + 21); // Fourth Thursday
+            holidays.push(thanksgiving);
+            
+            // Day After Thanksgiving - Friday after Thanksgiving
+            const dayAfterThanksgiving = new Date(thanksgiving);
+            dayAfterThanksgiving.setDate(thanksgiving.getDate() + 1);
+            holidays.push(dayAfterThanksgiving);
+            
+            // Christmas Eve - December 24
+            holidays.push(new Date(year, 11, 24));
+            
+            // Christmas Day - December 25
+            holidays.push(new Date(year, 11, 25));
+            
+            return holidays;
+        }
+
+        // Check if date is a holiday
+        function isHoliday(date) {
+            const year = date.getFullYear();
+            const holidays = getUSHolidays(year);
+            
+            return holidays.some(holiday =>
+                holiday.getFullYear() === date.getFullYear() &&
+                holiday.getMonth() === date.getMonth() &&
+                holiday.getDate() === date.getDate()
+            );
+        }
+
+        // Check if date is a business day (not weekend or holiday)
+        function isBusinessDay(date) {
+            const dayOfWeek = date.getDay();
+            // Check if it's weekend (Saturday = 6, Sunday = 0)
+            if (dayOfWeek === 0 || dayOfWeek === 6) {
+                return false;
+            }
+            // Check if it's a holiday
+            if (isHoliday(date)) {
+                return false;
+            }
+            return true;
+        }
+
+        // Get next business day after the given date
+        function getNextBusinessDay(date) {
+            const nextDay = new Date(date);
+            nextDay.setDate(nextDay.getDate() + 1);
+            
+            // Keep incrementing until we find a business day
+            while (!isBusinessDay(nextDay)) {
+                nextDay.setDate(nextDay.getDate() + 1);
+            }
+            
+            return nextDay;
+        }
+
+        // Set date input restrictions
+        function setDateRestrictions() {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            const minDate = tomorrow.toISOString().split('T')[0];
+            
+            const startDateInput = document.getElementById('requestStartDate');
+            const endDateInput = document.getElementById('requestEndDate');
+            
+            startDateInput.min = minDate;
+            endDateInput.min = minDate;
+            
+            // Add comprehensive date validation with immediate feedback
+            addDatePickerRestrictions(startDateInput, endDateInput);
+        }
+        
+        // Add comprehensive restrictions to prevent weekend/holiday selection
+        function addDatePickerRestrictions(startDateInput, endDateInput) {
+            // Function to validate and handle date selection
+            function validateDateSelection(input, isStartDate = false) {
+                if (!input.value) return;
+                
+                const selectedDate = new Date(input.value + 'T00:00:00');
+                
+                if (!isBusinessDay(selectedDate)) {
+                    const dayName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][selectedDate.getDay()];
+                    const isWeekend = selectedDate.getDay() === 0 || selectedDate.getDay() === 6;
+                    const errorMsg = isWeekend
+                        ? `${dayName}s are not allowed for vacation requests. Please select a business day.`
+                        : `${selectedDate.toLocaleDateString()} is a holiday. Please select a business day.`;
+                    
+                    showError(errorMsg);
+                    input.value = '';
+                    calculateVacationDetails();
+                    return false;
+                }
+                
+                if (isStartDate) {
+                    // Update end date minimum to be same as start date
+                    endDateInput.min = input.value;
+                }
+                
+                calculateVacationDetails();
+                return true;
+            }
+            
+            // Add multiple event listeners for comprehensive validation
+            startDateInput.addEventListener('input', () => validateDateSelection(startDateInput, true));
+            startDateInput.addEventListener('change', () => validateDateSelection(startDateInput, true));
+            startDateInput.addEventListener('blur', () => validateDateSelection(startDateInput, true));
+            
+            endDateInput.addEventListener('input', () => validateDateSelection(endDateInput, false));
+            endDateInput.addEventListener('change', () => validateDateSelection(endDateInput, false));
+            endDateInput.addEventListener('blur', () => validateDateSelection(endDateInput, false));
+            
+            // Add keyboard event listener to prevent typing invalid dates
+            [startDateInput, endDateInput].forEach(input => {
+                input.addEventListener('keydown', function(e) {
+                    // Allow navigation keys, backspace, delete, etc.
+                    const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
+                    if (allowedKeys.includes(e.key)) return;
+                    
+                    // For other keys, validate after a short delay
+                    setTimeout(() => {
+                        if (this.value) {
+                            const selectedDate = new Date(this.value + 'T00:00:00');
+                            if (!isNaN(selectedDate.getTime()) && !isBusinessDay(selectedDate)) {
+                                showError('Only business days are allowed for vacation requests');
+                                this.value = '';
+                                calculateVacationDetails();
+                            }
+                        }
+                    }, 100);
+                });
+            });
+        }
+
+        // Calculate vacation details with proper business day calculation
         function calculateVacationDetails() {
             const startDate = document.getElementById('requestStartDate').value;
             const endDate = document.getElementById('requestEndDate').value;
@@ -783,31 +1387,32 @@
                 return;
             }
 
-            const start = new Date(startDate);
-            const end = new Date(endDate);
+            // Fix date parsing to avoid timezone issues
+            const start = new Date(startDate + 'T00:00:00');
+            const end = new Date(endDate + 'T00:00:00');
             
             if (end < start) {
                 document.getElementById('calculatedDays').textContent = '--';
                 document.getElementById('calculatedHours').textContent = '--';
                 document.getElementById('calculatedReturnDate').textContent = '--';
+                showError('End date must be after start date');
                 return;
             }
 
-            // Calculate business days
+            // Calculate business days excluding weekends and holidays (INCLUSIVE of both start and end dates)
             let businessDays = 0;
             let currentDate = new Date(start);
             
+            // Include both start and end dates in the calculation
             while (currentDate <= end) {
-                const dayOfWeek = currentDate.getDay();
-                if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Not Sunday (0) or Saturday (6)
+                if (isBusinessDay(currentDate)) {
                     businessDays++;
                 }
                 currentDate.setDate(currentDate.getDate() + 1);
             }
 
             const totalHours = businessDays * 8;
-            const returnDate = new Date(end);
-            returnDate.setDate(returnDate.getDate() + 1);
+            const returnDate = getNextBusinessDay(end);
 
             document.getElementById('calculatedDays').textContent = businessDays;
             document.getElementById('calculatedHours').textContent = totalHours;
@@ -820,35 +1425,40 @@
         }
 
         function formatDate(dateString) {
-            const date = new Date(dateString);
+            // Handle different date formats from backend to avoid timezone issues
+            let date;
+            
+            if (dateString.includes('GMT') || dateString.includes('UTC')) {
+                // Backend returns: "Mon, 29 Sep 2025 00:00:00 GMT"
+                date = new Date(dateString);
+                
+                // Use UTC methods to avoid timezone conversion issues
+                const year = date.getUTCFullYear();
+                const month = date.getUTCMonth();
+                const day = date.getUTCDate();
+                
+                // Create a new date in local timezone for proper formatting
+                const localDate = new Date(year, month, day);
+                
+                return localDate.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+            } else if (dateString.includes('T')) {
+                // ISO format: "2025-09-29T00:00:00"
+                date = new Date(dateString);
+            } else {
+                // Simple date format: "2025-09-29"
+                // Add explicit time to avoid timezone issues
+                date = new Date(dateString + 'T00:00:00');
+            }
+            
             return date.toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'short',
                 day: 'numeric'
             });
-        }
-
-        function showToast(message, type = 'success') {
-            toastMessage.textContent = message;
-            
-            toast.className = 'toast';
-            toastIcon.className = 'h-5 w-5';
-            
-            if (type === 'success') {
-                toast.classList.add('toast-success');
-                toastIcon.classList.add('text-success-400');
-                toastIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
-            } else if (type === 'error') {
-                toast.classList.add('toast-error');
-                toastIcon.classList.add('text-danger-400');
-                toastIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
-            }
-            
-            toast.classList.remove('hidden');
-            
-            setTimeout(() => {
-                toast.classList.add('hidden');
-            }, 5000);
         }
 
         function setLoading(button, textElement, spinnerElement, isLoading, loadingText, normalText) {
@@ -898,6 +1508,7 @@
         // Create request modal
         createRequestButton.addEventListener('click', function() {
             createRequestForm.reset();
+            setDateRestrictions(); // Set date restrictions when modal opens
             calculateVacationDetails();
             createRequestModal.classList.remove('hidden');
         });
@@ -922,7 +1533,7 @@
             const requestData = Object.fromEntries(formData.entries());
 
             if (!requestData.employeeId || !requestData.startDate || !requestData.endDate) {
-                showToast('Please fill in all required fields', 'error');
+                showError('Please fill in all required fields');
                 return;
             }
 
@@ -954,11 +1565,6 @@
             if (event.target === requestDetailsModal) {
                 requestDetailsModal.classList.add('hidden');
             }
-        });
-
-        // Toast close
-        closeToast.addEventListener('click', function() {
-            toast.classList.add('hidden');
         });
     </script>
 </body>

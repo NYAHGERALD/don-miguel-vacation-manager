@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Don Miguel Vacation Manager</title>
+    <link href="../static/css/output.css" rel="stylesheet">
+    <link href="../static/css/toast-notifications.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <style>
+        /* Modern CSS Variables */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --dark-glass-bg: rgba(0, 0, 0, 0.25);
+            --dark-glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Modern Body Background */
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Modern Card */
+        .modern-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .modern-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+            opacity: 1;
+        }
+
+        /* Modern Button */
+        .modern-btn {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .modern-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .modern-btn:hover::before {
+            left: 100%;
+        }
+
+        .modern-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .modern-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .modern-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: white;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Loading Animation */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Admin Badge */
+        .admin-badge {
+            background: var(--danger-gradient);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Back Link */
+        .back-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+
+        .back-link:hover {
+            color: white;
+            transform: translateX(-5px);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fadeIn { animation: fadeIn 0.8s ease-out forwards; }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="w-full max-w-md">
+            <!-- Back Link -->
+            <a href="/" class="back-link animate-fadeIn">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                Back to Home
+            </a>
+
+            <!-- Login Card -->
+            <div class="modern-card p-8 animate-fadeIn" style="animation-delay: 0.2s;">
+                <!-- Admin Badge -->
+                <div class="text-center">
+                    <div class="admin-badge">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                        Administrator Access
+                    </div>
+                </div>
+
+                <!-- Header -->
+                <div class="text-center mb-8">
+                    <h1 class="text-3xl font-black text-white mb-2">Admin Login</h1>
+                    <p class="text-white opacity-80">Secure access to system administration</p>
+                </div>
+
+                <!-- Login Form -->
+                <form id="adminLoginForm">
+                    <div class="form-group">
+                        <label for="email" class="form-label">Admin Email</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            class="form-input" 
+                            placeholder="Enter your admin email"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            class="form-input" 
+                            placeholder="Enter your password"
+                            required
+                        >
+                    </div>
+
+                    <button type="submit" class="modern-btn" id="loginBtn">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                        </svg>
+                        <span id="loginBtnText">Sign In as Admin</span>
+                    </button>
+                </form>
+
+                <!-- Security Notice -->
+                <div class="mt-6 p-4 bg-yellow-500 bg-opacity-20 border border-yellow-500 border-opacity-30 rounded-lg">
+                    <div class="flex items-start">
+                        <svg class="w-5 h-5 text-yellow-300 mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                        </svg>
+                        <div>
+                            <p class="text-yellow-100 text-sm font-medium">Security Notice</p>
+                            <p class="text-yellow-200 text-xs mt-1">Admin access is restricted to authorized personnel only. All login attempts are logged and monitored.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container"></div>
+
+    <!-- Include Toast Notifications Script -->
+    <script src="../static/js/toast-notifications.js"></script>
+
+    <!-- Add showToast function if not available -->
+    <script>
+        // Fallback showToast function if toast-notifications.js doesn't load
+        if (typeof showToast === 'undefined') {
+            function showToast(message, type = 'info') {
+                console.log(`Toast [${type}]: ${message}`);
+                alert(`${type.toUpperCase()}: ${message}`);
+            }
+        }
+    </script>
+
+    <!-- Secure Backend Admin Authentication -->
+    <script>
+        // DOM elements
+        const loginForm = document.getElementById('adminLoginForm');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginBtnText = document.getElementById('loginBtnText');
+
+        // Set loading state
+        function setLoading(loading) {
+            if (loading) {
+                loginBtn.disabled = true;
+                loginBtnText.innerHTML = '<div class="loading-spinner"></div> Authenticating...';
+            } else {
+                loginBtn.disabled = false;
+                loginBtnText.innerHTML = 'Sign In as Admin';
+            }
+        }
+
+        // Handle form submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (!email || !password) {
+                showToast('Please fill in all fields', 'error');
+                return;
+            }
+
+            setLoading(true);
+
+            try {
+                console.log('🔐 Attempting secure admin login for:', email);
+                
+                // Use secure backend authentication
+                const loginResponse = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const loginResult = await loginResponse.json();
+
+                if (!loginResponse.ok) {
+                    throw new Error(loginResult.error || 'Login failed');
+                }
+
+                console.log('✅ Admin login successful:', loginResult.email);
+                
+                // Store admin session info (session is managed server-side)
+                localStorage.setItem('adminEmail', loginResult.email);
+                localStorage.setItem('isAdmin', 'true');
+                localStorage.setItem('adminLoginTime', new Date().toISOString());
+
+                showToast('Admin login successful! Redirecting...', 'success');
+                
+                // Redirect to admin dashboard
+                setTimeout(() => {
+                    window.location.href = '/admin/dashboard';
+                }, 1500);
+
+            } catch (error) {
+                console.error('❌ Admin login error:', error);
+                let errorMessage = 'Login failed. Please try again.';
+                
+                if (error.message) {
+                    errorMessage = error.message;
+                }
+                
+                showToast(errorMessage, 'error');
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        // Check if already logged in as admin
+        window.addEventListener('load', async () => {
+            const isAdmin = localStorage.getItem('isAdmin');
+            
+            if (isAdmin === 'true') {
+                try {
+                    // Check if session is still valid
+                    const sessionResponse = await fetch('/api/admin/session-check', {
+                        method: 'GET',
+                        credentials: 'include'
+                    });
+                    
+                    if (sessionResponse.ok) {
+                        console.log('✅ Valid admin session found, redirecting...');
+                        window.location.href = '/admin/dashboard';
+                    } else {
+                        // Clear invalid session
+                        localStorage.removeItem('isAdmin');
+                        localStorage.removeItem('adminEmail');
+                        localStorage.removeItem('adminLoginTime');
+                    }
+                } catch (error) {
+                    console.log('Session check failed:', error);
+                    // Clear invalid session
+                    localStorage.removeItem('isAdmin');
+                    localStorage.removeItem('adminEmail');
+                    localStorage.removeItem('adminLoginTime');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

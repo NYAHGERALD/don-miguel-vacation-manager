@@ -9,31 +9,141 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .form-input {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            ring: 2px;
+            ring-color: rgba(59, 130, 246, 0.5);
+            border-color: transparent;
+            background: rgba(255, 255, 255, 0.25);
+        }
+        
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .form-input option {
+            color: #374151;
+            background: white;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .password-strength-weak { background: #ef4444; }
+        .password-strength-fair { background: #f59e0b; }
+        .password-strength-good { background: #10b981; }
+        .password-strength-strong { background: #059669; }
+        
+        .requirement-met { color: #10b981 !important; }
+        .requirement-unmet { color: rgba(255, 255, 255, 0.6) !important; }
+        
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .form-error {
+            color: #fca5a5;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-top: 1rem;
+        }
+        
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+        
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #6ee7b7;
+        }
+    </style>
 </head>
-<body class="bg-secondary-50 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8">
+<body class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-lg w-full space-y-8">
         <!-- Header -->
         <div class="text-center">
-            <div class="mx-auto mb-6">
-                <h1 class="text-2xl font-bold text-primary-600">Don Miguel</h1>
-                <p class="text-sm text-secondary-500 -mt-1">Vacation Manager</p>
+            <div class="mx-auto mb-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-4 shadow-lg">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                    </svg>
+                </div>
+                <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">Don Miguel</h1>
+                <p class="text-sm text-white opacity-80 -mt-1">Vacation Manager</p>
             </div>
-            <h2 class="text-3xl font-bold text-secondary-900">
+            <h2 class="text-4xl font-bold text-white mb-3">
                 Supervisor Registration
             </h2>
-            <p class="mt-2 text-sm text-secondary-600">
+            <p class="mt-2 text-lg text-white opacity-90">
                 Create your account to start managing vacation requests
             </p>
         </div>
 
         <!-- Registration Form -->
-        <div class="card">
-            <div class="card-body">
+        <div class="glass-card rounded-2xl shadow-2xl">
+            <div class="p-8">
                 <form id="registerForm" class="space-y-6">
                     <!-- Name Fields -->
-                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                         <div>
-                            <label for="firstName" class="form-label">
+                            <label for="firstName" class="block text-sm font-semibold text-white mb-2">
                                 First Name
                             </label>
                             <input 
@@ -41,13 +151,13 @@
                                 name="firstName" 
                                 type="text" 
                                 required 
-                                class="form-input"
+                                class="form-input w-full px-4 py-3 rounded-lg transition-all duration-200"
                                 placeholder="John"
                             >
                             <div id="firstNameError" class="form-error hidden"></div>
                         </div>
                         <div>
-                            <label for="lastName" class="form-label">
+                            <label for="lastName" class="block text-sm font-semibold text-white mb-2">
                                 Last Name
                             </label>
                             <input 
@@ -55,7 +165,7 @@
                                 name="lastName" 
                                 type="text" 
                                 required 
-                                class="form-input"
+                                class="form-input w-full px-4 py-3 rounded-lg transition-all duration-200"
                                 placeholder="Smith"
                             >
                             <div id="lastNameError" class="form-error hidden"></div>
@@ -64,7 +174,7 @@
 
                     <!-- Email Field -->
                     <div>
-                        <label for="email" class="form-label">
+                        <label for="email" class="block text-sm font-semibold text-white mb-2">
                             Email Address
                         </label>
                         <input 
@@ -73,7 +183,7 @@
                             type="email" 
                             autocomplete="email" 
                             required 
-                            class="form-input"
+                            class="form-input w-full px-4 py-3 rounded-lg transition-all duration-200"
                             placeholder="supervisor@donmiguelfoods.com"
                         >
                         <div id="emailError" class="form-error hidden"></div>
@@ -81,14 +191,14 @@
 
                     <!-- Department Field -->
                     <div>
-                        <label for="department" class="form-label">
+                        <label for="department" class="block text-sm font-semibold text-white mb-2">
                             Department
                         </label>
                         <select 
                             id="department" 
                             name="department" 
                             required 
-                            class="form-input"
+                            class="form-input w-full px-4 py-3 rounded-lg transition-all duration-200"
                         >
                             <option value="">Select Department</option>
                             <option value="Production">Production</option>
@@ -100,14 +210,14 @@
 
                     <!-- Shift Field -->
                     <div>
-                        <label for="shift" class="form-label">
+                        <label for="shift" class="block text-sm font-semibold text-white mb-2">
                             Shift
                         </label>
                         <select 
                             id="shift" 
                             name="shift" 
                             required 
-                            class="form-input"
+                            class="form-input w-full px-4 py-3 rounded-lg transition-all duration-200"
                         >
                             <option value="">Select Shift</option>
                             <option value="First Shift">First Shift</option>
@@ -118,7 +228,7 @@
 
                     <!-- Password Field -->
                     <div>
-                        <label for="password" class="form-label">
+                        <label for="password" class="block text-sm font-semibold text-white mb-2">
                             Password
                         </label>
                         <div class="relative">
@@ -128,13 +238,13 @@
                                 type="password" 
                                 autocomplete="new-password" 
                                 required 
-                                class="form-input pr-10"
+                                class="form-input w-full px-4 py-3 pr-12 rounded-lg transition-all duration-200"
                                 placeholder="Create a strong password"
                             >
                             <button 
                                 type="button" 
                                 id="togglePassword"
-                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-secondary-400 hover:text-secondary-600"
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-white opacity-70 hover:opacity-100 transition-opacity duration-200"
                             >
                                 <svg id="eyeIcon" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -147,35 +257,35 @@
                         </div>
                         <div id="passwordError" class="form-error hidden"></div>
                         <!-- Password Strength Indicator -->
-                        <div class="mt-2">
-                            <div class="flex items-center space-x-2">
-                                <div class="flex-1 bg-secondary-200 rounded-full h-2">
+                        <div class="mt-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="flex-1 bg-white bg-opacity-20 rounded-full h-2">
                                     <div id="passwordStrength" class="h-2 rounded-full transition-all duration-300" style="width: 0%;"></div>
                                 </div>
-                                <span id="passwordStrengthText" class="text-xs text-secondary-500">Weak</span>
+                                <span id="passwordStrengthText" class="text-xs text-white opacity-80 font-medium">Weak</span>
                             </div>
-                            <div class="mt-1 text-xs text-secondary-500">
+                            <div class="mt-2 text-xs text-white opacity-80">
                                 <ul id="passwordRequirements" class="space-y-1">
-                                    <li id="req-length" class="flex items-center">
-                                        <svg class="w-3 h-3 mr-1 text-secondary-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <li id="req-length" class="flex items-center requirement-unmet">
+                                        <svg class="w-3 h-3 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                         </svg>
                                         At least 8 characters
                                     </li>
-                                    <li id="req-uppercase" class="flex items-center">
-                                        <svg class="w-3 h-3 mr-1 text-secondary-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <li id="req-uppercase" class="flex items-center requirement-unmet">
+                                        <svg class="w-3 h-3 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                         </svg>
                                         One uppercase letter
                                     </li>
-                                    <li id="req-lowercase" class="flex items-center">
-                                        <svg class="w-3 h-3 mr-1 text-secondary-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <li id="req-lowercase" class="flex items-center requirement-unmet">
+                                        <svg class="w-3 h-3 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                         </svg>
                                         One lowercase letter
                                     </li>
-                                    <li id="req-number" class="flex items-center">
-                                        <svg class="w-3 h-3 mr-1 text-secondary-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <li id="req-number" class="flex items-center requirement-unmet">
+                                        <svg class="w-3 h-3 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                         </svg>
                                         One number
@@ -187,7 +297,7 @@
 
                     <!-- Confirm Password Field -->
                     <div>
-                        <label for="confirmPassword" class="form-label">
+                        <label for="confirmPassword" class="block text-sm font-semibold text-white mb-2">
                             Confirm Password
                         </label>
                         <input 
@@ -196,7 +306,7 @@
                             type="password" 
                             autocomplete="new-password" 
                             required 
-                            class="form-input"
+                            class="form-input w-full px-4 py-3 rounded-lg transition-all duration-200"
                             placeholder="Confirm your password"
                         >
                         <div id="confirmPasswordError" class="form-error hidden"></div>
@@ -205,78 +315,50 @@
                     <!-- Terms and Conditions -->
                     <div class="flex items-start">
                         <div class="flex items-center h-5">
-                            <input 
-                                id="terms" 
-                                name="terms" 
-                                type="checkbox" 
+                            <input
+                                id="terms"
+                                name="terms"
+                                type="checkbox"
                                 required
-                                class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-secondary-300 rounded"
+                                class="h-4 w-4 text-blue-500 focus:ring-blue-400 border-white border-opacity-30 rounded bg-white bg-opacity-20"
                             >
                         </div>
                         <div class="ml-3 text-sm">
-                            <label for="terms" class="text-secondary-700">
-                                I agree to the 
-                                <a href="#" class="font-medium text-primary-600 hover:text-primary-500">Terms of Service</a>
-                                and 
-                                <a href="#" class="font-medium text-primary-600 hover:text-primary-500">Privacy Policy</a>
+                            <label for="terms" class="text-white opacity-90">
+                                I agree to the
+                                <a href="#" onclick="showLegalDocument('terms')" class="font-medium underline cursor-pointer italic" style="color: #60a5fa !important;">Terms of Service</a>
+                                and
+                                <a href="#" onclick="showLegalDocument('privacy')" class="font-medium underline cursor-pointer italic" style="color: #60a5fa !important;">Privacy Policy</a>
                             </label>
                         </div>
                     </div>
 
                     <!-- Submit Button -->
                     <div>
-                        <button 
-                            type="submit" 
+                        <button
+                            type="submit"
                             id="registerButton"
-                            class="w-full btn-primary flex justify-center items-center"
+                            class="btn-primary w-full text-white font-semibold py-3 px-6 rounded-lg shadow-lg flex justify-center items-center"
                         >
                             <span id="registerButtonText">Create Account</span>
                             <div id="registerSpinner" class="spinner ml-2 hidden"></div>
                         </button>
                     </div>
-
-                    <!-- Divider -->
-                    <div class="relative">
-                        <div class="absolute inset-0 flex items-center">
-                            <div class="w-full border-t border-secondary-300"></div>
-                        </div>
-                        <div class="relative flex justify-center text-sm">
-                            <span class="px-2 bg-white text-secondary-500">Or register with</span>
-                        </div>
-                    </div>
-
-                    <!-- Google Sign Up -->
-                    <div>
-                        <button 
-                            type="button" 
-                            id="googleSignUpButton"
-                            class="w-full flex justify-center items-center px-4 py-2 border border-secondary-300 rounded-lg shadow-sm bg-white text-sm font-medium text-secondary-700 hover:bg-secondary-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200"
-                        >
-                            <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24">
-                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                            </svg>
-                            <span id="googleSignUpButtonText">Sign up with Google</span>
-                            <div id="googleSignUpSpinner" class="spinner ml-2 hidden"></div>
-                        </button>
-                    </div>
                 </form>
 
                 <!-- Error Alert -->
-                <div id="errorAlert" class="hidden mt-4 p-4 bg-danger-50 border border-danger-200 rounded-lg">
+                <div id="errorAlert" class="alert alert-error hidden">
                     <div class="flex">
                         <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-danger-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="h-5 w-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
                         <div class="ml-3">
-                            <h3 class="text-sm font-medium text-danger-800">
+                            <h3 class="text-sm font-medium text-red-300">
                                 Registration Failed
                             </h3>
-                            <div class="mt-2 text-sm text-danger-700">
+                            <div class="mt-2 text-sm">
                                 <p id="errorMessage"></p>
                             </div>
                         </div>
@@ -284,18 +366,18 @@
                 </div>
 
                 <!-- Success Alert -->
-                <div id="successAlert" class="hidden mt-4 p-4 bg-success-50 border border-success-200 rounded-lg">
+                <div id="successAlert" class="alert alert-success hidden">
                     <div class="flex">
                         <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-success-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="h-5 w-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
                         <div class="ml-3">
-                            <h3 class="text-sm font-medium text-success-800">
+                            <h3 class="text-sm font-medium text-green-300">
                                 Registration Successful
                             </h3>
-                            <div class="mt-2 text-sm text-success-700">
+                            <div class="mt-2 text-sm">
                                 <p>Account created successfully! Redirecting to dashboard...</p>
                             </div>
                         </div>
@@ -306,9 +388,9 @@
 
         <!-- Sign In Link -->
         <div class="text-center">
-            <p class="text-sm text-secondary-600">
+            <p class="text-sm text-white opacity-80">
                 Already have an account?
-                <a href="/login" class="font-medium text-primary-600 hover:text-primary-500 transition-colors duration-200">
+                <a href="/login" class="font-medium text-blue-300 hover:text-blue-200 underline transition-colors duration-200">
                     Sign in here
                 </a>
             </p>
@@ -316,16 +398,53 @@
 
         <!-- Back to Home -->
         <div class="text-center">
-            <a href="/" class="text-sm text-secondary-500 hover:text-secondary-700 transition-colors duration-200">
+            <a href="/" class="text-sm text-white opacity-70 hover:opacity-90 transition-opacity duration-200">
                 ← Back to home
             </a>
+        </div>
+    </div>
+
+    <!-- Legal Document Modal -->
+    <div id="legalDocumentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-2 sm:p-4">
+        <div class="glass-card rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-4xl flex flex-col" style="max-height: calc(100vh - 1rem); height: auto;">
+            <!-- Fixed Header -->
+            <div class="flex items-center justify-between p-4 sm:p-6 border-b border-white border-opacity-20 flex-shrink-0">
+                <h3 id="legalDocumentTitle" class="text-lg sm:text-xl font-bold text-white truncate pr-4">Legal Document</h3>
+                <button onclick="closeLegalDocument()" class="text-white opacity-70 hover:opacity-100 transition-opacity duration-200 flex-shrink-0 p-1">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Scrollable Content -->
+            <div class="flex-1 overflow-y-auto p-4 sm:p-6" style="min-height: 0;">
+                <div id="legalDocumentContent" class="text-white opacity-90 leading-relaxed text-sm sm:text-base">
+                    <div class="flex items-center justify-center py-8">
+                        <div class="spinner mr-3"></div>
+                        <span>Loading document...</span>
+                    </div>
+                </div>
+                <div class="mt-6 pt-4 border-t border-white border-opacity-20 text-xs sm:text-sm text-white opacity-70">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4">
+                        <p>Version: <span id="legalDocumentVersion" class="font-medium">-</span></p>
+                        <p>Effective: <span id="legalDocumentDate" class="font-medium">-</span></p>
+                        <p>Updated: <span id="legalDocumentUpdated" class="font-medium">-</span></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Fixed Footer -->
+            <div class="p-4 sm:p-6 border-t border-white border-opacity-20 flex justify-end flex-shrink-0">
+                <button onclick="closeLegalDocument()" class="btn-secondary px-4 sm:px-6 py-2 rounded-lg text-sm sm:text-base">Close</button>
+            </div>
         </div>
     </div>
 
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
         // Firebase configuration (replace with your actual config)
         const firebaseConfig = {
@@ -341,7 +460,6 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const googleProvider = new GoogleAuthProvider();
 
         // DOM elements
         const registerForm = document.getElementById('registerForm');
@@ -356,9 +474,6 @@
         const registerButton = document.getElementById('registerButton');
         const registerButtonText = document.getElementById('registerButtonText');
         const registerSpinner = document.getElementById('registerSpinner');
-        const googleSignUpButton = document.getElementById('googleSignUpButton');
-        const googleSignUpButtonText = document.getElementById('googleSignUpButtonText');
-        const googleSignUpSpinner = document.getElementById('googleSignUpSpinner');
         const errorAlert = document.getElementById('errorAlert');
         const successAlert = document.getElementById('successAlert');
         const errorMessage = document.getElementById('errorMessage');
@@ -389,13 +504,12 @@
             // Update requirement indicators
             Object.keys(requirements).forEach(req => {
                 const element = document.getElementById(`req-${req}`);
-                const svg = element.querySelector('svg');
                 if (requirements[req]) {
-                    svg.classList.remove('text-secondary-400');
-                    svg.classList.add('text-success-500');
+                    element.classList.remove('requirement-unmet');
+                    element.classList.add('requirement-met');
                 } else {
-                    svg.classList.remove('text-success-500');
-                    svg.classList.add('text-secondary-400');
+                    element.classList.remove('requirement-met');
+                    element.classList.add('requirement-unmet');
                 }
             });
 
@@ -406,21 +520,17 @@
             passwordStrength.style.width = `${percentage}%`;
             
             if (score === 0) {
-                passwordStrength.className = 'h-2 rounded-full transition-all duration-300 bg-secondary-300';
+                passwordStrength.className = 'h-2 rounded-full transition-all duration-300 bg-gray-400';
                 passwordStrengthText.textContent = 'Weak';
-                passwordStrengthText.className = 'text-xs text-secondary-500';
             } else if (score <= 2) {
-                passwordStrength.className = 'h-2 rounded-full transition-all duration-300 bg-danger-500';
+                passwordStrength.className = 'h-2 rounded-full transition-all duration-300 password-strength-weak';
                 passwordStrengthText.textContent = 'Weak';
-                passwordStrengthText.className = 'text-xs text-danger-600';
             } else if (score === 3) {
-                passwordStrength.className = 'h-2 rounded-full transition-all duration-300 bg-warning-500';
+                passwordStrength.className = 'h-2 rounded-full transition-all duration-300 password-strength-fair';
                 passwordStrengthText.textContent = 'Good';
-                passwordStrengthText.className = 'text-xs text-warning-600';
             } else {
-                passwordStrength.className = 'h-2 rounded-full transition-all duration-300 bg-success-500';
+                passwordStrength.className = 'h-2 rounded-full transition-all duration-300 password-strength-strong';
                 passwordStrengthText.textContent = 'Strong';
-                passwordStrengthText.className = 'text-xs text-success-600';
             }
         });
 
@@ -442,16 +552,10 @@
         }
 
         // Set loading state
-        function setLoading(isLoading, isGoogle = false) {
-            if (isGoogle) {
-                googleSignUpButton.disabled = isLoading;
-                googleSignUpButtonText.textContent = isLoading ? 'Creating account...' : 'Sign up with Google';
-                googleSignUpSpinner.classList.toggle('hidden', !isLoading);
-            } else {
-                registerButton.disabled = isLoading;
-                registerButtonText.textContent = isLoading ? 'Creating account...' : 'Create Account';
-                registerSpinner.classList.toggle('hidden', !isLoading);
-            }
+        function setLoading(isLoading) {
+            registerButton.disabled = isLoading;
+            registerButtonText.textContent = isLoading ? 'Creating account...' : 'Create Account';
+            registerSpinner.classList.toggle('hidden', !isLoading);
         }
 
         // Validate form
@@ -509,6 +613,7 @@
 
             return response.json();
         }
+
 
         // Email/Password registration
         registerForm.addEventListener('submit', async function(e) {
@@ -569,45 +674,101 @@
             }
         });
 
-        // Google Sign Up (Note: This would need additional form to collect department/shift info)
-        googleSignUpButton.addEventListener('click', async function() {
-            hideAlerts();
-            setLoading(true, true);
-
-            try {
-                const result = await signInWithPopup(auth, googleProvider);
-                
-                // For Google sign-up, we'd need to show a modal to collect department and shift
-                // For now, we'll redirect to a completion page
-                showError('Google sign-up requires additional information. Please use email registration or contact your administrator.');
-
-            } catch (error) {
-                console.error('Google sign-up error:', error);
-                let errorMsg = 'An error occurred during Google sign-up.';
-                
-                switch (error.code) {
-                    case 'auth/popup-closed-by-user':
-                        errorMsg = 'Sign-up was cancelled.';
-                        break;
-                    case 'auth/popup-blocked':
-                        errorMsg = 'Pop-up was blocked. Please allow pop-ups and try again.';
-                        break;
-                    case 'auth/account-exists-with-different-credential':
-                        errorMsg = 'An account already exists with this email using a different sign-up method.';
-                        break;
-                }
-                
-                showError(errorMsg);
-            } finally {
-                setLoading(false, true);
-            }
-        });
-
         // Check if user is already logged in
         auth.onAuthStateChanged(function(user) {
-            if (user) {
-                // User is signed in, redirect to dashboard
-                window.location.href = '/dashboard';
+            // Don't redirect users to dashboard when they're on the registration page
+            // The registration page should allow users to register even if they're already authenticated
+            // The redirect to dashboard will happen after successful registration
+        });
+    </script>
+
+    <!-- Legal Documents JavaScript -->
+    <script>
+        // Legal document modal functions
+        async function showLegalDocument(type) {
+            const modal = document.getElementById('legalDocumentModal');
+            const title = document.getElementById('legalDocumentTitle');
+            const content = document.getElementById('legalDocumentContent');
+            const version = document.getElementById('legalDocumentVersion');
+            const date = document.getElementById('legalDocumentDate');
+            const updated = document.getElementById('legalDocumentUpdated');
+            
+            // Show modal with loading state
+            modal.classList.remove('hidden');
+            content.innerHTML = `
+                <div class="flex items-center justify-center py-8">
+                    <div class="spinner mr-3"></div>
+                    <span>Loading document...</span>
+                </div>
+            `;
+            
+            try {
+                let endpoint;
+                let documentTitle;
+                
+                if (type === 'terms') {
+                    endpoint = '/api/legal/terms-of-service';
+                    documentTitle = 'Terms of Service';
+                } else if (type === 'privacy') {
+                    endpoint = '/api/legal/privacy-policy';
+                    documentTitle = 'Privacy Policy';
+                } else {
+                    throw new Error('Invalid document type');
+                }
+                
+                title.textContent = documentTitle;
+                
+                const response = await fetch(endpoint);
+                if (!response.ok) {
+                    throw new Error(`Failed to load ${documentTitle}`);
+                }
+                
+                const document = await response.json();
+                
+                // Update modal content
+                content.innerHTML = `<div class="prose prose-invert max-w-none">${document.content.replace(/\n/g, '<br>')}</div>`;
+                version.textContent = document.version || 'N/A';
+                date.textContent = document.effective_date ? new Date(document.effective_date).toLocaleDateString() : 'N/A';
+                updated.textContent = document.updated_at ? new Date(document.updated_at).toLocaleDateString() : 'N/A';
+                
+            } catch (error) {
+                console.error('Error loading legal document:', error);
+                content.innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="text-red-400 mb-4">
+                            <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <p class="font-semibold">Error Loading Document</p>
+                        </div>
+                        <p class="text-white opacity-70">Unable to load the requested document. Please try again later.</p>
+                    </div>
+                `;
+                version.textContent = 'N/A';
+                date.textContent = 'N/A';
+                updated.textContent = 'N/A';
+            }
+        }
+        
+        function closeLegalDocument() {
+            const modal = document.getElementById('legalDocumentModal');
+            modal.classList.add('hidden');
+        }
+        
+        // Close modal when clicking outside
+        document.getElementById('legalDocumentModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeLegalDocument();
+            }
+        });
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('legalDocumentModal');
+                if (!modal.classList.contains('hidden')) {
+                    closeLegalDocument();
+                }
             }
         });
     </script>

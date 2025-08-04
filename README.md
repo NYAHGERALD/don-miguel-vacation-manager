@@ -1,262 +1,341 @@
 # Don Miguel Vacation Manager
 
-A professional-grade vacation management web application designed for workplace supervisors to manage employee vacation requests efficiently and securely.
+A comprehensive web-based vacation management system with SMS notifications, built with Flask, PostgreSQL, Firebase Authentication, and Twilio SMS integration.
 
-## 🌟 Features
+## Features
 
-### Core Functionality
-- **Secure Authentication**: Firebase Authentication with email/password and Google OAuth
-- **Supervisor Dashboard**: Comprehensive metrics and analytics
-- **Employee Management**: Add, view, and manage employees by department
-- **Vacation Request System**: Create, approve, deny, and track vacation requests
-- **Approval Workflow**: Streamlined approval process with business rule validation
-- **Data Filtering & Sorting**: Advanced filtering by status, dates, employees, and more
-- **Visual Analytics**: Charts and graphs for vacation trends and statistics
-- **Notifications**: Email alerts for approvals, denials, and reminders
+### 🏢 Employee Management
+- User registration and authentication via Firebase
+- Role-based access control (Employee, Supervisor, Admin)
+- Profile management with personal information
+- Secure session management
 
-### Advanced Features
-- **Access Control**: Role-based permissions scoped by department
-- **Conflict Detection**: Automatic detection of overlapping vacation requests
-- **Capacity Management**: Configurable limits for concurrent vacations per work area
-- **Audit Logging**: Complete audit trail for compliance
-- **Responsive Design**: Mobile-friendly interface using Tailwind CSS
-- **Real-time Updates**: Dynamic dashboard updates
+### 📅 Vacation Request System
+- Create and submit vacation requests
+- Supervisor approval/denial workflow
+- Request status tracking and history
+- Calendar integration and conflict detection
 
-## 🏗️ Architecture
+### 📊 Dashboard & Analytics
+- Real-time vacation statistics
+- Pending requests overview
+- Employee vacation balance tracking
+- Administrative reporting tools
 
-### Technology Stack
-- **Frontend**: HTML5, Tailwind CSS v4, JavaScript ES6+, Chart.js
-- **Backend**: Python Flask with RESTful API design
-- **Database**: PostgreSQL with advanced schema design
-- **Authentication**: Firebase Authentication
-- **Styling**: Tailwind CSS v4 with custom Don Miguel Foods branding
-- **Charts**: Chart.js for data visualization
+### 📱 SMS Notification System
+- Automated vacation reminders via Twilio
+- Configurable notification preferences per supervisor
+- Customizable notification timing and frequency
+- Complete notification history tracking
+- Test SMS functionality
 
-### Project Structure
-```
-vacation-manager-app/
-├── backend/
-│   └── app.py                 # Flask application with API endpoints
-├── database/
-│   └── schema.sql            # PostgreSQL database schema
-├── templates/                # HTML templates
-│   ├── index.html           # Landing page
-│   ├── login.html           # Login page
-│   ├── register.html        # Registration page
-│   ├── dashboard.html       # Supervisor dashboard
-│   ├── employees.html       # Employee management
-│   └── vacation_requests.html # Vacation request management
-├── static/
-│   ├── css/
-│   │   ├── input.css        # Tailwind input file
-│   │   └── output.css       # Compiled Tailwind CSS
-│   └── js/
-│       ├── auth.js          # Authentication logic
-│       ├── dashboard.js     # Dashboard functionality
-│       ├── employees.js     # Employee management
-│       └── vacation.js      # Vacation request handling
-├── firebase-config.js       # Firebase configuration
-├── tailwind.config.js       # Tailwind CSS configuration
-├── package.json            # Node.js dependencies
-├── requirements.txt        # Python dependencies
-├── .env.example           # Environment variables template
-└── README.md              # This file
-```
+### 👨‍💼 Administrative Features
+- User management and role assignment
+- System configuration and settings
+- Vacation policy management
+- Comprehensive audit logging
 
-## 🚀 Quick Start
+## Technology Stack
+
+- **Backend**: Flask (Python)
+- **Database**: PostgreSQL
+- **Authentication**: Firebase Admin SDK
+- **SMS**: Twilio API
+- **Frontend**: HTML5, Tailwind CSS, JavaScript
+- **Scheduling**: APScheduler
+- **Deployment**: Gunicorn, Nginx
+
+## Quick Start
 
 ### Prerequisites
-- Python 3.9+
-- Node.js 18+
+- Python 3.8+
 - PostgreSQL 12+
-- Firebase project with Authentication enabled
+- Node.js 14+ (for CSS building)
+- Firebase project
+- Twilio account
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/don-miguel-vacation-manager.git
+   git clone <repository-url>
    cd don-miguel-vacation-manager
    ```
 
-2. **Set up Python environment**
+2. **Set up virtual environment**
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
-   pip install -r requirements.txt
    ```
 
-3. **Install Node.js dependencies**
+3. **Install dependencies**
    ```bash
+   pip install -r requirements.txt
    npm install
    ```
 
-4. **Configure environment variables**
+4. **Configure environment**
    ```bash
    cp .env.example .env
-   # Edit .env with your actual configuration values
+   # Edit .env with your configuration
    ```
 
-5. **Set up PostgreSQL database**
+5. **Set up database**
    ```bash
    createdb vacation_manager
-   psql -d vacation_manager -f database/schema.sql
+   psql -U postgres -d vacation_manager -f database/schema.sql
+   psql -U postgres -d vacation_manager -f database/grant_permissions.sql
+   psql -U postgres -d vacation_manager -f database/create_notification_preferences.sql
    ```
 
 6. **Configure Firebase**
-   - Create a Firebase project at https://console.firebase.google.com
-   - Enable Authentication with Email/Password and Google providers
-   - Download service account key and update firebase-config.js
-   - Update .env with Firebase configuration
+   - Place `firebase-service-account.json` in project root
+   - Configure Firebase Authentication
 
-7. **Build CSS**
+7. **Build and run**
    ```bash
    npm run build-css
+   python backend/app.py
    ```
 
-8. **Start the application**
-   ```bash
-   npm run dev
-   ```
+Visit `http://localhost:5000` to access the application.
 
-The application will be available at `http://localhost:5000`
+## Configuration
 
-## 📊 Database Schema
+### Environment Variables
 
-### Core Tables
-- **supervisors**: Supervisor profiles linked to Firebase Authentication
-- **employees**: Employee information managed by supervisors
-- **vacation_requests**: Vacation requests with approval workflow
-- **area_limits**: Configurable limits for concurrent vacations
-- **audit_log**: Complete audit trail for compliance
+Create a `.env` file with the following variables:
 
-### Key Features
-- Foreign key relationships ensuring data integrity
-- Check constraints for data validation
-- Indexes for optimal query performance
-- Triggers for automatic timestamp updates
-- Views for complex queries and reporting
+```env
+# Application
+SECRET_KEY=your-secret-key-here
+FLASK_ENV=development
 
-## 🔐 Security Features
+# Database
+DATABASE_URL=postgresql://username:password@localhost:5432/vacation_manager
 
-- **Firebase Authentication**: Secure user authentication and session management
-- **JWT Token Validation**: Server-side token verification
-- **Role-Based Access Control**: Department-scoped data access
-- **SQL Injection Prevention**: Parameterized queries
-- **CORS Protection**: Configured cross-origin resource sharing
-- **Environment Variables**: Sensitive data stored securely
-
-## 🎨 UI/UX Features
-
-- **Responsive Design**: Mobile-first approach with Tailwind CSS
-- **Accessibility**: ARIA roles and semantic HTML
-- **Custom Branding**: Don Miguel Foods color scheme and typography
-- **Interactive Components**: Modals, dropdowns, and form validation
-- **Loading States**: User feedback during async operations
-- **Error Handling**: Graceful error messages and recovery
-
-## 📈 Analytics & Reporting
-
-### Dashboard Metrics
-- Total employees managed
-- Vacation request breakdown by status
-- Upcoming vacations timeline
-- Monthly vacation statistics
-- Department and shift analytics
-
-### Visualizations
-- Bar charts for monthly request trends
-- Pie charts for status distribution
-- Gantt charts for vacation timelines
-- Heat maps for peak vacation periods
-
-## 🔧 API Endpoints
-
-### Authentication
-- `POST /api/register` - Register new supervisor
-- `GET /api/supervisor/<firebase_uid>` - Get supervisor profile
-
-### Employee Management
-- `GET /api/employees` - List employees
-- `POST /api/employees` - Add new employee
-
-### Vacation Requests
-- `GET /api/vacation-requests` - List vacation requests
-- `POST /api/vacation-requests` - Create vacation request
-- `PUT /api/vacation-requests/<id>/approve` - Approve request
-- `PUT /api/vacation-requests/<id>/deny` - Deny request
-
-### Dashboard
-- `GET /api/dashboard/stats` - Get dashboard statistics
-
-## 🚀 Deployment
-
-### Production Setup
-1. **Environment Configuration**
-   - Set `FLASK_ENV=production`
-   - Configure production database
-   - Set secure secret keys
-
-2. **Database Migration**
-   ```bash
-   psql -d production_db -f database/schema.sql
-   ```
-
-3. **Build Assets**
-   ```bash
-   npm run build-css-prod
-   ```
-
-4. **Deploy with Gunicorn**
-   ```bash
-   gunicorn -w 4 -b 0.0.0.0:8000 backend.app:app
-   ```
-
-### Recommended Hosting
-- **Frontend**: Vercel or Netlify
-- **Backend**: Railway, Heroku, or DigitalOcean
-- **Database**: Supabase, Railway, or managed PostgreSQL
-- **Domain**: `vacationmanager.donmiguelfoods.com`
-
-## 🧪 Testing
-
-### Run Tests
-```bash
-pytest backend/tests/
+# Twilio SMS
+TWILIO_ACCOUNT_SID=your-twilio-account-sid
+TWILIO_AUTH_TOKEN=your-twilio-auth-token
+TWILIO_PHONE_NUMBER=+1234567890
 ```
 
-### Test Coverage
-- Unit tests for API endpoints
-- Integration tests for database operations
-- Frontend tests for user interactions
+### Firebase Setup
 
-## 📝 Contributing
+1. Create a Firebase project
+2. Enable Email/Password authentication
+3. Download service account key as `firebase-service-account.json`
+4. Place in project root directory
+
+### Twilio Setup
+
+1. Create Twilio account
+2. Purchase a phone number
+3. Get Account SID and Auth Token from console
+4. Configure environment variables
+
+## Project Structure
+
+```
+don-miguel-vacation-manager/
+├── backend/
+│   └── app.py                 # Main Flask application
+├── database/
+│   ├── schema.sql            # Database schema
+│   ├── grant_permissions.sql # Database permissions
+│   └── create_notification_preferences.sql
+├── static/
+│   ├── css/                  # Compiled CSS files
+│   ├── js/                   # JavaScript files
+│   └── assets/               # Images and other assets
+├── templates/
+│   ├── index.html           # Landing page
+│   ├── dashboard.html       # Main dashboard
+│   ├── profile.html         # User profile with SMS settings
+│   ├── admin.html           # Admin panel
+│   └── *.html               # Other templates
+├── docs/
+│   └── *.md                 # Documentation files
+├── requirements.txt         # Python dependencies
+├── package.json            # Node.js dependencies
+├── tailwind.config.js      # Tailwind CSS configuration
+├── .env.example           # Environment template
+├── .gitignore            # Git ignore rules
+├── README.md             # This file
+├── DEPLOYMENT.md         # Deployment guide
+└── DEPLOYMENT_CHECKLIST.md # Deployment checklist
+```
+
+## API Endpoints
+
+### Authentication
+- `POST /api/login` - User login
+- `POST /api/register` - User registration
+- `POST /api/logout` - User logout
+
+### Vacation Management
+- `GET /api/vacation-requests` - Get user's vacation requests
+- `POST /api/vacation-requests` - Create new vacation request
+- `PUT /api/vacation-requests/<id>` - Update vacation request status
+
+### SMS Notifications
+- `GET /api/notification-preferences` - Get notification settings
+- `PUT /api/notification-preferences` - Update notification settings
+- `GET /api/notification-history` - Get notification history
+- `POST /api/test-sms` - Send test SMS
+
+### Administration
+- `GET /api/admin/users` - Get all users (admin only)
+- `PUT /api/admin/users/<id>` - Update user role (admin only)
+
+## SMS Notification System
+
+### Features
+- **Automated Reminders**: Configurable notifications for upcoming vacations
+- **Individual Preferences**: Each supervisor can configure their own settings
+- **Flexible Scheduling**: Choose notification days, times, and frequency
+- **Phone Number Override**: Use different phone numbers for notifications
+- **Complete History**: Track all sent messages with Twilio status
+
+### Configuration Options
+- Enable/disable notifications
+- Days before vacation to notify (1-30 days)
+- Notification times (multiple times per day)
+- Phone number override
+- Notification frequency settings
+
+### Usage
+1. Navigate to Profile → SMS Notifications tab
+2. Configure your notification preferences
+3. Test SMS functionality
+4. View notification history
+
+## Development
+
+### Running in Development Mode
+```bash
+export FLASK_ENV=development
+python backend/app.py
+```
+
+### Building CSS
+```bash
+npm run build-css
+```
+
+### Database Migrations
+```bash
+# Run new migration
+psql -U postgres -d vacation_manager -f database/new_migration.sql
+```
+
+### Testing SMS
+Use the test SMS endpoint or the profile page test button to verify SMS functionality.
+
+## Deployment
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for comprehensive deployment instructions.
+
+### Quick Production Deployment
+```bash
+# Install production dependencies
+pip install gunicorn
+
+# Set production environment
+export FLASK_ENV=production
+
+# Run with Gunicorn
+gunicorn --bind 0.0.0.0:5000 --workers 4 backend.app:app
+```
+
+## Security
+
+### Authentication
+- Firebase Admin SDK for secure authentication
+- Session-based user management
+- Role-based access control
+
+### Data Protection
+- Input validation and sanitization
+- SQL injection prevention
+- CSRF protection
+- Secure password handling
+
+### SMS Security
+- Twilio secure API integration
+- Phone number validation
+- Rate limiting for SMS sending
+
+## Monitoring
+
+### Application Logs
+Monitor application performance and errors through structured logging.
+
+### SMS Monitoring
+- Track SMS delivery status via Twilio console
+- Monitor notification history in the application
+- Review SMS usage and billing
+
+### Database Monitoring
+- Monitor connection pool usage
+- Track query performance
+- Regular database maintenance
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Database Connection Errors**
+   - Verify PostgreSQL is running
+   - Check DATABASE_URL format
+   - Ensure user permissions are correct
+
+2. **Firebase Authentication Issues**
+   - Verify service account file exists
+   - Check Firebase project configuration
+   - Validate API keys and permissions
+
+3. **SMS Not Working**
+   - Verify Twilio credentials
+   - Check account balance and phone number
+   - Review notification preferences
+
+4. **Static Files Not Loading**
+   - Run `npm run build-css`
+   - Check file permissions
+   - Verify static file paths
+
+## Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
 
-## 📄 License
+## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 🏢 Company Information
+## Support
 
-**Don Miguel Foods**
-- Application Name: Don Miguel Vacation Manager
-- Created by: Gerald Nyah
-- Support: support@donmiguelfoods.com
-- Website: https://vacationmanager.donmiguelfoods.com
+For support and questions:
+1. Check the troubleshooting section
+2. Review the deployment guide
+3. Check application logs for detailed error messages
+4. Contact the development team
 
-## 🆘 Support
+## Changelog
 
-For technical support or questions:
-- Email: support@donmiguelfoods.com
-- Documentation: [Project Wiki](https://github.com/your-username/don-miguel-vacation-manager/wiki)
-- Issues: [GitHub Issues](https://github.com/your-username/don-miguel-vacation-manager/issues)
+### Version 2.0.0
+- Added comprehensive SMS notification system
+- Implemented Twilio integration
+- Added notification preferences and history
+- Enhanced supervisor dashboard
+- Improved security and error handling
 
----
-
-© 2025 Don Miguel Foods. All rights reserved.
+### Version 1.0.0
+- Initial release
+- Basic vacation management system
+- Firebase authentication
+- Admin panel functionality

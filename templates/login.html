@@ -9,30 +9,127 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .form-input {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            ring: 2px;
+            ring-color: rgba(59, 130, 246, 0.5);
+            border-color: transparent;
+            background: rgba(255, 255, 255, 0.25);
+        }
+        
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .form-error {
+            color: #fca5a5;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-top: 1rem;
+        }
+        
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+        
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #6ee7b7;
+        }
+    </style>
 </head>
-<body class="bg-secondary-50 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8">
+<body class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-lg w-full space-y-8">
         <!-- Header -->
         <div class="text-center">
-            <div class="mx-auto mb-6">
-                <h1 class="text-2xl font-bold text-primary-600">Don Miguel</h1>
-                <p class="text-sm text-secondary-500 -mt-1">Vacation Manager</p>
+            <div class="mx-auto mb-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-4 shadow-lg">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                    </svg>
+                </div>
+                <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">Don Miguel</h1>
+                <p class="text-sm text-white opacity-80 -mt-1">Vacation Manager</p>
             </div>
-            <h2 class="text-3xl font-bold text-secondary-900">
+            <h2 class="text-4xl font-bold text-white mb-3">
                 Supervisor Login
             </h2>
-            <p class="mt-2 text-sm text-secondary-600">
+            <p class="mt-2 text-lg text-white opacity-90">
                 Sign in to your account to manage vacation requests
             </p>
         </div>
 
         <!-- Login Form -->
-        <div class="card">
-            <div class="card-body">
+        <div class="glass-card rounded-2xl shadow-2xl">
+            <div class="p-8">
                 <form id="loginForm" class="space-y-6">
                     <!-- Email Field -->
                     <div>
-                        <label for="email" class="form-label">
+                        <label for="email" class="block text-sm font-semibold text-white mb-2">
                             Email Address
                         </label>
                         <input 
@@ -41,7 +138,7 @@
                             type="email" 
                             autocomplete="email" 
                             required 
-                            class="form-input"
+                            class="form-input w-full px-4 py-3 rounded-lg transition-all duration-200"
                             placeholder="supervisor@donmiguelfoods.com"
                         >
                         <div id="emailError" class="form-error hidden"></div>
@@ -49,7 +146,7 @@
 
                     <!-- Password Field -->
                     <div>
-                        <label for="password" class="form-label">
+                        <label for="password" class="block text-sm font-semibold text-white mb-2">
                             Password
                         </label>
                         <div class="relative">
@@ -59,13 +156,13 @@
                                 type="password" 
                                 autocomplete="current-password" 
                                 required 
-                                class="form-input pr-10"
+                                class="form-input w-full px-4 py-3 pr-12 rounded-lg transition-all duration-200"
                                 placeholder="Enter your password"
                             >
                             <button 
                                 type="button" 
                                 id="togglePassword"
-                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-secondary-400 hover:text-secondary-600"
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-white opacity-70 hover:opacity-100 transition-opacity duration-200"
                             >
                                 <svg id="eyeIcon" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -86,15 +183,15 @@
                                 id="remember-me" 
                                 name="remember-me" 
                                 type="checkbox" 
-                                class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-secondary-300 rounded"
+                                class="h-4 w-4 text-blue-500 focus:ring-blue-400 border-white border-opacity-30 rounded bg-white bg-opacity-20"
                             >
-                            <label for="remember-me" class="ml-2 block text-sm text-secondary-700">
+                            <label for="remember-me" class="ml-3 text-sm text-white opacity-90">
                                 Remember me
                             </label>
                         </div>
 
                         <div class="text-sm">
-                            <a href="#" class="font-medium text-primary-600 hover:text-primary-500 transition-colors duration-200">
+                            <a href="#" id="forgotPasswordLink" class="font-medium text-blue-300 hover:text-blue-200 underline transition-colors duration-200">
                                 Forgot your password?
                             </a>
                         </div>
@@ -105,55 +202,28 @@
                         <button 
                             type="submit" 
                             id="loginButton"
-                            class="w-full btn-primary flex justify-center items-center"
+                            class="btn-primary w-full text-white font-semibold py-3 px-6 rounded-lg shadow-lg flex justify-center items-center"
                         >
                             <span id="loginButtonText">Sign In</span>
                             <div id="loginSpinner" class="spinner ml-2 hidden"></div>
                         </button>
                     </div>
 
-                    <!-- Divider -->
-                    <div class="relative">
-                        <div class="absolute inset-0 flex items-center">
-                            <div class="w-full border-t border-secondary-300"></div>
-                        </div>
-                        <div class="relative flex justify-center text-sm">
-                            <span class="px-2 bg-white text-secondary-500">Or continue with</span>
-                        </div>
-                    </div>
-
-                    <!-- Google Sign In -->
-                    <div>
-                        <button 
-                            type="button" 
-                            id="googleSignInButton"
-                            class="w-full flex justify-center items-center px-4 py-2 border border-secondary-300 rounded-lg shadow-sm bg-white text-sm font-medium text-secondary-700 hover:bg-secondary-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200"
-                        >
-                            <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24">
-                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                            </svg>
-                            <span id="googleButtonText">Sign in with Google</span>
-                            <div id="googleSpinner" class="spinner ml-2 hidden"></div>
-                        </button>
-                    </div>
                 </form>
 
                 <!-- Error Alert -->
-                <div id="errorAlert" class="hidden mt-4 p-4 bg-danger-50 border border-danger-200 rounded-lg">
+                <div id="errorAlert" class="alert alert-error hidden">
                     <div class="flex">
                         <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-danger-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="h-5 w-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
                         <div class="ml-3">
-                            <h3 class="text-sm font-medium text-danger-800">
+                            <h3 class="text-sm font-medium text-red-300">
                                 Login Failed
                             </h3>
-                            <div class="mt-2 text-sm text-danger-700">
+                            <div class="mt-2 text-sm">
                                 <p id="errorMessage"></p>
                             </div>
                         </div>
@@ -161,18 +231,18 @@
                 </div>
 
                 <!-- Success Alert -->
-                <div id="successAlert" class="hidden mt-4 p-4 bg-success-50 border border-success-200 rounded-lg">
+                <div id="successAlert" class="alert alert-success hidden">
                     <div class="flex">
                         <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-success-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="h-5 w-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
                         <div class="ml-3">
-                            <h3 class="text-sm font-medium text-success-800">
+                            <h3 class="text-sm font-medium text-green-300">
                                 Login Successful
                             </h3>
-                            <div class="mt-2 text-sm text-success-700">
+                            <div class="mt-2 text-sm">
                                 <p>Redirecting to dashboard...</p>
                             </div>
                         </div>
@@ -183,9 +253,9 @@
 
         <!-- Sign Up Link -->
         <div class="text-center">
-            <p class="text-sm text-secondary-600">
+            <p class="text-sm text-white opacity-80">
                 Don't have an account?
-                <a href="/register" class="font-medium text-primary-600 hover:text-primary-500 transition-colors duration-200">
+                <a href="/register" class="font-medium text-blue-300 hover:text-blue-200 underline transition-colors duration-200">
                     Register as a supervisor
                 </a>
             </p>
@@ -193,7 +263,7 @@
 
         <!-- Back to Home -->
         <div class="text-center">
-            <a href="/" class="text-sm text-secondary-500 hover:text-secondary-700 transition-colors duration-200">
+            <a href="/" class="text-sm text-white opacity-70 hover:opacity-90 transition-opacity duration-200">
                 ← Back to home
             </a>
         </div>
@@ -202,7 +272,7 @@
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
         // Firebase configuration (replace with your actual config)
         const firebaseConfig = {
@@ -219,7 +289,6 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const googleProvider = new GoogleAuthProvider();
 
         // DOM elements
         const loginForm = document.getElementById('loginForm');
@@ -228,15 +297,13 @@
         const loginButton = document.getElementById('loginButton');
         const loginButtonText = document.getElementById('loginButtonText');
         const loginSpinner = document.getElementById('loginSpinner');
-        const googleSignInButton = document.getElementById('googleSignInButton');
-        const googleButtonText = document.getElementById('googleButtonText');
-        const googleSpinner = document.getElementById('googleSpinner');
         const errorAlert = document.getElementById('errorAlert');
         const successAlert = document.getElementById('successAlert');
         const errorMessage = document.getElementById('errorMessage');
         const togglePassword = document.getElementById('togglePassword');
         const eyeIcon = document.getElementById('eyeIcon');
         const eyeOffIcon = document.getElementById('eyeOffIcon');
+        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
 
         // Password visibility toggle
         togglePassword.addEventListener('click', function() {
@@ -264,16 +331,10 @@
         }
 
         // Set loading state
-        function setLoading(isLoading, isGoogle = false) {
-            if (isGoogle) {
-                googleSignInButton.disabled = isLoading;
-                googleButtonText.textContent = isLoading ? 'Signing in...' : 'Sign in with Google';
-                googleSpinner.classList.toggle('hidden', !isLoading);
-            } else {
-                loginButton.disabled = isLoading;
-                loginButtonText.textContent = isLoading ? 'Signing in...' : 'Sign In';
-                loginSpinner.classList.toggle('hidden', !isLoading);
-            }
+        function setLoading(isLoading) {
+            loginButton.disabled = isLoading;
+            loginButtonText.textContent = isLoading ? 'Signing in...' : 'Sign In';
+            loginSpinner.classList.toggle('hidden', !isLoading);
         }
 
         // Email/Password login
@@ -328,55 +389,68 @@
             }
         });
 
-        // Google Sign In
-        googleSignInButton.addEventListener('click', async function() {
-            hideAlerts();
-            setLoading(true, true);
+
+        // Password reset functionality
+        forgotPasswordLink.addEventListener('click', async function(e) {
+            e.preventDefault();
+            
+            const email = emailInput.value.trim();
+            if (!email) {
+                showError('Please enter your email address first, then click "Forgot your password?"');
+                emailInput.focus();
+                return;
+            }
+
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showError('Please enter a valid email address.');
+                emailInput.focus();
+                return;
+            }
 
             try {
-                const result = await signInWithPopup(auth, googleProvider);
-                const user = result.user;
-                
-                // Get ID token
-                const idToken = await user.getIdToken();
-                
-                // Store token and redirect
-                localStorage.setItem('authToken', idToken);
-                showSuccess();
-                
-                setTimeout(() => {
-                    window.location.href = '/dashboard';
-                }, 1500);
+                hideAlerts();
+                forgotPasswordLink.textContent = 'Sending...';
+                forgotPasswordLink.style.pointerEvents = 'none';
 
+                await sendPasswordResetEmail(auth, email);
+                
+                showSuccess();
+                successAlert.querySelector('h3').textContent = 'Password Reset Email Sent';
+                successAlert.querySelector('p').textContent = `We've sent a password reset link to ${email}. Please check your email and follow the instructions to reset your password.`;
+                
+                // Clear the email field
+                emailInput.value = '';
+                
             } catch (error) {
-                console.error('Google sign-in error:', error);
-                let errorMsg = 'An error occurred during Google sign-in.';
+                console.error('Password reset error:', error);
+                let errorMsg = 'Failed to send password reset email.';
                 
                 switch (error.code) {
-                    case 'auth/popup-closed-by-user':
-                        errorMsg = 'Sign-in was cancelled.';
+                    case 'auth/user-not-found':
+                        errorMsg = 'No account found with this email address.';
                         break;
-                    case 'auth/popup-blocked':
-                        errorMsg = 'Pop-up was blocked. Please allow pop-ups and try again.';
+                    case 'auth/invalid-email':
+                        errorMsg = 'Invalid email address.';
                         break;
-                    case 'auth/account-exists-with-different-credential':
-                        errorMsg = 'An account already exists with this email using a different sign-in method.';
+                    case 'auth/too-many-requests':
+                        errorMsg = 'Too many password reset attempts. Please try again later.';
+                        break;
+                    case 'auth/network-request-failed':
+                        errorMsg = 'Network error. Please check your connection and try again.';
                         break;
                 }
                 
                 showError(errorMsg);
             } finally {
-                setLoading(false, true);
+                forgotPasswordLink.textContent = 'Forgot your password?';
+                forgotPasswordLink.style.pointerEvents = 'auto';
             }
         });
 
-        // Check if user is already logged in
-        auth.onAuthStateChanged(function(user) {
-            if (user) {
-                // User is signed in, redirect to dashboard
-                window.location.href = '/dashboard';
-            }
-        });
+        // Note: We don't automatically redirect authenticated users from the login page
+        // Users may want to access the login page to log in with a different account
     </script>
 </body>
 </html>

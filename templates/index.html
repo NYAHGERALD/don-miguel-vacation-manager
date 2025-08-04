@@ -3,259 +3,1595 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Don Miguel Vacation Manager</title>
+    <title>Don Miguel Vacation Manager - Professional Workforce Management</title>
     <link href="../static/css/output.css" rel="stylesheet">
+    <link href="../static/css/toast-notifications.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <style>
+        /* Modern CSS Variables */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --info-gradient: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --dark-glass-bg: rgba(0, 0, 0, 0.25);
+            --dark-glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Modern Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideLeft {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideRight {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 1; transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200px 0; }
+            100% { background-position: calc(200px + 100%) 0; }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 5px rgba(102, 126, 234, 0.4); }
+            50% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.8), 0 0 30px rgba(102, 126, 234, 0.4); }
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes parallaxMove {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-50px); }
+        }
+
+        /* Animation Classes */
+        .animate-fadeIn { animation: fadeIn 0.8s ease-out forwards; }
+        .animate-slideUp { animation: slideUp 0.8s ease-out forwards; }
+        .animate-slideDown { animation: slideDown 0.8s ease-out forwards; }
+        .animate-slideLeft { animation: slideLeft 0.8s ease-out forwards; }
+        .animate-slideRight { animation: slideRight 0.8s ease-out forwards; }
+        .animate-bounceIn { animation: bounceIn 1s ease-out forwards; }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-rotate { animation: rotate 20s linear infinite; }
+        .animate-scaleIn { animation: scaleIn 0.6s ease-out forwards; }
+        .animate-pulseGlow { animation: pulseGlow 2s ease-in-out infinite; }
+
+        /* Modern Body Background */
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Modern Navigation */
+        .modern-nav {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-brand {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+            font-size: 1.5rem;
+        }
+
+        .nav-link {
+            position: relative;
+            color: rgba(255, 255, 255, 0.95);
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-link:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--success-gradient);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after {
+            width: 80%;
+        }
+
+        /* Modern Buttons */
+        .modern-btn {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .modern-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .modern-btn:hover::before {
+            left: 100%;
+        }
+
+        .modern-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .modern-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .modern-btn-outline {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            color: white;
+        }
+
+        .modern-btn-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: white;
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
+        }
+
+        .modern-btn-large {
+            padding: 1.25rem 2.5rem;
+            font-size: 1.125rem;
+            border-radius: 1rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+
+        .floating-element {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(1) {
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+            top: 20%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .floating-element:nth-child(3) {
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        .floating-element:nth-child(4) {
+            bottom: 10%;
+            right: 20%;
+            animation-delay: 6s;
+        }
+
+        /* Modern Cards */
+        .modern-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .modern-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modern-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .modern-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Feature Icons */
+        .feature-icon {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+
+        .feature-icon:hover::before {
+            opacity: 1;
+            animation: shimmer 1.5s ease-in-out;
+        }
+
+        /* Stats Section */
+        .stats-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #f5576c);
+            background-size: 200% 100%;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--dark-glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--dark-glass-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            pointer-events: none;
+        }
+
+        /* Modern Footer */
+        .modern-footer {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
+        }
+
+        /* Footer Copyright Text Styling */
+        .modern-footer .text-white {
+            color: white !important;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .modern-footer .opacity-70 {
+            opacity: 0.9 !important;
+        }
+
+        /* Ensure footer copyright is visible */
+        .footer-copyright {
+            color: white !important;
+            opacity: 1 !important;
+            font-weight: 500;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Scroll Animations */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Parallax Elements */
+        .parallax-element {
+            transition: transform 0.1s ease-out;
+        }
+
+        /* Loading Animation */
+        .loading-shimmer {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.1) 100%);
+            background-size: 200px 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        /* Hamburger Menu Animation */
+        .hamburger-menu {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 24px;
+            height: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            gap: 4px;
+        }
+
+        .hamburger-line {
+            width: 20px;
+            height: 2px;
+            background-color: white;
+            border-radius: 1px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+            display: block;
+        }
+
+        .hamburger-line:nth-child(1) {
+            margin-bottom: 0;
+        }
+
+        .hamburger-line:nth-child(2) {
+            margin: 0;
+        }
+
+        .hamburger-line:nth-child(3) {
+            margin-top: 0;
+        }
+
+        .hamburger-menu.active .hamburger-line:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger-menu.active .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-menu.active .hamburger-line:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Mobile Menu Styles */
+        .mobile-menu {
+            position: fixed;
+            top: 64px;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translateY(-100%);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .mobile-menu.active {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-menu-content {
+            padding: 2rem 1rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .mobile-nav-link {
+            display: flex;
+            align-items: center;
+            padding: 1rem 0;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            transform: translateX(-20px);
+            opacity: 0;
+        }
+
+        .mobile-menu.active .mobile-nav-link {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .mobile-nav-link:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-nav-link:nth-child(2) { transition-delay: 0.15s; }
+        .mobile-nav-link:nth-child(3) { transition-delay: 0.2s; }
+        .mobile-nav-link:nth-child(4) { transition-delay: 0.25s; }
+        .mobile-nav-link:nth-child(5) { transition-delay: 0.3s; }
+        .mobile-nav-link:nth-child(6) { transition-delay: 0.35s; }
+
+        .mobile-nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            padding-left: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .mobile-nav-link svg {
+            margin-right: 0.75rem;
+            width: 20px;
+            height: 20px;
+        }
+
+        .mobile-cta-button {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Mobile Menu Overlay */
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 998;
+        }
+
+        .mobile-menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .modern-card {
+                border-radius: 1rem;
+                margin: 0.5rem;
+            }
+            
+            .stats-card {
+                padding: 1.5rem;
+                border-radius: 1rem;
+            }
+            
+            .modern-btn {
+                padding: 0.875rem 1.5rem;
+                border-radius: 0.625rem;
+            }
+
+            .modern-btn-large {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+
+            .hero-section {
+                padding-top: 80px;
+            }
+
+            .nav-brand {
+                font-size: 1.25rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-section {
+                padding-top: 70px;
+            }
+
+            .mobile-menu {
+                top: 60px;
+            }
+
+            .mobile-menu-content {
+                padding: 1.5rem 1rem;
+            }
+
+            .mobile-nav-link {
+                font-size: 1rem;
+                padding: 0.875rem 0;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-gradient);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-gradient);
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Section Spacing */
+        .section-padding {
+            padding: 6rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .section-padding {
+                padding: 4rem 0;
+            }
+        }
+    </style>
 </head>
-<body class="bg-secondary-50 min-h-screen">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-soft border-b border-secondary-200">
+<body>
+    <!-- Modern Navigation -->
+    <nav class="modern-nav">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo and Brand -->
-                <div class="flex items-center">
+                <div class="flex items-center animate-slideRight">
                     <div class="flex-shrink-0">
-                        <h1 class="text-xl font-bold text-primary-600">Don Miguel</h1>
-                        <p class="text-xs text-secondary-500 -mt-1">Vacation Manager</p>
+                        <h1 class="nav-brand">Don Miguel</h1>
+                        <p class="text-xs text-white opacity-70 -mt-1">Vacation Manager</p>
                     </div>
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden md:block">
+                <div class="hidden md:block animate-fadeIn" style="animation-delay: 0.2s;">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="/" class="text-primary-600 hover:text-primary-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Home</a>
-                        <a href="/login" class="text-secondary-600 hover:text-secondary-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Login</a>
-                        <a href="/register" class="btn-primary">Get Started</a>
+                        <a href="#home" class="nav-link">
+                            <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                            </svg>
+                            Home
+                        </a>
+                        <a href="#features" class="nav-link">
+                            <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Features
+                        </a>
+                        <a href="#about" class="nav-link">
+                            <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            About
+                        </a>
+                        <a href="/login" class="nav-link">
+                            <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013 3v1"></path>
+                            </svg>
+                            Login
+                        </a>
+                        <a href="/admin/login" class="nav-link">
+                            <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                            Admin
+                        </a>
                     </div>
+                </div>
+
+                <!-- CTA Button -->
+                <div class="hidden md:block animate-slideLeft" style="animation-delay: 0.4s;">
+                    <a href="/register" class="modern-btn">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                        Get Started
+                    </a>
                 </div>
 
                 <!-- Mobile menu button -->
                 <div class="md:hidden">
-                    <button type="button" class="mobile-menu-button bg-secondary-100 inline-flex items-center justify-center p-2 rounded-md text-secondary-600 hover:text-secondary-700 hover:bg-secondary-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500" aria-controls="mobile-menu" aria-expanded="false">
-                        <span class="sr-only">Open main menu</span>
-                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
+                    <button type="button" class="mobile-menu-button inline-flex items-center justify-center p-2 text-white hover:bg-white hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white focus:ring-opacity-50 transition-all duration-200 rounded-md" aria-label="Toggle mobile menu">
+                        <div class="hamburger-menu">
+                            <div class="hamburger-line"></div>
+                            <div class="hamburger-line"></div>
+                            <div class="hamburger-line"></div>
+                        </div>
                     </button>
                 </div>
             </div>
         </div>
 
+        <!-- Mobile Menu Overlay -->
+        <div class="mobile-menu-overlay"></div>
+
         <!-- Mobile menu -->
-        <div class="mobile-menu hidden md:hidden">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-secondary-200">
-                <a href="/" class="text-primary-600 hover:text-primary-700 block px-3 py-2 rounded-md text-base font-medium">Home</a>
-                <a href="/login" class="text-secondary-600 hover:text-secondary-700 block px-3 py-2 rounded-md text-base font-medium">Login</a>
-                <a href="/register" class="text-primary-600 hover:text-primary-700 block px-3 py-2 rounded-md text-base font-medium">Get Started</a>
+        <div class="mobile-menu md:hidden">
+            <div class="mobile-menu-content">
+                <a href="#home" class="mobile-nav-link">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                    </svg>
+                    Home
+                </a>
+                <a href="#features" class="mobile-nav-link">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Features
+                </a>
+                <a href="#about" class="mobile-nav-link">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    About
+                </a>
+                <a href="/login" class="mobile-nav-link">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3v1"></path>
+                    </svg>
+                    Login
+                </a>
+                <a href="/admin/login" class="mobile-nav-link">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                    </svg>
+                    Admin
+                </a>
+                <div class="mobile-cta-button">
+                    <a href="/register" class="modern-btn w-full justify-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                        Get Started
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <div class="relative bg-gradient-to-br from-primary-600 to-primary-800 overflow-hidden">
-        <div class="absolute inset-0 bg-black opacity-10"></div>
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+    <section id="home" class="hero-section">
+        <!-- Floating Background Elements -->
+        <div class="hero-bg-elements">
+            <div class="floating-element">
+                <svg class="w-32 h-32 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <div class="floating-element">
+                <svg class="w-24 h-24 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+            </div>
+            <div class="floating-element">
+                <svg class="w-28 h-28 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+            </div>
+            <div class="floating-element">
+                <svg class="w-20 h-20 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
             <div class="text-center">
-                <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 fade-in">
-                    Streamline Your
-                    <span class="text-primary-200">Vacation Management</span>
+                <!-- Hero Badge -->
+                <div class="animate-bounceIn mb-8" style="animation-delay: 0.2s;">
+                    <span class="inline-flex items-center px-6 py-3 rounded-full text-sm font-medium bg-gradient-to-r from-blue-500/20 to-purple-600/20 text-white backdrop-blur-sm border border-white/30 shadow-lg">
+                        <svg class="w-4 h-4 mr-2 text-yellow-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                        <span class="font-semibold">Professional Workforce Management</span>
+                    </span>
+                </div>
+
+                <!-- Hero Title -->
+                <h1 class="text-5xl md:text-7xl font-black text-white mb-6 animate-fadeIn" style="animation-delay: 0.4s;">
+                    Transform Your
+                    <span class="bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent animate-pulseGlow">
+                        Vacation Management
+                    </span>
                 </h1>
-                <p class="text-xl text-primary-100 mb-8 max-w-3xl mx-auto slide-up">
-                    Professional vacation management system designed for Don Miguel Foods supervisors. 
-                    Manage employee requests, track approvals, and maintain workforce scheduling with ease.
+
+                <!-- Hero Subtitle -->
+                <p class="text-xl md:text-2xl text-white opacity-90 mb-12 max-w-4xl mx-auto leading-relaxed animate-slideUp" style="animation-delay: 0.6s;">
+                    Professional vacation management system designed for <strong>Don Miguel Foods</strong> supervisors. 
+                    Streamline employee requests, automate approvals, and maintain optimal workforce scheduling with our cutting-edge platform.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center slide-up">
-                    <a href="/register" class="bg-white text-primary-600 hover:bg-primary-50 font-semibold py-3 px-8 rounded-lg transition-colors duration-200 shadow-medium">
+
+                <!-- Hero CTA Buttons -->
+                <div class="flex flex-col sm:flex-row gap-6 justify-center animate-slideUp" style="animation-delay: 0.8s;">
+                    <a href="/register" class="modern-btn modern-btn-large">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
                         Start Managing Today
                     </a>
-                    <a href="/login" class="border-2 border-white text-white hover:bg-white hover:text-primary-600 font-semibold py-3 px-8 rounded-lg transition-colors duration-200">
+                    <a href="/login" class="modern-btn modern-btn-outline modern-btn-large">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                        </svg>
+                        Supervisor Login
+                    </a>
+                </div>
+
+                <!-- Hero Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20 animate-slideUp" style="animation-delay: 1s;">
+                    <div class="stats-card">
+                        <div class="text-3xl font-bold text-white mb-2">100%</div>
+                        <div class="text-white opacity-80">Automated Processing</div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="text-3xl font-bold text-white mb-2">24/7</div>
+                        <div class="text-white opacity-80">System Availability</div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="text-3xl font-bold text-white mb-2">Secure</div>
+                        <div class="text-white opacity-80">Enterprise Grade</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <a href="#features" class="text-white opacity-70 hover:opacity-100 transition-opacity duration-300">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section-padding">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-20 scroll-reveal">
+                <h2 class="text-4xl md:text
+5xl font-black text-white mb-6">
+                    Everything You Need to Manage Vacations
+                </h2>
+                <p class="text-xl text-white opacity-80 max-w-4xl mx-auto leading-relaxed">
+                    Comprehensive tools designed specifically for workplace supervisors to efficiently manage employee vacation requests and maintain optimal workforce scheduling with modern technology.
+                </p>
+            </div>
+
+            <!-- Features Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="modern-card p-8 text-center scroll-reveal" style="animation-delay: 0.1s;">
+                    <div class="feature-icon bg-gradient-to-r from-green-400 to-blue-500">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-4">Smart Approval System</h3>
+                    <p class="text-white opacity-80 leading-relaxed">Streamlined approval workflow with automatic conflict detection and capacity management for optimal scheduling.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="modern-card p-8 text-center scroll-reveal" style="animation-delay: 0.2s;">
+                    <div class="feature-icon bg-gradient-to-r from-purple-400 to-pink-500">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-4">Employee Management</h3>
+                    <p class="text-white opacity-80 leading-relaxed">Comprehensive employee profiles with department-based access control and detailed work area assignments.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="modern-card p-8 text-center scroll-reveal" style="animation-delay: 0.3s;">
+                    <div class="feature-icon bg-gradient-to-r from-yellow-400 to-orange-500">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-4">Analytics Dashboard</h3>
+                    <p class="text-white opacity-80 leading-relaxed">Real-time insights with visual charts, vacation trends, and comprehensive reporting for informed decision-making.</p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="modern-card p-8 text-center scroll-reveal" style="animation-delay: 0.4s;">
+                    <div class="feature-icon bg-gradient-to-r from-red-400 to-pink-500">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-4">Secure & Compliant</h3>
+                    <p class="text-white opacity-80 leading-relaxed">Enterprise-grade security with Firebase authentication, audit logging, and role-based access control.</p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="modern-card p-8 text-center scroll-reveal" style="animation-delay: 0.5s;">
+                    <div class="feature-icon bg-gradient-to-r from-indigo-400 to-purple-500">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.414A1 1 0 013 6.707V4z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-4">Smart Filtering</h3>
+                    <p class="text-white opacity-80 leading-relaxed">Advanced filtering and sorting capabilities by status, dates, employees, and departments for quick access to information.</p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="modern-card p-8 text-center scroll-reveal" style="animation-delay: 0.6s;">
+                    <div class="feature-icon bg-gradient-to-r from-teal-400 to-blue-500">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-4">Mobile Responsive</h3>
+                    <p class="text-white opacity-80 leading-relaxed">Fully responsive design that works seamlessly across all devices, ensuring access from anywhere, anytime.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section-padding">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <!-- Content -->
+                <div class="scroll-reveal">
+                    <h2 class="text-4xl md:text-5xl font-black text-white mb-8">
+                        Built for
+                        <span class="bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent">
+                            Don Miguel Foods
+                        </span>
+                        Supervisors
+                    </h2>
+                    <p class="text-xl text-white opacity-90 mb-8 leading-relaxed">
+                        Our vacation management system is specifically designed to meet the unique needs of Don Miguel Foods supervisors. 
+                        With intuitive workflows, powerful automation, and comprehensive reporting, managing your team's vacation requests has never been easier.
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <div class="w-8 h-8 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-semibold text-white mb-2">Streamlined Workflow</h4>
+                                <p class="text-white opacity-80">Reduce administrative overhead with automated processes and intelligent scheduling.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <div class="w-8 h-8 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-semibold text-white mb-2">Real-time Updates</h4>
+                                <p class="text-white opacity-80">Stay informed with instant notifications and real-time status updates on all requests.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <div class="w-8 h-8 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-semibold text-white mb-2">Comprehensive Reporting</h4>
+                                <p class="text-white opacity-80">Make data-driven decisions with detailed analytics and customizable reports.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Element -->
+                <div class="scroll-reveal" style="animation-delay: 0.2s;">
+                    <div class="modern-card p-8 text-center">
+                        <div class="animate-float">
+                            <svg class="w-32 h-32 mx-auto text-white opacity-80 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4">Professional Management</h3>
+                        <p class="text-white opacity-80">Built with enterprise-grade technology for reliable, scalable workforce management.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section section-padding">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <div class="scroll-reveal">
+                <h2 class="text-4xl md:text-5xl font-black text-white mb-6">
+                    Ready to Transform Your
+                    <span class="bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent">
+                        Vacation Management?
+                    </span>
+                </h2>
+                <p class="text-xl text-white opacity-90 mb-12 max-w-4xl mx-auto leading-relaxed">
+                    Join Don Miguel Foods supervisors who are already using our platform to streamline their vacation approval process and improve workforce management efficiency.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                    <a href="/register" class="modern-btn modern-btn-large">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                        Get Started Now
+                    </a>
+                    <a href="/login" class="modern-btn modern-btn-outline modern-btn-large">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                        </svg>
                         Supervisor Login
                     </a>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Features Section -->
-    <div class="py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-secondary-900 mb-4">
-                    Everything You Need to Manage Vacations
-                </h2>
-                <p class="text-xl text-secondary-600 max-w-3xl mx-auto">
-                    Comprehensive tools designed specifically for workplace supervisors to efficiently manage employee vacation requests and maintain optimal workforce scheduling.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Feature 1 -->
-                <div class="card hover:shadow-medium transition-shadow duration-300">
-                    <div class="card-body text-center">
-                        <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-semibold text-secondary-900 mb-2">Smart Approval System</h3>
-                        <p class="text-secondary-600">Streamlined approval workflow with automatic conflict detection and capacity management for optimal scheduling.</p>
-                    </div>
-                </div>
-
-                <!-- Feature 2 -->
-                <div class="card hover:shadow-medium transition-shadow duration-300">
-                    <div class="card-body text-center">
-                        <div class="w-16 h-16 bg-success-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-success-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-semibold text-secondary-900 mb-2">Employee Management</h3>
-                        <p class="text-secondary-600">Comprehensive employee profiles with department-based access control and detailed work area assignments.</p>
-                    </div>
-                </div>
-
-                <!-- Feature 3 -->
-                <div class="card hover:shadow-medium transition-shadow duration-300">
-                    <div class="card-body text-center">
-                        <div class="w-16 h-16 bg-warning-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-warning-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-semibold text-secondary-900 mb-2">Analytics Dashboard</h3>
-                        <p class="text-secondary-600">Real-time insights with visual charts, vacation trends, and comprehensive reporting for informed decision-making.</p>
-                    </div>
-                </div>
-
-                <!-- Feature 4 -->
-                <div class="card hover:shadow-medium transition-shadow duration-300">
-                    <div class="card-body text-center">
-                        <div class="w-16 h-16 bg-danger-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-danger-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-semibold text-secondary-900 mb-2">Secure & Compliant</h3>
-                        <p class="text-secondary-600">Enterprise-grade security with Firebase authentication, audit logging, and role-based access control.</p>
-                    </div>
-                </div>
-
-                <!-- Feature 5 -->
-                <div class="card hover:shadow-medium transition-shadow duration-300">
-                    <div class="card-body text-center">
-                        <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5zM4 19h6v-2H4v2zM4 15h8v-2H4v2zM4 11h10V9H4v2zM4 7h12V5H4v2z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-semibold text-secondary-900 mb-2">Smart Filtering</h3>
-                        <p class="text-secondary-600">Advanced filtering and sorting capabilities by status, dates, employees, and departments for quick access to information.</p>
-                    </div>
-                </div>
-
-                <!-- Feature 6 -->
-                <div class="card hover:shadow-medium transition-shadow duration-300">
-                    <div class="card-body text-center">
-                        <div class="w-16 h-16 bg-success-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-success-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-semibold text-secondary-900 mb-2">Mobile Responsive</h3>
-                        <p class="text-secondary-600">Fully responsive design that works seamlessly across all devices, ensuring access from anywhere, anytime.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CTA Section -->
-    <div class="bg-secondary-900 py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
-                Ready to Transform Your Vacation Management?
-            </h2>
-            <p class="text-xl text-secondary-300 mb-8 max-w-3xl mx-auto">
-                Join Don Miguel Foods supervisors who are already using our platform to streamline their vacation approval process and improve workforce management.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="/register" class="btn-primary text-lg py-3 px-8">
-                    Get Started Now
-                </a>
-                <a href="/login" class="border-2 border-secondary-300 text-secondary-300 hover:bg-secondary-300 hover:text-secondary-900 font-semibold py-3 px-8 rounded-lg transition-colors duration-200">
-                    Supervisor Login
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="bg-white border-t border-secondary-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <!-- Modern Footer -->
+    <footer class="modern-footer">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
                 <!-- Company Info -->
-                <div class="col-span-1 md:col-span-2">
-                    <div class="flex items-center mb-4">
-                        <h3 class="text-xl font-bold text-primary-600">Don Miguel</h3>
-                        <span class="ml-2 text-secondary-500">Vacation Manager</span>
+                <div class="col-span-1 md:col-span-2 scroll-reveal">
+                    <div class="flex items-center mb-6">
+                        <h3 class="nav-brand text-2xl">Don Miguel</h3>
+                        <span class="ml-3 text-white opacity-70 font-medium">Vacation Manager</span>
                     </div>
-                    <p class="text-secondary-600 mb-4">
+                    <p class="text-white opacity-80 mb-6 leading-relaxed text-lg">
                         Professional vacation management system designed specifically for Don Miguel Foods supervisors to efficiently manage employee vacation requests and maintain optimal workforce scheduling.
                     </p>
-                    <p class="text-sm text-secondary-500">
-                        Created by Gerald Nyah
-                    </p>
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-white font-semibold">Enterprise Grade</p>
+                            <p class="text-white opacity-70 text-sm">Secure & Reliable</p>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Quick Links -->
-                <div>
-                    <h4 class="text-lg font-semibold text-secondary-900 mb-4">Quick Links</h4>
-                    <ul class="space-y-2">
-                        <li><a href="/login" class="text-secondary-600 hover:text-primary-600 transition-colors duration-200">Supervisor Login</a></li>
-                        <li><a href="/register" class="text-secondary-600 hover:text-primary-600 transition-colors duration-200">Register</a></li>
-                        <li><a href="/dashboard" class="text-secondary-600 hover:text-primary-600 transition-colors duration-200">Dashboard</a></li>
-                        <li><a href="#" class="text-secondary-600 hover:text-primary-600 transition-colors duration-200">Help Center</a></li>
+                <div class="scroll-reveal" style="animation-delay: 0.1s;">
+                    <h4 class="text-lg font-bold text-white mb-6">Quick Links</h4>
+                    <ul class="space-y-4">
+                        <li>
+                            <a href="/login" class="text-white opacity-80 hover:opacity-100 transition-all duration-300 flex items-center group">
+                                <svg class="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                                Supervisor Login
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/register" class="text-white opacity-80 hover:opacity-100 transition-all duration-300 flex items-center group">
+                                <svg class="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                                Register Account
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/dashboard" class="text-white opacity-80 hover:opacity-100 transition-all duration-300 flex items-center group">
+                                <svg class="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/help" class="text-white opacity-80 hover:opacity-100 transition-all duration-300 flex items-center group">
+                                <svg class="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                                Help Center
+                            </a>
+                        </li>
                     </ul>
                 </div>
 
                 <!-- Support -->
-                <div>
-                    <h4 class="text-lg font-semibold text-secondary-900 mb-4">Support</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-secondary-600 hover:text-primary-600 transition-colors duration-200">Contact Support</a></li>
-                        <li><a href="#" class="text-secondary-600 hover:text-primary-600 transition-colors duration-200">Terms of Service</a></li>
-                        <li><a href="#" class="text-secondary-600 hover:text-primary-600 transition-colors duration-200">Privacy Policy</a></li>
-                        <li><a href="#" class="text-secondary-600 hover:text-primary-600 transition-colors duration-200">Documentation</a></li>
+                <div class="scroll-reveal" style="animation-delay: 0.2s;">
+                    <h4 class="text-lg font-bold text-white mb-6">Support</h4>
+                    <ul class="space-y-4">
+                        <li>
+                            <a href="/admin/login" class="text-white opacity-80 hover:opacity-100 transition-all duration-300 flex items-center group">
+                                <svg class="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                                Administration Sign In
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="showLegalDocument('terms')" class="transition-all duration-300 flex items-center group cursor-pointer italic" style="color: #60a5fa !important;">
+                                <svg class="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                                Terms of Service
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="showLegalDocument('privacy')" class="transition-all duration-300 flex items-center group cursor-pointer italic" style="color: #60a5fa !important;">
+                                <svg class="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                                Privacy Policy
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
 
-            <div class="border-t border-secondary-200 mt-8 pt-8 text-center">
-                <p class="text-secondary-500">
-                    © 2025 Don Miguel Foods. All rights reserved.
-                </p>
+            <!-- Footer Bottom -->
+            <div class="border-t border-white border-opacity-20 mt-12 pt-8 text-center">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="footer-copyright mb-4 md:mb-0" style="color: white !important; opacity: 1 !important; font-size: 16px; font-weight: 600; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); display: block !important; visibility: visible !important;">
+                        © <span id="currentYear" style="color: white !important;">2025</span> Don Miguel Vacation Manager. All rights reserved.
+                    </p>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-white opacity-90" style="color: white !important;">Created by</span>
+                        <span class="text-white font-semibold" style="color: white !important;">Gerald Nyah</span>
+                        <div class="w-2 h-2 bg-gradient-to-r from-green-400 to-blue-500 rounded-full animate-pulse"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>
 
+    <!-- Legal Document Modal -->
+    <div id="legalDocumentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-2 sm:p-4">
+        <div class="modern-card w-full max-w-4xl flex flex-col" style="max-height: calc(100vh - 1rem); height: auto;">
+            <!-- Fixed Header -->
+            <div class="flex items-center justify-between p-4 sm:p-6 border-b border-white border-opacity-20 flex-shrink-0">
+                <h3 id="legalDocumentTitle" class="text-lg sm:text-xl font-bold text-white truncate pr-4">Legal Document</h3>
+                <button onclick="closeLegalDocument()" class="text-white opacity-70 hover:opacity-100 transition-opacity duration-200 flex-shrink-0 p-1">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Scrollable Content -->
+            <div class="flex-1 overflow-y-auto p-4 sm:p-6" style="min-height: 0;">
+                <div id="legalDocumentContent" class="text-white opacity-90 leading-relaxed text-sm sm:text-base">
+                    <div class="flex items-center justify-center py-8">
+                        <div class="loading-shimmer w-6 h-6 sm:w-8 sm:h-8 rounded mr-3"></div>
+                        <span>Loading document...</span>
+                    </div>
+                </div>
+                <div class="mt-6 pt-4 border-t border-white border-opacity-20 text-xs sm:text-sm text-white opacity-70">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4">
+                        <p>Version: <span id="legalDocumentVersion" class="font-medium">-</span></p>
+                        <p>Effective: <span id="legalDocumentDate" class="font-medium">-</span></p>
+                        <p>Updated: <span id="legalDocumentUpdated" class="font-medium">-</span></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Fixed Footer -->
+            <div class="p-4 sm:p-6 border-t border-white border-opacity-20 flex justify-end flex-shrink-0">
+                <button onclick="closeLegalDocument()" class="modern-btn-outline px-4 sm:px-6 py-2 rounded-lg text-sm sm:text-base">Close</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container"></div>
+
+    <!-- Include Toast Notifications Script -->
+    <script src="../static/js/toast-notifications.js"></script>
+
     <!-- JavaScript -->
-    <script src="../static/js/script.js"></script>
     <script>
-        // Mobile menu toggle
-        document.addEventListener('DOMContentLoaded', function() {
+        // Modern scroll reveal animation
+        function revealOnScroll() {
+            const reveals = document.querySelectorAll('.scroll-reveal');
+            
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('revealed');
+                }
+            });
+        }
+
+        // Parallax effect for floating elements
+        function parallaxEffect() {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.parallax-element');
+            
+            parallaxElements.forEach(element => {
+                const speed = element.dataset.speed || 0.5;
+                const yPos = -(scrolled * speed);
+                element.style.transform = `translateY(${yPos}px)`;
+            });
+        }
+
+        // Smooth scrolling for navigation links
+        function smoothScroll() {
+            const links = document.querySelectorAll('a[href^="#"]');
+            
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    
+                    if (targetSection) {
+                        const offsetTop = targetSection.offsetTop - 80; // Account for fixed nav
+                        
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        }
+
+        // Navigation background opacity on scroll
+        function navScrollEffect() {
+            const nav = document.querySelector('.modern-nav');
+            const scrolled = window.pageYOffset;
+            
+            if (scrolled > 50) {
+                nav.style.background = 'rgba(0, 0, 0, 0.4)';
+                nav.style.backdropFilter = 'blur(25px)';
+            } else {
+                nav.style.background = 'rgba(0, 0, 0, 0.2)';
+                nav.style.backdropFilter = 'blur(20px)';
+            }
+        }
+
+        // Enhanced Mobile menu toggle with hamburger animation
+        function initMobileMenu() {
             const mobileMenuButton = document.querySelector('.mobile-menu-button');
             const mobileMenu = document.querySelector('.mobile-menu');
+            const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
+            const hamburgerMenu = document.querySelector('.hamburger-menu');
 
-            if (mobileMenuButton && mobileMenu) {
-                mobileMenuButton.addEventListener('click', function() {
-                    mobileMenu.classList.toggle('hidden');
+            if (mobileMenuButton && mobileMenu && mobileMenuOverlay && hamburgerMenu) {
+                // Toggle mobile menu
+                function toggleMobileMenu() {
+                    const isActive = mobileMenu.classList.contains('active');
+                    
+                    if (isActive) {
+                        // Close menu
+                        mobileMenu.classList.remove('active');
+                        mobileMenuOverlay.classList.remove('active');
+                        hamburgerMenu.classList.remove('active');
+                        document.body.style.overflow = '';
+                    } else {
+                        // Open menu
+                        mobileMenu.classList.add('active');
+                        mobileMenuOverlay.classList.add('active');
+                        hamburgerMenu.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    }
+                }
+
+                // Button click handler
+                mobileMenuButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    toggleMobileMenu();
+                });
+
+                // Overlay click handler
+                mobileMenuOverlay.addEventListener('click', function() {
+                    toggleMobileMenu();
+                });
+
+                // Close mobile menu when clicking on a link
+                const mobileLinks = mobileMenu.querySelectorAll('.mobile-nav-link');
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        // Only close if it's an anchor link (starts with #)
+                        if (link.getAttribute('href').startsWith('#')) {
+                            toggleMobileMenu();
+                        } else {
+                            // For external links, just close the menu
+                            setTimeout(() => {
+                                toggleMobileMenu();
+                            }, 100);
+                        }
+                    });
+                });
+
+                // Close menu on escape key
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+                        toggleMobileMenu();
+                    }
+                });
+
+                // Handle window resize
+                window.addEventListener('resize', function() {
+                    if (window.innerWidth >= 768 && mobileMenu.classList.contains('active')) {
+                        toggleMobileMenu();
+                    }
                 });
             }
+        }
+
+        // Initialize animations on page load
+        function initAnimations() {
+            // Add staggered animation delays to feature cards
+            const featureCards = document.querySelectorAll('.modern-card');
+            featureCards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+
+            // Initialize floating elements
+            const floatingElements = document.querySelectorAll('.floating-element');
+            floatingElements.forEach((element, index) => {
+                element.style.animationDelay = `${index * 2}s`;
+            });
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            initMobileMenu();
+            smoothScroll();
+            initAnimations();
+            revealOnScroll();
+            
+            // Set current year in footer
+            const currentYear = new Date().getFullYear();
+            const yearElement = document.getElementById('currentYear');
+            if (yearElement) {
+                yearElement.textContent = currentYear;
+            }
         });
+
+        window.addEventListener('scroll', function() {
+            revealOnScroll();
+            parallaxEffect();
+            navScrollEffect();
+        });
+
+        // Performance optimization: throttle scroll events
+        let ticking = false;
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(function() {
+                    revealOnScroll();
+                    parallaxEffect();
+                    navScrollEffect();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+
+        window.addEventListener('scroll', requestTick);
+
+        // Add loading animation
+        window.addEventListener('load', function() {
+            document.body.classList.add('loaded');
+        });
+
+        // Legal document modal functions
+        async function showLegalDocument(type) {
+            const modal = document.getElementById('legalDocumentModal');
+            const title = document.getElementById('legalDocumentTitle');
+            const content = document.getElementById('legalDocumentContent');
+            const version = document.getElementById('legalDocumentVersion');
+            const date = document.getElementById('legalDocumentDate');
+            const updated = document.getElementById('legalDocumentUpdated');
+            
+            // Show modal with loading state
+            modal.classList.remove('hidden');
+            content.innerHTML = `
+                <div class="flex items-center justify-center py-8">
+                    <div class="loading-shimmer w-8 h-8 rounded mr-3"></div>
+                    <span>Loading document...</span>
+                </div>
+            `;
+            
+            try {
+                let endpoint;
+                let documentTitle;
+                
+                if (type === 'terms') {
+                    endpoint = '/api/legal/terms-of-service';
+                    documentTitle = 'Terms of Service';
+                } else if (type === 'privacy') {
+                    endpoint = '/api/legal/privacy-policy';
+                    documentTitle = 'Privacy Policy';
+                } else {
+                    throw new Error('Invalid document type');
+                }
+                
+                title.textContent = documentTitle;
+                
+                const response = await fetch(endpoint);
+                if (!response.ok) {
+                    throw new Error(`Failed to load ${documentTitle}`);
+                }
+                
+                const document = await response.json();
+                
+                // Update modal content
+                content.innerHTML = `<div class="prose prose-invert max-w-none whitespace-pre-wrap">${document.content}</div>`;
+                version.textContent = document.version || 'N/A';
+                date.textContent = document.effective_date ? new Date(document.effective_date).toLocaleDateString() : 'N/A';
+                updated.textContent = document.updated_at ? new Date(document.updated_at).toLocaleDateString() : 'N/A';
+                
+            } catch (error) {
+                console.error('Error loading legal document:', error);
+                content.innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="text-red-400 mb-4">
+                            <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <p class="font-semibold">Error Loading Document</p>
+                        </div>
+                        <p class="text-white opacity-70">Unable to load the requested document. Please try again later.</p>
+                    </div>
+                `;
+                version.textContent = 'N/A';
+                date.textContent = 'N/A';
+                updated.textContent = 'N/A';
+            }
+        }
+        
+        function closeLegalDocument() {
+            const modal = document.getElementById('legalDocumentModal');
+            modal.classList.add('hidden');
+        }
+        
+        // Close modal when clicking outside
+        document.getElementById('legalDocumentModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeLegalDocument();
+            }
+        });
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('legalDocumentModal');
+                if (!modal.classList.contains('hidden')) {
+                    closeLegalDocument();
+                }
+            }
+        });
+
+
+        // Helper function to safely show toast messages
+        function safeShowToast(message, type) {
+            try {
+                // Check if the toast notification system is loaded
+                if (typeof window.toast !== 'undefined' && window.toast) {
+                    // Use the toast notification system
+                    switch(type) {
+                        case 'success':
+                            window.toast.success(message);
+                            break;
+                        case 'error':
+                            window.toast.error(message);
+                            break;
+                        case 'warning':
+                            window.toast.warning(message);
+                            break;
+                        case 'info':
+                        default:
+                            window.toast.info(message);
+                            break;
+                    }
+                } else if (typeof showSuccess === 'function') {
+                    // Fallback to global convenience functions
+                    switch(type) {
+                        case 'success':
+                            showSuccess(message);
+                            break;
+                        case 'error':
+                            showError(message);
+                            break;
+                        case 'warning':
+                            showWarning(message);
+                            break;
+                        case 'info':
+                        default:
+                            showInfo(message);
+                            break;
+                    }
+                } else {
+                    // Final fallback: console and alert
+                    console.log(`Toast (${type}): ${message}`);
+                    if (type === 'error') {
+                        alert('Error: ' + message);
+                    } else if (type === 'success') {
+                        // Create a simple visual success message
+                        const successDiv = document.createElement('div');
+                        successDiv.style.cssText = `
+                            position: fixed;
+                            top: 20px;
+                            right: 20px;
+                            background: #10b981;
+                            color: white;
+                            padding: 12px 20px;
+                            border-radius: 8px;
+                            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                            z-index: 10000;
+                            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                            font-size: 14px;
+                            max-width: 300px;
+                        `;
+                        successDiv.textContent = message;
+                        document.body.appendChild(successDiv);
+                        
+                        // Remove after 5 seconds
+                        setTimeout(() => {
+                            if (successDiv.parentNode) {
+                                successDiv.parentNode.removeChild(successDiv);
+                            }
+                        }, 5000);
+                    }
+                }
+            } catch (error) {
+                console.error('Error showing toast:', error);
+                console.log(`Fallback message (${type}): ${message}`);
+            }
+        }
     </script>
 </body>
 </html>

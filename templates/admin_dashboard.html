@@ -1,0 +1,3160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Don Miguel Vacation Manager</title>
+    <link href="../static/css/output.css" rel="stylesheet">
+    <link href="../static/css/toast-notifications.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <style>
+        /* Modern CSS Variables */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --dark-glass-bg: rgba(0, 0, 0, 0.25);
+            --dark-glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Modern Body Background */
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Modern Card */
+        .modern-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .modern-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+            opacity: 1;
+        }
+
+        /* Modern Button */
+        .modern-btn {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .modern-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .modern-btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+        }
+
+        .modern-btn-danger {
+            background: var(--danger-gradient);
+        }
+
+        .modern-btn-success {
+            background: var(--success-gradient);
+        }
+
+        .modern-btn-warning {
+            background: var(--warning-gradient);
+        }
+
+        /* Admin Header */
+        .admin-header {
+            background: var(--dark-glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--dark-glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        /* Sidebar */
+        .admin-sidebar {
+            background: var(--dark-glass-bg);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--dark-glass-border);
+            height: calc(100vh - 80px);
+            position: sticky;
+            top: 80px;
+            overflow-y: auto;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-item:hover,
+        .sidebar-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left-color: #667eea;
+        }
+
+        /* Content Area */
+        .admin-content {
+            padding: 2rem;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-gradient);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: black;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: rgba(0, 0, 0, 0.8);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        /* Table Styles */
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
+        .admin-table th {
+            background: rgba(0, 0, 0, 0.2);
+            color: black;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .admin-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: black;
+        }
+
+        .admin-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: black;
+            font-size: 0.875rem;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: black;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        /* Badge Styles */
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-success {
+            background: var(--success-gradient);
+            color: white;
+        }
+
+        .badge-warning {
+            background: var(--warning-gradient);
+            color: white;
+        }
+
+        .badge-danger {
+            background: var(--danger-gradient);
+            color: white;
+        }
+
+        .badge-info {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        /* Loading Animation */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Hamburger Menu Button */
+        .hamburger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hamburger-menu:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .hamburger-line {
+            width: 24px;
+            height: 3px;
+            background: white;
+            margin: 2px 0;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .hamburger-menu.active .hamburger-line:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .hamburger-menu.active .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-menu.active .hamburger-line:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        /* Mobile Sidebar Overlay */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 999;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        /* Mobile Sidebar */
+        .admin-sidebar.mobile {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100vh;
+            z-index: 1000;
+            transition: left 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .admin-sidebar.mobile.active {
+            left: 0;
+        }
+
+        .mobile-sidebar-header {
+            display: none;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--dark-glass-border);
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .mobile-sidebar-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-sidebar-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .admin-content {
+                padding: 1.5rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hamburger-menu {
+                display: flex;
+            }
+
+            .admin-sidebar {
+                display: none;
+            }
+
+            .admin-sidebar.mobile {
+                display: block;
+            }
+
+            .mobile-sidebar-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            .admin-content {
+                padding: 1rem;
+                width: 100%;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.75rem;
+            }
+
+            .filter-bar select {
+                width: 100%;
+            }
+
+            /* Header adjustments for mobile */
+            .admin-header .flex {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .admin-header .flex > div:first-child {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .admin-header .flex > div:last-child {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .admin-header .flex > div:last-child .modern-btn {
+                font-size: 0.75rem;
+                padding: 0.5rem 0.75rem;
+            }
+
+            .admin-header .flex > div:last-child .modern-btn svg {
+                width: 14px;
+                height: 14px;
+            }
+
+            /* Table responsiveness */
+            .admin-table {
+                font-size: 0.875rem;
+            }
+
+            .admin-table th,
+            .admin-table td {
+                padding: 0.75rem 0.5rem;
+            }
+
+            /* Make tables horizontally scrollable on very small screens */
+            .table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .admin-table {
+                min-width: 600px;
+            }
+
+            /* Modal adjustments */
+            .modal-content {
+                margin: 1rem;
+                max-width: none;
+                width: calc(100% - 2rem);
+                max-height: calc(100vh - 2rem);
+            }
+
+            /* Form adjustments */
+            .form-input,
+            .form-select,
+            .form-textarea {
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+
+            /* Button adjustments */
+            .modern-btn {
+                padding: 0.75rem 1rem;
+                font-size: 0.875rem;
+            }
+
+            .modern-btn-sm {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .admin-header {
+                padding: 0.75rem 1rem;
+            }
+
+            .admin-header h1 {
+                font-size: 1.25rem;
+            }
+
+            .admin-content {
+                padding: 0.75rem;
+            }
+
+            .stats-grid {
+                gap: 0.75rem;
+            }
+
+            .stat-card {
+                padding: 1rem;
+            }
+
+            .stat-number {
+                font-size: 1.5rem;
+            }
+
+            .modern-card {
+                padding: 1rem;
+            }
+
+            /* Stack action buttons vertically on very small screens */
+            .admin-table td .flex {
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+
+            .admin-table td .modern-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Landscape phone adjustments */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .admin-sidebar.mobile {
+                width: 240px;
+            }
+
+            .admin-sidebar.mobile.active {
+                left: 0;
+            }
+        }
+
+        /* Hide sections by default */
+        .admin-section {
+            display: none;
+        }
+
+        .admin-section.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Header -->
+    <header class="admin-header">
+        <div class="flex items-center justify-between px-6 py-4">
+            <div class="flex items-center gap-4">
+                <!-- Hamburger Menu Button -->
+                <button class="hamburger-menu" onclick="toggleMobileSidebar()" aria-label="Toggle menu">
+                    <div class="hamburger-line"></div>
+                    <div class="hamburger-line"></div>
+                    <div class="hamburger-line"></div>
+                </button>
+                <h1 class="text-xl font-bold text-black">Admin Dashboard</h1>
+                <div class="badge badge-danger">Administrator</div>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-black text-sm" id="adminEmail">Loading...</span>
+                <button class="modern-btn modern-btn-sm modern-btn-warning" onclick="openPasswordResetModal()">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m0 0a2 2 0 012 2 2 2 0 01-2 2 2 2 0 01-2-2m0-4a2 2 0 00-2-2v10m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Change Password
+                </button>
+                <button class="modern-btn modern-btn-sm modern-btn-danger" onclick="logout()">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                    </svg>
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeMobileSidebar()"></div>
+
+    <div class="flex">
+        <!-- Desktop Sidebar -->
+        <nav class="admin-sidebar w-64" id="desktopSidebar">
+            <div class="p-4">
+                <div class="space-y-2">
+                    <a href="#" class="sidebar-item active" data-section="overview">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        Overview
+                    </a>
+                    <a href="#" class="sidebar-item" data-section="announcements">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path>
+                        </svg>
+                        Announcements
+                    </a>
+                    <a href="#" class="sidebar-item" data-section="faq">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        FAQ Articles
+                    </a>
+                    <a href="#" class="sidebar-item" data-section="feedback">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+                        </svg>
+                        Feedback
+                    </a>
+                    <a href="#" class="sidebar-item" data-section="support-tickets">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                        Support Tickets
+                    </a>
+                    <a href="#" class="sidebar-item" data-section="supervisors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                        </svg>
+                        Supervisors
+                    </a>
+                    <a href="#" class="sidebar-item" data-section="vacation-requests">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        Vacation Requests
+                    </a>
+                    <a href="#" class="sidebar-item" data-section="employees">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                        Employees
+                    </a>
+                    <a href="#" class="sidebar-item" data-section="admin-emails">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                        Admin Emails
+                    </a>
+                    <a href="#" class="sidebar-item" data-section="legal-documents">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Legal Documents
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Mobile Sidebar -->
+        <nav class="admin-sidebar mobile" id="mobileSidebar">
+            <div class="mobile-sidebar-header">
+                <h2 class="text-lg font-bold text-black">Menu</h2>
+                <button class="mobile-sidebar-close" onclick="closeMobileSidebar()" aria-label="Close menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-4">
+                <div class="space-y-2">
+                    <a href="#" class="sidebar-item active" data-section="overview" onclick="handleMobileSidebarClick(this)">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        Overview
+                    </a>
+                    <a href="#" class="sidebar-item" data-section="announcements" onclick="handleMobileSidebarClick(this)">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path>
+                        </svg>
+                        Announcements
+                    </a>
+                    <a href="#" class="sidebar-item" data-section="faq" onclick="handleMobileSidebarClick(this)">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        FAQ Articles
+                    </a>
+                    <a href="#" class="sidebar-item" data-section="feedback" onclick="handleMobileSidebarClick(this)">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+                        </svg>
+                        Feedback
+                    </a>
+                    <a href="#" class="sidebar-item" data-section="support-tickets" onclick="handleMobileSidebarClick(this)">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                        Support Tickets
+                    </a>
+                    <a href="#" class="sidebar-item" data-section="supervisors" onclick="handleMobileSidebarClick(this)">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                        </svg>
+                        Supervisors
+                    </a>
+                    <a href="#" class="sidebar-item" data-section="vacation-requests" onclick="handleMobileSidebarClick(this)">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        Vacation Requests
+                    </a>
+                    <a href="#" class="sidebar-item" data-section="employees" onclick="handleMobileSidebarClick(this)">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                        Employees
+                    </a>
+                    <a href="#" class="sidebar-item" data-section="admin-emails" onclick="handleMobileSidebarClick(this)">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                        Admin Emails
+                    </a>
+                    <a href="#" class="sidebar-item" data-section="legal-documents" onclick="handleMobileSidebarClick(this)">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Legal Documents
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="admin-content flex-1">
+            <!-- Overview Section -->
+            <div id="overview" class="admin-section active">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-black mb-2">System Overview</h2>
+                    <p class="text-black opacity-80">Monitor system statistics and recent activity</p>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalSupervisors">-</div>
+                        <div class="stat-label">Total Supervisors</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalEmployees">-</div>
+                        <div class="stat-label">Total Employees</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalVacationRequests">-</div>
+                        <div class="stat-label">Vacation Requests</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalAnnouncements">-</div>
+                        <div class="stat-label">Active Announcements</div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="modern-card p-6">
+                    <h3 class="text-xl font-bold text-black mb-4">Recent Activity</h3>
+                    <div id="recentActivity" class="space-y-4">
+                        <div class="text-black opacity-60">Loading recent activity...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Announcements Section -->
+            <div id="announcements" class="admin-section">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-black mb-2">Announcements Management</h2>
+                        <p class="text-black opacity-80">Create and manage system announcements</p>
+                    </div>
+                    <button class="modern-btn" onclick="openAnnouncementModal()">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        New Announcement
+                    </button>
+                </div>
+
+                <div class="modern-card">
+                    <table class="admin-table" id="announcementsTable">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Target Departments</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" class="text-center text-black opacity-60">Loading announcements...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- FAQ Articles Section -->
+            <div id="faq" class="admin-section">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-black mb-2">FAQ Articles Management</h2>
+                        <p class="text-black opacity-80">Manage help center FAQ articles</p>
+                    </div>
+                    <button class="modern-btn" onclick="openFaqModal()">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        New FAQ Article
+                    </button>
+                </div>
+
+                <div class="modern-card">
+                    <table class="admin-table" id="faqTable">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" class="text-center text-black opacity-60">Loading FAQ articles...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Feedback Section -->
+            <div id="feedback" class="admin-section">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-black mb-2">User Feedback</h2>
+                    <p class="text-black opacity-80">View and manage user feedback submissions</p>
+                </div>
+
+                <div class="filter-bar">
+                    <select id="feedbackCategoryFilter" class="form-select" onchange="loadFeedback()">
+                        <option value="">All Categories</option>
+                        <option value="bug_report">Bug Reports</option>
+                        <option value="feature_request">Feature Requests</option>
+                        <option value="general_feedback">General Feedback</option>
+                    </select>
+                </div>
+
+                <div class="modern-card">
+                    <table class="admin-table" id="feedbackTable">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Category</th>
+                                <th>Rating</th>
+                                <th>Message</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" class="text-center text-black opacity-60">Loading feedback...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Support Tickets Section -->
+            <div id="support-tickets" class="admin-section">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-black mb-2">Support Tickets</h2>
+                    <p class="text-black opacity-80">Manage user support requests</p>
+                </div>
+
+                <div class="filter-bar">
+                    <select id="ticketStatusFilter" class="form-select" onchange="loadSupportTickets()">
+                        <option value="">All Status</option>
+                        <option value="open">Open</option>
+                        <option value="in_progress">In Progress</option>
+                        <option value="resolved">Resolved</option>
+                        <option value="closed">Closed</option>
+                    </select>
+                    <select id="ticketPriorityFilter" class="form-select" onchange="loadSupportTickets()">
+                        <option value="">All Priorities</option>
+                        <option value="low">Low</option>
+                        <option value="normal">Normal</option>
+                        <option value="high">High</option>
+                        <option value="urgent">Urgent</option>
+                    </select>
+                </div>
+
+                <div class="modern-card">
+                    <table class="admin-table" id="supportTicketsTable">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>User</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Priority</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="7" class="text-center text-black opacity-60">Loading support tickets...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Supervisors Section -->
+            <div id="supervisors" class="admin-section">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-black mb-2">Supervisors</h2>
+                    <p class="text-black opacity-80">View all system supervisors</p>
+                </div>
+
+                <div class="filter-bar">
+                    <select id="supervisorDepartmentFilter" class="form-select" onchange="loadSupervisors()">
+                        <option value="">All Departments</option>
+                        <option value="Production">Production</option>
+                        <option value="Bakery">Bakery</option>
+                        <option value="Warehouse">Warehouse</option>
+                    </select>
+                    <select id="supervisorShiftFilter" class="form-select" onchange="loadSupervisors()">
+                        <option value="">All Shifts</option>
+                        <option value="First Shift">First Shift</option>
+                        <option value="Second Shift">Second Shift</option>
+                    </select>
+                </div>
+
+                <div class="modern-card">
+                    <table class="admin-table" id="supervisorsTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Department</th>
+                                <th>Shift</th>
+                                <th>Employees</th>
+                                <th>Created</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" class="text-center text-black opacity-60">Loading supervisors...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Vacation Requests Section -->
+            <div id="vacation-requests" class="admin-section">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-black mb-2">Vacation Requests</h2>
+                    <p class="text-black opacity-80">View and manage all vacation requests</p>
+                </div>
+
+                <div class="filter-bar">
+                    <select id="vacationSupervisorFilter" class="form-select" onchange="loadVacationRequests()">
+                        <option value="">All Supervisors</option>
+                    </select>
+                    <select id="vacationDepartmentFilter" class="form-select" onchange="loadVacationRequests()">
+                        <option value="">All Departments</option>
+                        <option value="Production">Production</option>
+                        <option value="Bakery">Bakery</option>
+                        <option value="Warehouse">Warehouse</option>
+                    </select>
+                    <select id="vacationShiftFilter" class="form-select" onchange="loadVacationRequests()">
+                        <option value="">All Shifts</option>
+                        <option value="First Shift">First Shift</option>
+                        <option value="Second Shift">Second Shift</option>
+                    </select>
+                    <select id="vacationStatusFilter" class="form-select" onchange="loadVacationRequests()">
+                        <option value="">All Status</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Denied">Denied</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                </div>
+
+                <div class="modern-card">
+                    <div class="table-container">
+                        <table class="admin-table" id="vacationRequestsTable">
+                            <thead>
+                                <tr>
+                                    <th>Employee</th>
+                                    <th>Supervisor</th>
+                                    <th>Department</th>
+                                    <th>Shift</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Total Hours</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="9" class="text-center text-black opacity-60">Loading vacation requests...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Employees Section -->
+            <div id="employees" class="admin-section">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-black mb-2">Employees</h2>
+                    <p class="text-black opacity-80">View all system employees</p>
+                </div>
+
+                <div class="filter-bar">
+                    <select id="employeeSupervisorFilter" class="form-select" onchange="loadEmployees()">
+                        <option value="">All Supervisors</option>
+                    </select>
+                    <select id="employeeDepartmentFilter" class="form-select" onchange="loadEmployees()">
+                        <option value="">All Departments</option>
+                        <option value="Production">Production</option>
+                        <option value="Bakery">Bakery</option>
+                        <option value="Warehouse">Warehouse</option>
+                    </select>
+                    <select id="employeeShiftFilter" class="form-select" onchange="loadEmployees()">
+                        <option value="">All Shifts</option>
+                        <option value="First Shift">First Shift</option>
+                        <option value="Second Shift">Second Shift</option>
+                    </select>
+                </div>
+
+                <div class="modern-card">
+                    <div class="table-container">
+                        <table class="admin-table" id="employeesTable">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Department</th>
+                                    <th>Shift</th>
+                                    <th>Work Area</th>
+                                    <th>Work Line</th>
+                                    <th>Supervisor</th>
+                                    <th>Created</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="7" class="text-center text-black opacity-60">Loading employees...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Emails Section -->
+            <div id="admin-emails" class="admin-section">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-black mb-2">Admin Email Management</h2>
+                        <p class="text-black opacity-80">Manage administrator access emails</p>
+                    </div>
+                    <button class="modern-btn" onclick="openAdminEmailModal()">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        Add Admin Email
+                    </button>
+                </div>
+
+                <div class="modern-card">
+                    <div class="table-container">
+                        <table class="admin-table" id="adminEmailsTable">
+                            <thead>
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="4" class="text-center text-black opacity-60">Loading admin emails...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Legal Documents Section -->
+            <div id="legal-documents" class="admin-section">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-black mb-2">Legal Documents Management</h2>
+                        <p class="text-black opacity-80">Manage Terms of Service and Privacy Policy</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Terms of Service Card -->
+                    <div class="modern-card p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-bold text-black">Terms of Service</h3>
+                            <span class="badge badge-info" id="tosStatus">Loading...</span>
+                        </div>
+                        <div class="mb-4">
+                            <p class="text-black opacity-80 text-sm mb-2">Current Version: <span id="tosVersion">-</span></p>
+                            <p class="text-black opacity-80 text-sm mb-4">Last Updated: <span id="tosLastUpdated">-</span></p>
+                        </div>
+                        <div class="flex gap-3">
+                            <button class="modern-btn modern-btn-sm flex-1" onclick="viewLegalDocument('terms_of_service')">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                                View
+                            </button>
+                            <button class="modern-btn modern-btn-sm modern-btn-warning flex-1" onclick="editLegalDocument('terms_of_service')">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                </svg>
+                                Edit
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Privacy Policy Card -->
+                    <div class="modern-card p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-bold text-black">Privacy Policy</h3>
+                            <span class="badge badge-info" id="privacyStatus">Loading...</span>
+                        </div>
+                        <div class="mb-4">
+                            <p class="text-black opacity-80 text-sm mb-2">Current Version: <span id="privacyVersion">-</span></p>
+                            <p class="text-black opacity-80 text-sm mb-4">Last Updated: <span id="privacyLastUpdated">-</span></p>
+                        </div>
+                        <div class="flex gap-3">
+                            <button class="modern-btn modern-btn-sm flex-1" onclick="viewLegalDocument('privacy_policy')">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                                View
+                            </button>
+                            <button class="modern-btn modern-btn-sm modern-btn-warning flex-1" onclick="editLegalDocument('privacy_policy')">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                </svg>
+                                Edit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Document History -->
+                <div class="modern-card mt-6">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-black mb-4">Document History</h3>
+                        <div class="table-container">
+                            <table class="admin-table" id="legalDocumentsHistoryTable">
+                                <thead>
+                                    <tr>
+                                        <th>Document Type</th>
+                                        <th>Version</th>
+                                        <th>Title</th>
+                                        <th>Status</th>
+                                        <th>Effective Date</th>
+                                        <th>Created</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="7" class="text-center text-black opacity-60">Loading document history...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Announcement Modal -->
+    <div id="announcementModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-black">Create Announcement</h3>
+                <button onclick="closeModal('announcementModal')" class="text-white opacity-60 hover:opacity-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <form id="announcementForm">
+                <div class="form-group">
+                    <label class="form-label">Title</label>
+                    <input type="text" id="announcementTitle" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Content</label>
+                    <textarea id="announcementContent" class="form-textarea" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Target Departments (leave empty for all)</label>
+                    <select id="announcementDepartments" class="form-select" multiple>
+                        <option value="Production">Production</option>
+                        <option value="Bakery">Bakery</option>
+                        <option value="Warehouse">Warehouse</option>
+                    </select>
+                </div>
+                <div class="flex gap-4">
+                    <button type="submit" class="modern-btn flex-1">Create Announcement</button>
+                    <button type="button" onclick="closeModal('announcementModal')" class="modern-btn modern-btn-danger flex-1">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- FAQ Modal -->
+    <div id="faqModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-black">Create FAQ Article</h3>
+                <button onclick="closeModal('faqModal')" class="text-white opacity-60 hover:opacity-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <form id="faqForm">
+                <div class="form-group">
+                    <label class="form-label">Title</label>
+                    <input type="text" id="faqTitle" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <input type="text" id="faqCategory" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Content</label>
+                    <textarea id="faqContent" class="form-textarea" required></textarea>
+                </div>
+                <div class="flex gap-4">
+                    <button type="submit" class="modern-btn flex-1">Create FAQ Article</button>
+                    <button type="button" onclick="closeModal('faqModal')" class="modern-btn modern-btn-danger flex-1">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Email Modal -->
+    <div id="adminEmailModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-black">Add Admin Email</h3>
+                <button onclick="closeModal('adminEmailModal')" class="text-white opacity-60 hover:opacity-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <form id="adminEmailForm">
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" id="adminEmailAddress" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="adminEmailPassword" class="form-input" required>
+                </div>
+                <div class="flex gap-4">
+                    <button type="submit" class="modern-btn flex-1">Add Admin Email</button>
+                    <button type="button" onclick="closeModal('adminEmailModal')" class="modern-btn modern-btn-danger flex-1">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Announcement Modal -->
+    <div id="viewAnnouncementModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-black">View Announcement</h3>
+                <button onclick="closeModal('viewAnnouncementModal')" class="text-white opacity-60 hover:opacity-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div id="viewAnnouncementContent">
+                <div class="mb-6">
+                    <h4 id="viewAnnouncementTitle" class="text-2xl font-bold text-black mb-4"></h4>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div id="viewAnnouncementStatus"></div>
+                        <span class="text-white opacity-60 text-sm" id="viewAnnouncementCreated"></span>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h5 class="text-lg font-semibold text-black mb-3">Content</h5>
+                    <div id="viewAnnouncementText" class="text-black leading-relaxed whitespace-pre-wrap bg-black bg-opacity-20 p-4 rounded-lg border border-white border-opacity-20" style="color: black !important; background-color: rgba(0,0,0,0.2) !important;"></div>
+                </div>
+                
+                <div class="mb-4">
+                    <h5 class="text-lg font-semibold text-black mb-3">Target Departments</h5>
+                    <div id="viewAnnouncementDepartments" class="text-black bg-black bg-opacity-20 p-3 rounded-lg border border-white border-opacity-20" style="color: black !important; background-color: rgba(0,0,0,0.2) !important;"></div>
+                </div>
+            </div>
+            <div class="flex gap-4 mt-6">
+                <button onclick="closeModal('viewAnnouncementModal')" class="modern-btn flex-1">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Announcement Modal -->
+    <div id="editAnnouncementModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-black">Edit Announcement</h3>
+                <button onclick="closeModal('editAnnouncementModal')" class="text-white opacity-60 hover:opacity-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <form id="editAnnouncementForm">
+                <input type="hidden" id="editAnnouncementId">
+                <div class="form-group">
+                    <label class="form-label">Title</label>
+                    <input type="text" id="editAnnouncementTitle" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Content</label>
+                    <textarea id="editAnnouncementContent" class="form-textarea" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Target Departments (leave empty for all)</label>
+                    <select id="editAnnouncementDepartments" class="form-select" multiple>
+                        <option value="Production">Production</option>
+                        <option value="Bakery">Bakery</option>
+                        <option value="Warehouse">Warehouse</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <input type="checkbox" id="editAnnouncementPublished" class="mr-2">
+                        Published
+                    </label>
+                </div>
+                <div class="flex gap-4">
+                    <button type="submit" class="modern-btn flex-1">Update Announcement</button>
+                    <button type="button" onclick="closeModal('editAnnouncementModal')" class="modern-btn modern-btn-danger flex-1">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- View FAQ Article Modal -->
+    <div id="viewFaqModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-black">View FAQ Article</h3>
+                <button onclick="closeModal('viewFaqModal')" class="text-white opacity-60 hover:opacity-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div id="viewFaqContent">
+                <div class="mb-6">
+                    <h4 id="viewFaqTitle" class="text-2xl font-bold text-black mb-4"></h4>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div id="viewFaqStatus"></div>
+                        <span class="text-white opacity-60 text-sm" id="viewFaqCreated"></span>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h5 class="text-lg font-semibold text-black mb-3">Category</h5>
+                    <div id="viewFaqCategory" class="text-black bg-black bg-opacity-20 p-3 rounded-lg border border-white border-opacity-20" style="color: black !important; background-color: rgba(0,0,0,0.2) !important;"></div>
+                </div>
+                
+                <div class="mb-4">
+                    <h5 class="text-lg font-semibold text-black mb-3">Content</h5>
+                    <div id="viewFaqText" class="text-black leading-relaxed whitespace-pre-wrap bg-black bg-opacity-20 p-4 rounded-lg border border-white border-opacity-20" style="color: black !important; background-color: rgba(0,0,0,0.2) !important;"></div>
+                </div>
+            </div>
+            <div class="flex gap-4 mt-6">
+                <button onclick="closeModal('viewFaqModal')" class="modern-btn flex-1">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit FAQ Article Modal -->
+    <div id="editFaqModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-black">Edit FAQ Article</h3>
+                <button onclick="closeModal('editFaqModal')" class="text-white opacity-60 hover:opacity-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <form id="editFaqForm">
+                <input type="hidden" id="editFaqId">
+                <div class="form-group">
+                    <label class="form-label">Title</label>
+                    <input type="text" id="editFaqTitle" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <input type="text" id="editFaqCategory" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Content</label>
+                    <textarea id="editFaqContent" class="form-textarea" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <input type="checkbox" id="editFaqPublished" class="mr-2">
+                        Published
+                    </label>
+                </div>
+                <div class="flex gap-4">
+                    <button type="submit" class="modern-btn flex-1">Update FAQ Article</button>
+                    <button type="button" onclick="closeModal('editFaqModal')" class="modern-btn modern-btn-danger flex-1">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Support Ticket Modal -->
+    <div id="viewSupportTicketModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-black">View Support Ticket</h3>
+                <button onclick="closeModal('viewSupportTicketModal')" class="text-white opacity-60 hover:opacity-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div id="viewSupportTicketContent">
+                <div class="mb-6">
+                    <h4 id="viewTicketSubject" class="text-2xl font-bold text-black mb-4"></h4>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div id="viewTicketStatus"></div>
+                        <div id="viewTicketPriority"></div>
+                        <span class="text-white opacity-60 text-sm" id="viewTicketCreated"></span>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h5 class="text-lg font-semibold text-black mb-3">User Information</h5>
+                    <div class="bg-black bg-opacity-20 p-4 rounded-lg border border-white border-opacity-20">
+                        <p class="text-black" style="color: black !important;"><strong>Email:</strong> <span id="viewTicketUserEmail"></span></p>
+                        <p class="text-black" style="color: black !important;"><strong>Category:</strong> <span id="viewTicketCategory"></span></p>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <h5 class="text-lg font-semibold text-black mb-3">Message</h5>
+                    <div id="viewTicketMessage" class="text-black leading-relaxed whitespace-pre-wrap bg-black bg-opacity-20 p-4 rounded-lg border border-white border-opacity-20" style="color: black !important; background-color: rgba(0,0,0,0.2) !important;"></div>
+                </div>
+            </div>
+            <div class="flex gap-4 mt-6">
+                <button onclick="closeModal('viewSupportTicketModal')" class="modern-btn flex-1">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Reset Modal -->
+    <div id="passwordResetModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-black">Change Admin Password</h3>
+                <button onclick="closeModal('passwordResetModal')" class="text-white opacity-60 hover:opacity-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <form id="passwordResetForm">
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" id="resetEmail" class="form-input" required readonly>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Current Password</label>
+                    <input type="password" id="currentPassword" class="form-input" required>
+                    <small class="text-black opacity-60 text-xs mt-1 block">Enter your current password to verify your identity</small>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">New Password</label>
+                    <input type="password" id="newPassword" class="form-input" required minlength="6">
+                    <small class="text-black opacity-60 text-xs mt-1 block">Password must be at least 6 characters long</small>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Confirm New Password</label>
+                    <input type="password" id="confirmPassword" class="form-input" required minlength="6">
+                    <small class="text-black opacity-60 text-xs mt-1 block">Re-enter your new password to confirm</small>
+                </div>
+                <div class="bg-yellow-500 bg-opacity-20 border border-yellow-500 border-opacity-30 rounded-lg p-4 mb-6">
+                    <div class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                        </svg>
+                        <div>
+                            <h4 class="text-yellow-400 font-semibold text-sm mb-1">Security Notice</h4>
+                            <p class="text-yellow-200 text-xs">
+                                Changing your password will log you out of all active sessions. You will need to log in again with your new password.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <button type="submit" class="modern-btn modern-btn-warning flex-1">Change Password</button>
+                    <button type="button" onclick="closeModal('passwordResetModal')" class="modern-btn modern-btn-danger flex-1">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Legal Document Modal -->
+    <div id="viewLegalDocumentModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-black" id="viewLegalDocumentTitle">View Legal Document</h3>
+                <button onclick="closeModal('viewLegalDocumentModal')" class="text-white opacity-60 hover:opacity-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div id="viewLegalDocumentContent">
+                <div class="mb-6">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div id="viewLegalDocumentStatus"></div>
+                        <span class="text-black opacity-60 text-sm">Version: <span id="viewLegalDocumentVersion"></span></span>
+                        <span class="text-black opacity-60 text-sm">Effective: <span id="viewLegalDocumentEffective"></span></span>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <h5 class="text-lg font-semibold text-black mb-3">Content</h5>
+                    <div id="viewLegalDocumentText" class="text-black leading-relaxed whitespace-pre-wrap bg-black bg-opacity-20 p-4 rounded-lg border border-white border-opacity-20 max-h-96 overflow-y-auto" style="color: black !important; background-color: rgba(0,0,0,0.2) !important;"></div>
+                </div>
+            </div>
+            <div class="flex gap-4 mt-6">
+                <button onclick="closeModal('viewLegalDocumentModal')" class="modern-btn flex-1">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Legal Document Modal -->
+    <div id="editLegalDocumentModal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-black" id="editLegalDocumentTitle">Edit Legal Document</h3>
+                <button onclick="closeModal('editLegalDocumentModal')" class="text-white opacity-60 hover:opacity-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <form id="editLegalDocumentForm">
+                <input type="hidden" id="editLegalDocumentType">
+                <div class="form-group">
+                    <label class="form-label">Document Title</label>
+                    <input type="text" id="editLegalDocumentTitleInput" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Content</label>
+                    <textarea id="editLegalDocumentContent" class="form-textarea" required style="min-height: 300px; resize: vertical;"></textarea>
+                    <small class="text-black opacity-60 text-xs mt-1 block">Use plain text or basic HTML formatting</small>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Effective Date</label>
+                    <input type="date" id="editLegalDocumentEffectiveDate" class="form-input" required>
+                    <small class="text-black opacity-60 text-xs mt-1 block">When this version should become active</small>
+                </div>
+                <div class="bg-blue-500 bg-opacity-20 border border-blue-500 border-opacity-30 rounded-lg p-4 mb-6">
+                    <div class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <div>
+                            <h4 class="text-blue-400 font-semibold text-sm mb-1">Version Control</h4>
+                            <p class="text-blue-200 text-xs">
+                                Saving will create a new version and archive the previous one. The current active version will be replaced with this new version.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <button type="submit" class="modern-btn modern-btn-warning flex-1">Save Changes</button>
+                    <button type="button" onclick="closeModal('editLegalDocumentModal')" class="modern-btn modern-btn-danger flex-1">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container"></div>
+
+    <!-- Include Toast Notifications Script -->
+    <script src="../static/js/toast-notifications.js"></script>
+
+    <!-- Admin Dashboard JavaScript -->
+    <script>
+        // Global variables
+        let currentSection = 'overview';
+        let adminToken = null;
+        let adminEmail = null;
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAdminAuth();
+            setupSidebarNavigation();
+            loadOverviewData();
+        });
+
+        // Check admin authentication
+        async function checkAdminAuth() {
+            adminEmail = localStorage.getItem('adminEmail');
+            const isAdmin = localStorage.getItem('isAdmin');
+
+            if (!adminEmail || isAdmin !== 'true') {
+                window.location.href = '/admin/login';
+                return;
+            }
+
+            // Verify session is still valid
+            try {
+                const response = await fetch('/api/admin/session-check', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                
+                if (!response.ok) {
+                    // Session expired, redirect to login
+                    localStorage.removeItem('adminEmail');
+                    localStorage.removeItem('isAdmin');
+                    localStorage.removeItem('adminLoginTime');
+                    window.location.href = '/admin/login';
+                    return;
+                }
+                
+                const sessionData = await response.json();
+                document.getElementById('adminEmail').textContent = sessionData.email;
+            } catch (error) {
+                console.error('Session check failed:', error);
+                window.location.href = '/admin/login';
+            }
+        }
+
+        // Setup sidebar navigation
+        function setupSidebarNavigation() {
+            const sidebarItems = document.querySelectorAll('.sidebar-item');
+            const sections = document.querySelectorAll('.admin-section');
+
+            sidebarItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const sectionId = this.dataset.section;
+                    
+                    sidebarItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    sections.forEach(s => s.classList.remove('active'));
+                    document.getElementById(sectionId).classList.add('active');
+                    
+                    currentSection = sectionId;
+                    loadSectionData(sectionId);
+                });
+            });
+        }
+
+        // Load section data
+        function loadSectionData(sectionId) {
+            switch(sectionId) {
+                case 'overview':
+                    loadOverviewData();
+                    break;
+                case 'announcements':
+                    loadAnnouncements();
+                    break;
+                // Add other cases as needed
+            }
+        }
+
+        // API request helper
+        async function apiRequest(url, options = {}) {
+            const defaultOptions = {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'  // Include session cookies
+            };
+
+            const response = await fetch(url, { ...defaultOptions, ...options });
+            
+            if (!response.ok) {
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            return response.json();
+        }
+
+        // Load overview data
+        async function loadOverviewData() {
+            try {
+                const data = await apiRequest('/api/admin/overview');
+                
+                document.getElementById('totalSupervisors').textContent = data.totalSupervisors || 0;
+                document.getElementById('totalEmployees').textContent = data.totalEmployees || 0;
+                document.getElementById('totalVacationRequests').textContent = data.totalVacationRequests || 0;
+                document.getElementById('totalAnnouncements').textContent = data.totalAnnouncements || 0;
+                
+                const activityContainer = document.getElementById('recentActivity');
+                if (data.recentActivity && data.recentActivity.length > 0) {
+                    activityContainer.innerHTML = data.recentActivity.map(activity => `
+                        <div class="flex items-center gap-3 p-4 bg-white bg-opacity-90 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
+                            <div class="w-3 h-3 bg-blue-500 rounded-full flex-shrink-0 shadow-sm"></div>
+                            <div class="flex-1">
+                                <p class="text-gray-800 text-sm font-medium leading-relaxed">${activity.description}</p>
+                                <p class="text-gray-600 text-xs mt-1">${formatDate(activity.created_at)}</p>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    activityContainer.innerHTML = '<div class="text-center py-8"><div class="bg-white bg-opacity-90 rounded-lg p-6 border border-gray-200"><p class="text-gray-600 text-sm font-medium">No recent activity</p><p class="text-gray-500 text-xs mt-1">Activity will appear here as users interact with the system</p></div></div>';
+                }
+            } catch (error) {
+                console.error('Error loading overview data:', error);
+                safeShowToast('Failed to load overview data', 'error');
+            }
+        }
+
+        // Load announcements
+        async function loadAnnouncements() {
+            try {
+                const announcements = await apiRequest('/api/admin/announcements');
+                const tbody = document.querySelector('#announcementsTable tbody');
+                
+                if (announcements.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="text-center text-black opacity-60">No announcements found</td></tr>';
+                    return;
+                }
+                
+                tbody.innerHTML = announcements.map(announcement => `
+                    <tr>
+                        <td class="font-medium">${announcement.title}</td>
+                        <td>${announcement.target_departments ? announcement.target_departments.join(', ') : 'All Departments'}</td>
+                        <td><span class="badge ${announcement.is_published ? 'badge-success' : 'badge-warning'}">${announcement.is_published ? 'Published' : 'Draft'}</span></td>
+                        <td>${formatDate(announcement.created_at)}</td>
+                        <td>
+                            <div class="flex gap-2">
+                                <button class="modern-btn modern-btn-sm modern-btn-success" onclick="viewAnnouncement(${announcement.id})">View</button>
+                                <button class="modern-btn modern-btn-sm" onclick="editAnnouncement(${announcement.id})">Edit</button>
+                                <button class="modern-btn modern-btn-sm modern-btn-danger" onclick="deleteAnnouncement(${announcement.id})">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading announcements:', error);
+                safeShowToast('Failed to load announcements', 'error');
+            }
+        }
+
+        // Modal functions
+        function openAnnouncementModal() {
+            document.getElementById('announcementModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Utility functions
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString();
+        }
+
+        async function logout() {
+            try {
+                // Call backend logout endpoint
+                await fetch('/api/admin/logout', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+            
+            // Clear local storage
+            localStorage.removeItem('adminEmail');
+            localStorage.removeItem('isAdmin');
+            localStorage.removeItem('adminLoginTime');
+            window.location.href = '/admin/login';
+        }
+
+        // Form submission handlers
+        document.getElementById('announcementForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('announcementTitle').value;
+            const content = document.getElementById('announcementContent').value;
+            const departmentSelect = document.getElementById('announcementDepartments');
+            const selectedDepartments = Array.from(departmentSelect.selectedOptions).map(option => option.value);
+            
+            try {
+                await apiRequest('/api/admin/announcements', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        title: title,
+                        content: content,
+                        target_departments: selectedDepartments.length > 0 ? selectedDepartments : null,
+                        is_published: true
+                    })
+                });
+                
+                safeShowToast('Announcement created successfully', 'success');
+                closeModal('announcementModal');
+                document.getElementById('announcementForm').reset();
+                loadAnnouncements();
+            } catch (error) {
+                console.error('Error creating announcement:', error);
+                safeShowToast('Failed to create announcement', 'error');
+            }
+        });
+
+        document.getElementById('faqForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('faqTitle').value;
+            const category = document.getElementById('faqCategory').value;
+            const content = document.getElementById('faqContent').value;
+            
+            try {
+                await apiRequest('/api/admin/faq', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        title: title,
+                        category: category,
+                        content: content,
+                        is_published: true
+                    })
+                });
+                
+                safeShowToast('FAQ article created successfully', 'success');
+                closeModal('faqModal');
+                document.getElementById('faqForm').reset();
+                loadFaqArticles();
+            } catch (error) {
+                console.error('Error creating FAQ article:', error);
+                safeShowToast('Failed to create FAQ article', 'error');
+            }
+        });
+
+        document.getElementById('adminEmailForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('adminEmailAddress').value;
+            const password = document.getElementById('adminEmailPassword').value;
+            
+            try {
+                await apiRequest('/api/admin/admin-emails', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+                
+                safeShowToast('Admin email added successfully', 'success');
+                closeModal('adminEmailModal');
+                document.getElementById('adminEmailForm').reset();
+                loadAdminEmails();
+            } catch (error) {
+                console.error('Error adding admin email:', error);
+                safeShowToast('Failed to add admin email', 'error');
+            }
+        });
+
+        // Password Reset form submission
+        document.getElementById('passwordResetForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('resetEmail').value.trim();
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // Client-side validation
+            if (!email || !currentPassword || !newPassword || !confirmPassword) {
+                safeShowToast('All fields are required', 'error');
+                return;
+            }
+            
+            if (newPassword.length < 6) {
+                safeShowToast('New password must be at least 6 characters long', 'error');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                safeShowToast('New passwords do not match', 'error');
+                return;
+            }
+            
+            if (currentPassword === newPassword) {
+                safeShowToast('New password must be different from current password', 'error');
+                return;
+            }
+            
+            // Confirm password change
+            if (!confirm('Are you sure you want to change your password? You will be logged out and need to log in again.')) {
+                return;
+            }
+            
+            try {
+                console.log('Attempting to change admin password');
+                const response = await apiRequest('/api/admin/change-password', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        email: email,
+                        current_password: currentPassword,
+                        new_password: newPassword
+                    })
+                });
+                
+                console.log('Password change response:', response);
+                safeShowToast('Password changed successfully! You will be logged out.', 'success');
+                
+                // Close modal and clear form
+                closeModal('passwordResetModal');
+                document.getElementById('passwordResetForm').reset();
+                
+                // Log out after a short delay to show the success message
+                setTimeout(() => {
+                    logout();
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Error changing password:', error);
+                safeShowToast('Failed to change password: ' + (error.message || 'Unknown error'), 'error');
+            }
+        });
+
+        // Edit FAQ form submission
+        document.getElementById('editFaqForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const id = document.getElementById('editFaqId').value;
+            const title = document.getElementById('editFaqTitle').value.trim();
+            const category = document.getElementById('editFaqCategory').value.trim();
+            const content = document.getElementById('editFaqContent').value.trim();
+            const isPublished = document.getElementById('editFaqPublished').checked;
+            
+            // Validate required fields
+            if (!title) {
+                safeShowToast('Title is required', 'error');
+                return;
+            }
+            if (!category) {
+                safeShowToast('Category is required', 'error');
+                return;
+            }
+            if (!content) {
+                safeShowToast('Content is required', 'error');
+                return;
+            }
+            
+            try {
+                console.log('Updating FAQ article with ID:', id);
+                const response = await apiRequest(`/api/admin/faq/${id}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        title: title,
+                        category: category,
+                        content: content,
+                        is_published: isPublished
+                    })
+                });
+                
+                console.log('FAQ update response:', response);
+                safeShowToast('FAQ article updated successfully!', 'success');
+                closeModal('editFaqModal');
+                document.getElementById('editFaqForm').reset();
+                loadFaqArticles();
+            } catch (error) {
+                console.error('Error updating FAQ article:', error);
+                safeShowToast('Failed to update FAQ article: ' + (error.message || 'Unknown error'), 'error');
+            }
+        });
+
+        // Edit announcement form submission
+        document.getElementById('editAnnouncementForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const id = document.getElementById('editAnnouncementId').value;
+            const title = document.getElementById('editAnnouncementTitle').value.trim();
+            const content = document.getElementById('editAnnouncementContent').value.trim();
+            const isPublished = document.getElementById('editAnnouncementPublished').checked;
+            const departmentSelect = document.getElementById('editAnnouncementDepartments');
+            const selectedDepartments = Array.from(departmentSelect.selectedOptions).map(option => option.value);
+            
+            // Validate required fields
+            if (!title) {
+                safeShowToast('Title is required', 'error');
+                return;
+            }
+            if (!content) {
+                safeShowToast('Content is required', 'error');
+                return;
+            }
+            
+            try {
+                console.log('Updating announcement with ID:', id);
+                const response = await apiRequest(`/api/admin/announcements/${id}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        title: title,
+                        content: content,
+                        target_departments: selectedDepartments.length > 0 ? selectedDepartments : null,
+                        is_published: isPublished
+                    })
+                });
+                
+                console.log('Update response:', response);
+                safeShowToast('Announcement updated successfully!', 'success');
+                closeModal('editAnnouncementModal');
+                document.getElementById('editAnnouncementForm').reset();
+                loadAnnouncements();
+            } catch (error) {
+                console.error('Error updating announcement:', error);
+                safeShowToast('Failed to update announcement: ' + (error.message || 'Unknown error'), 'error');
+            }
+        });
+
+        // Load FAQ articles
+        async function loadFaqArticles() {
+            try {
+                const articles = await apiRequest('/api/admin/faq');
+                const tbody = document.querySelector('#faqTable tbody');
+                
+                if (articles.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="text-center text-black opacity-60">No FAQ articles found</td></tr>';
+                    return;
+                }
+                
+                tbody.innerHTML = articles.map(article => `
+                    <tr>
+                        <td class="font-medium">${article.title}</td>
+                        <td>${article.category}</td>
+                        <td><span class="badge ${article.is_published ? 'badge-success' : 'badge-warning'}">${article.is_published ? 'Published' : 'Draft'}</span></td>
+                        <td>${formatDate(article.created_at)}</td>
+                        <td>
+                            <div class="flex gap-2">
+                                <button class="modern-btn modern-btn-sm modern-btn-success" onclick="viewFaqArticle(${article.id})">View</button>
+                                <button class="modern-btn modern-btn-sm" onclick="editFaqArticle(${article.id})">Edit</button>
+                                <button class="modern-btn modern-btn-sm modern-btn-danger" onclick="deleteFaqArticle(${article.id})">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading FAQ articles:', error);
+                safeShowToast('Failed to load FAQ articles', 'error');
+            }
+        }
+
+        // Load feedback
+        async function loadFeedback() {
+            try {
+                const categoryFilter = document.getElementById('feedbackCategoryFilter').value;
+                let url = '/api/admin/feedback';
+                if (categoryFilter) {
+                    url += `?category=${categoryFilter}`;
+                }
+                
+                const feedback = await apiRequest(url);
+                const tbody = document.querySelector('#feedbackTable tbody');
+                
+                if (feedback.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="text-center text-black opacity-60">No feedback found</td></tr>';
+                    return;
+                }
+                
+                tbody.innerHTML = feedback.map(item => `
+                    <tr>
+                        <td>${item.user_email || 'Anonymous'}</td>
+                        <td>${item.category}</td>
+                        <td>${item.rating ? '★'.repeat(item.rating) : 'N/A'}</td>
+                        <td class="max-w-xs truncate">${item.message}</td>
+                        <td>${formatDate(item.created_at)}</td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading feedback:', error);
+                safeShowToast('Failed to load feedback', 'error');
+            }
+        }
+
+        // Load support tickets
+        async function loadSupportTickets() {
+            try {
+                const statusFilter = document.getElementById('ticketStatusFilter').value;
+                const priorityFilter = document.getElementById('ticketPriorityFilter').value;
+                
+                let url = '/api/admin/support-tickets';
+                const params = new URLSearchParams();
+                if (statusFilter) params.append('status', statusFilter);
+                if (priorityFilter) params.append('priority', priorityFilter);
+                if (params.toString()) url += `?${params.toString()}`;
+                
+                const tickets = await apiRequest(url);
+                const tbody = document.querySelector('#supportTicketsTable tbody');
+                
+                if (tickets.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center text-black opacity-60">No support tickets found</td></tr>';
+                    return;
+                }
+                
+                tbody.innerHTML = tickets.map(ticket => `
+                    <tr>
+                        <td class="font-medium">${ticket.subject}</td>
+                        <td>${ticket.user_email || 'Anonymous'}</td>
+                        <td>${ticket.category}</td>
+                        <td><span class="badge badge-${getStatusBadgeClass(ticket.status)}">${ticket.status}</span></td>
+                        <td><span class="badge badge-${getPriorityBadgeClass(ticket.priority)}">${ticket.priority}</span></td>
+                        <td>${formatDate(ticket.created_at)}</td>
+                        <td>
+                            <div class="flex gap-2">
+                                <button class="modern-btn modern-btn-sm" onclick="viewTicket(${ticket.id})">View</button>
+                                <button class="modern-btn modern-btn-sm modern-btn-success" onclick="updateTicketStatus(${ticket.id}, 'resolved')">Resolve</button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading support tickets:', error);
+                safeShowToast('Failed to load support tickets', 'error');
+            }
+        }
+
+        // Load supervisors
+        async function loadSupervisors() {
+            try {
+                const departmentFilter = document.getElementById('supervisorDepartmentFilter').value;
+                const shiftFilter = document.getElementById('supervisorShiftFilter').value;
+                
+                let url = '/api/admin/supervisors';
+                const params = new URLSearchParams();
+                if (departmentFilter) params.append('department', departmentFilter);
+                if (shiftFilter) params.append('shift', shiftFilter);
+                if (params.toString()) url += `?${params.toString()}`;
+                
+                const supervisors = await apiRequest(url);
+                const tbody = document.querySelector('#supervisorsTable tbody');
+                
+                if (supervisors.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center text-black opacity-60">No supervisors found</td></tr>';
+                    return;
+                }
+                
+                tbody.innerHTML = supervisors.map(supervisor => `
+                    <tr>
+                        <td class="font-medium">${supervisor.first_name} ${supervisor.last_name}</td>
+                        <td>${supervisor.email}</td>
+                        <td>${supervisor.department}</td>
+                        <td>${supervisor.shift}</td>
+                        <td>${supervisor.employee_count || 0}</td>
+                        <td>${formatDate(supervisor.created_at)}</td>
+                    </tr>
+                `).join('');
+
+                // Populate supervisor filter dropdowns
+                populateSupervisorFilters(supervisors);
+            } catch (error) {
+                console.error('Error loading supervisors:', error);
+                safeShowToast('Failed to load supervisors', 'error');
+            }
+        }
+
+        // Load vacation requests
+        async function loadVacationRequests() {
+            try {
+                const supervisorFilter = document.getElementById('vacationSupervisorFilter').value;
+                const departmentFilter = document.getElementById('vacationDepartmentFilter').value;
+                const shiftFilter = document.getElementById('vacationShiftFilter').value;
+                const statusFilter = document.getElementById('vacationStatusFilter').value;
+                
+                let url = '/api/admin/vacation-requests';
+                const params = new URLSearchParams();
+                if (supervisorFilter) params.append('supervisor', supervisorFilter);
+                if (departmentFilter) params.append('department', departmentFilter);
+                if (shiftFilter) params.append('shift', shiftFilter);
+                if (statusFilter) params.append('status', statusFilter);
+                if (params.toString()) url += `?${params.toString()}`;
+                
+                const requests = await apiRequest(url);
+                const tbody = document.querySelector('#vacationRequestsTable tbody');
+                
+                if (requests.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="9" class="text-center text-black opacity-60">No vacation requests found</td></tr>';
+                    return;
+                }
+                
+                tbody.innerHTML = requests.map(request => `
+                    <tr>
+                        <td class="font-medium">${request.employee_name}</td>
+                        <td>${request.supervisor_name}</td>
+                        <td>${request.department}</td>
+                        <td>${request.shift}</td>
+                        <td>${formatDate(request.start_date)}</td>
+                        <td>${formatDate(request.end_date)}</td>
+                        <td>${request.total_hours}</td>
+                        <td><span class="badge badge-${getStatusBadgeClass(request.status)}">${request.status}</span></td>
+                        <td>${formatDate(request.created_at)}</td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading vacation requests:', error);
+                safeShowToast('Failed to load vacation requests', 'error');
+            }
+        }
+
+        // Load employees
+        async function loadEmployees() {
+            try {
+                const supervisorFilter = document.getElementById('employeeSupervisorFilter').value;
+                const departmentFilter = document.getElementById('employeeDepartmentFilter').value;
+                const shiftFilter = document.getElementById('employeeShiftFilter').value;
+                
+                let url = '/api/admin/employees';
+                const params = new URLSearchParams();
+                if (supervisorFilter) params.append('supervisor', supervisorFilter);
+                if (departmentFilter) params.append('department', departmentFilter);
+                if (shiftFilter) params.append('shift', shiftFilter);
+                if (params.toString()) url += `?${params.toString()}`;
+                
+                const employees = await apiRequest(url);
+                const tbody = document.querySelector('#employeesTable tbody');
+                
+                if (employees.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center text-black opacity-60">No employees found</td></tr>';
+                    return;
+                }
+                
+                tbody.innerHTML = employees.map(employee => `
+                    <tr>
+                        <td class="font-medium">${employee.first_name} ${employee.last_name}</td>
+                        <td>${employee.department}</td>
+                        <td>${employee.shift}</td>
+                        <td>${employee.work_area || 'N/A'}</td>
+                        <td>${employee.work_line || 'N/A'}</td>
+                        <td>${employee.supervisor_name || 'N/A'}</td>
+                        <td>${formatDate(employee.created_at)}</td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading employees:', error);
+                safeShowToast('Failed to load employees', 'error');
+            }
+        }
+
+        // Load admin emails
+        async function loadAdminEmails() {
+            try {
+                const emails = await apiRequest('/api/admin/admin-emails');
+                const tbody = document.querySelector('#adminEmailsTable tbody');
+                
+                if (emails.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center text-black opacity-60">No admin emails found</td></tr>';
+                    return;
+                }
+                
+                tbody.innerHTML = emails.map(email => `
+                    <tr>
+                        <td class="font-medium">${email.email}</td>
+                        <td><span class="badge badge-success">Active</span></td>
+                        <td>${formatDate(email.created_at)}</td>
+                        <td>
+                            <div class="flex gap-2">
+                                <button class="modern-btn modern-btn-sm modern-btn-danger" onclick="deleteAdminEmail('${email.email}')">Remove</button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading admin emails:', error);
+                safeShowToast('Failed to load admin emails', 'error');
+            }
+        }
+
+        // Modal functions
+        function openFaqModal() {
+            document.getElementById('faqModal').classList.add('active');
+        }
+
+        function openAdminEmailModal() {
+            document.getElementById('adminEmailModal').classList.add('active');
+        }
+
+        function openPasswordResetModal() {
+            // Pre-fill the email field with current admin email
+            const currentEmail = document.getElementById('adminEmail').textContent;
+            document.getElementById('resetEmail').value = currentEmail;
+            // Clear password fields
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+            document.getElementById('passwordResetModal').classList.add('active');
+        }
+
+        // Update section data loading
+        function loadSectionData(sectionId) {
+            switch(sectionId) {
+                case 'overview':
+                    loadOverviewData();
+                    break;
+                case 'announcements':
+                    loadAnnouncements();
+                    break;
+                case 'faq':
+                    loadFaqArticles();
+                    break;
+                case 'feedback':
+                    loadFeedback();
+                    break;
+                case 'support-tickets':
+                    loadSupportTickets();
+                    break;
+                case 'supervisors':
+                    loadSupervisors();
+                    break;
+                case 'vacation-requests':
+                    loadVacationRequests();
+                    break;
+                case 'employees':
+                    loadEmployees();
+                    // Also populate supervisor filter when employees section is loaded
+                    populateEmployeeSupervisorFilter();
+                    break;
+                case 'admin-emails':
+                    loadAdminEmails();
+                    break;
+                case 'legal-documents':
+                    loadLegalDocuments();
+                    break;
+            }
+        }
+
+        // Utility functions
+        function getStatusBadgeClass(status) {
+            switch(status.toLowerCase()) {
+                case 'approved': case 'resolved': case 'active': return 'success';
+                case 'pending': case 'open': case 'in_progress': return 'warning';
+                case 'denied': case 'cancelled': case 'closed': return 'danger';
+                default: return 'info';
+            }
+        }
+
+        function getPriorityBadgeClass(priority) {
+            switch(priority.toLowerCase()) {
+                case 'urgent': case 'high': return 'danger';
+                case 'normal': return 'warning';
+                case 'low': return 'success';
+                default: return 'info';
+            }
+        }
+
+        function populateSupervisorFilters(supervisors) {
+            const uniqueSupervisors = [...new Set(supervisors.map(s => `${s.first_name} ${s.last_name}`))];
+            
+            // Update vacation requests supervisor filter
+            const vacationSupervisorFilter = document.getElementById('vacationSupervisorFilter');
+            vacationSupervisorFilter.innerHTML = '<option value="">All Supervisors</option>' +
+                uniqueSupervisors.map(name => `<option value="${name}">${name}</option>`).join('');
+            
+            // Update employees supervisor filter
+            const employeeSupervisorFilter = document.getElementById('employeeSupervisorFilter');
+            employeeSupervisorFilter.innerHTML = '<option value="">All Supervisors</option>' +
+                uniqueSupervisors.map(name => `<option value="${name}">${name}</option>`).join('');
+        }
+
+        // Populate employee supervisor filter independently
+        async function populateEmployeeSupervisorFilter() {
+            try {
+                const employeeSupervisorFilter = document.getElementById('employeeSupervisorFilter');
+                
+                if (!employeeSupervisorFilter) {
+                    console.error('Employee supervisor filter element not found');
+                    return;
+                }
+                
+                console.log('Fetching supervisors for employee filter...');
+                const supervisors = await apiRequest('/api/admin/supervisors');
+                console.log('Raw supervisors data:', supervisors);
+                
+                if (!supervisors || supervisors.length === 0) {
+                    console.log('No supervisors found');
+                    return;
+                }
+                
+                const uniqueSupervisors = [...new Set(supervisors.map(s => `${s.first_name} ${s.last_name}`))];
+                console.log('Unique supervisors:', uniqueSupervisors);
+                
+                // Clear existing options and rebuild
+                employeeSupervisorFilter.innerHTML = '<option value="">All Supervisors</option>';
+                
+                uniqueSupervisors.forEach(name => {
+                    const option = document.createElement('option');
+                    option.value = name;
+                    option.textContent = name;
+                    employeeSupervisorFilter.appendChild(option);
+                });
+                
+                console.log(`Employee supervisor filter populated with ${uniqueSupervisors.length} supervisors`);
+                console.log('Final dropdown options:', Array.from(employeeSupervisorFilter.options).map(opt => opt.textContent));
+            } catch (error) {
+                console.error('Error populating employee supervisor filter:', error);
+            }
+        }
+
+        // Helper function to safely show toast messages
+        function safeShowToast(message, type) {
+            if (typeof showToast === 'function') {
+                showToast(message, type);
+            } else {
+                console.log(`Toast (${type}): ${message}`);
+                // Fallback: show alert for important messages
+                if (type === 'error') {
+                    alert('Error: ' + message);
+                } else if (type === 'success') {
+                    console.log('Success: ' + message);
+                }
+            }
+        }
+
+        // CRUD operation functions
+        async function viewAnnouncement(id) {
+            try {
+                console.log('Loading announcement with ID:', id);
+                const announcement = await apiRequest(`/api/admin/announcements/${id}`);
+                console.log('Loaded announcement:', announcement);
+                
+                // Set the content with proper error checking
+                const titleElement = document.getElementById('viewAnnouncementTitle');
+                const textElement = document.getElementById('viewAnnouncementText');
+                const departmentsElement = document.getElementById('viewAnnouncementDepartments');
+                const statusElement = document.getElementById('viewAnnouncementStatus');
+                const createdElement = document.getElementById('viewAnnouncementCreated');
+                
+                if (titleElement) {
+                    titleElement.textContent = announcement.title || 'No title';
+                    console.log('Set title:', announcement.title);
+                }
+                if (textElement) {
+                    textElement.textContent = announcement.content || 'No content';
+                    console.log('Set content:', announcement.content);
+                }
+                if (departmentsElement) {
+                    const deptText = announcement.target_departments ?
+                        announcement.target_departments.join(', ') : 'All Departments';
+                    departmentsElement.textContent = deptText;
+                    console.log('Set departments:', deptText);
+                }
+                if (statusElement) {
+                    const statusHtml = `<span class="badge ${announcement.is_published ? 'badge-success' : 'badge-warning'}">${announcement.is_published ? 'Published' : 'Draft'}</span>`;
+                    statusElement.innerHTML = statusHtml;
+                    console.log('Set status:', statusHtml);
+                }
+                if (createdElement) {
+                    const createdText = formatDate(announcement.created_at);
+                    createdElement.textContent = createdText;
+                    console.log('Set created date:', createdText);
+                }
+                
+                const modal = document.getElementById('viewAnnouncementModal');
+                if (modal) {
+                    modal.classList.add('active');
+                    console.log('Modal opened successfully');
+                } else {
+                    console.error('Modal element not found');
+                }
+                
+                safeShowToast('Announcement loaded successfully', 'success');
+            } catch (error) {
+                console.error('Error loading announcement:', error);
+                safeShowToast('Failed to load announcement: ' + error.message, 'error');
+            }
+        }
+
+        async function editAnnouncement(id) {
+            try {
+                console.log('Loading announcement for edit with ID:', id);
+                const announcement = await apiRequest(`/api/admin/announcements/${id}`);
+                console.log('Loaded announcement for edit:', announcement);
+                
+                document.getElementById('editAnnouncementId').value = announcement.id;
+                document.getElementById('editAnnouncementTitle').value = announcement.title || '';
+                document.getElementById('editAnnouncementContent').value = announcement.content || '';
+                document.getElementById('editAnnouncementPublished').checked = announcement.is_published || false;
+                
+                // Clear and set department selections
+                const departmentSelect = document.getElementById('editAnnouncementDepartments');
+                Array.from(departmentSelect.options).forEach(option => option.selected = false);
+                
+                if (announcement.target_departments && Array.isArray(announcement.target_departments)) {
+                    announcement.target_departments.forEach(dept => {
+                        const option = Array.from(departmentSelect.options).find(opt => opt.value === dept);
+                        if (option) option.selected = true;
+                    });
+                }
+                
+                document.getElementById('editAnnouncementModal').classList.add('active');
+                safeShowToast('Announcement loaded for editing', 'success');
+            } catch (error) {
+                console.error('Error loading announcement for edit:', error);
+                safeShowToast('Failed to load announcement for editing: ' + error.message, 'error');
+            }
+        }
+
+        async function deleteAnnouncement(id) {
+            if (confirm('Are you sure you want to delete this announcement?')) {
+                try {
+                    console.log('Deleting announcement with ID:', id);
+                    await apiRequest(`/api/admin/announcements/${id}`, {
+                        method: 'DELETE'
+                    });
+                    console.log('Announcement deleted successfully');
+                    safeShowToast('Announcement deleted successfully', 'success');
+                    loadAnnouncements();
+                } catch (error) {
+                    console.error('Error deleting announcement:', error);
+                    safeShowToast('Failed to delete announcement: ' + (error.message || 'Unknown error'), 'error');
+                }
+            }
+        }
+
+        async function viewFaqArticle(id) {
+            try {
+                console.log('Loading FAQ article with ID:', id);
+                const article = await apiRequest(`/api/admin/faq/${id}`);
+                console.log('Loaded FAQ article:', article);
+                
+                // Set the content with proper error checking
+                const titleElement = document.getElementById('viewFaqTitle');
+                const textElement = document.getElementById('viewFaqText');
+                const categoryElement = document.getElementById('viewFaqCategory');
+                const statusElement = document.getElementById('viewFaqStatus');
+                const createdElement = document.getElementById('viewFaqCreated');
+                
+                if (titleElement) {
+                    titleElement.textContent = article.title || 'No title';
+                    console.log('Set title:', article.title);
+                }
+                if (textElement) {
+                    textElement.textContent = article.content || 'No content';
+                    console.log('Set content:', article.content);
+                }
+                if (categoryElement) {
+                    categoryElement.textContent = article.category || 'No category';
+                    console.log('Set category:', article.category);
+                }
+                if (statusElement) {
+                    const statusHtml = `<span class="badge ${article.is_published ? 'badge-success' : 'badge-warning'}">${article.is_published ? 'Published' : 'Draft'}</span>`;
+                    statusElement.innerHTML = statusHtml;
+                    console.log('Set status:', statusHtml);
+                }
+                if (createdElement) {
+                    const createdText = formatDate(article.created_at);
+                    createdElement.textContent = createdText;
+                    console.log('Set created date:', createdText);
+                }
+                
+                const modal = document.getElementById('viewFaqModal');
+                if (modal) {
+                    modal.classList.add('active');
+                    console.log('FAQ view modal opened successfully');
+                } else {
+                    console.error('FAQ view modal element not found');
+                }
+                
+                safeShowToast('FAQ article loaded successfully', 'success');
+            } catch (error) {
+                console.error('Error loading FAQ article:', error);
+                safeShowToast('Failed to load FAQ article: ' + error.message, 'error');
+            }
+        }
+
+        async function editFaqArticle(id) {
+            try {
+                console.log('Loading FAQ article for edit with ID:', id);
+                const article = await apiRequest(`/api/admin/faq/${id}`);
+                console.log('Loaded FAQ article for edit:', article);
+                
+                document.getElementById('editFaqId').value = article.id;
+                document.getElementById('editFaqTitle').value = article.title || '';
+                document.getElementById('editFaqCategory').value = article.category || '';
+                document.getElementById('editFaqContent').value = article.content || '';
+                document.getElementById('editFaqPublished').checked = article.is_published || false;
+                
+                document.getElementById('editFaqModal').classList.add('active');
+                safeShowToast('FAQ article loaded for editing', 'success');
+            } catch (error) {
+                console.error('Error loading FAQ article for edit:', error);
+                safeShowToast('Failed to load FAQ article for editing: ' + error.message, 'error');
+            }
+        }
+
+        async function deleteFaqArticle(id) {
+            if (confirm('Are you sure you want to delete this FAQ article?')) {
+                try {
+                    await apiRequest(`/api/admin/faq/${id}`, {
+                        method: 'DELETE'
+                    });
+                    safeShowToast('FAQ article deleted successfully', 'success');
+                    loadFaqArticles();
+                } catch (error) {
+                    console.error('Error deleting FAQ article:', error);
+                    safeShowToast('Failed to delete FAQ article', 'error');
+                }
+            }
+        }
+
+        async function viewTicket(id) {
+            try {
+                console.log('Loading support ticket with ID:', id);
+                const ticket = await apiRequest(`/api/admin/support-tickets/${id}`);
+                console.log('Loaded support ticket:', ticket);
+                
+                // Set the content with proper error checking
+                const subjectElement = document.getElementById('viewTicketSubject');
+                const messageElement = document.getElementById('viewTicketMessage');
+                const userEmailElement = document.getElementById('viewTicketUserEmail');
+                const categoryElement = document.getElementById('viewTicketCategory');
+                const statusElement = document.getElementById('viewTicketStatus');
+                const priorityElement = document.getElementById('viewTicketPriority');
+                const createdElement = document.getElementById('viewTicketCreated');
+                
+                if (subjectElement) {
+                    subjectElement.textContent = ticket.subject || 'No subject';
+                    console.log('Set subject:', ticket.subject);
+                }
+                if (messageElement) {
+                    messageElement.textContent = ticket.message || 'No message';
+                    console.log('Set message:', ticket.message);
+                }
+                if (userEmailElement) {
+                    userEmailElement.textContent = ticket.user_email || 'Anonymous';
+                    console.log('Set user email:', ticket.user_email);
+                }
+                if (categoryElement) {
+                    categoryElement.textContent = ticket.category || 'No category';
+                    console.log('Set category:', ticket.category);
+                }
+                if (statusElement) {
+                    const statusHtml = `<span class="badge badge-${getStatusBadgeClass(ticket.status)}">${ticket.status || 'Unknown'}</span>`;
+                    statusElement.innerHTML = statusHtml;
+                    console.log('Set status:', statusHtml);
+                }
+                if (priorityElement) {
+                    const priorityHtml = `<span class="badge badge-${getPriorityBadgeClass(ticket.priority)}">${ticket.priority || 'Normal'}</span>`;
+                    priorityElement.innerHTML = priorityHtml;
+                    console.log('Set priority:', priorityHtml);
+                }
+                if (createdElement) {
+                    const createdText = formatDate(ticket.created_at);
+                    createdElement.textContent = createdText;
+                    console.log('Set created date:', createdText);
+                }
+                
+                const modal = document.getElementById('viewSupportTicketModal');
+                if (modal) {
+                    modal.classList.add('active');
+                    console.log('Support ticket modal opened successfully');
+                } else {
+                    console.error('Support ticket modal element not found');
+                }
+                
+                safeShowToast('Support ticket loaded successfully', 'success');
+            } catch (error) {
+                console.error('Error loading support ticket:', error);
+                safeShowToast('Failed to load support ticket: ' + error.message, 'error');
+            }
+        }
+
+        async function updateTicketStatus(id, status) {
+            try {
+                await apiRequest(`/api/admin/support-tickets/${id}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ status: status })
+                });
+                safeShowToast(`Ticket ${status} successfully`, 'success');
+                loadSupportTickets();
+            } catch (error) {
+                console.error('Error updating ticket status:', error);
+                safeShowToast('Failed to update ticket status', 'error');
+            }
+        }
+
+        async function deleteAdminEmail(email) {
+            if (confirm('Are you sure you want to remove this admin email?')) {
+                try {
+                    await apiRequest(`/api/admin/admin-emails/${encodeURIComponent(email)}`, {
+                        method: 'DELETE'
+                    });
+                    safeShowToast('Admin email removed successfully', 'success');
+                    loadAdminEmails();
+                } catch (error) {
+                    console.error('Error removing admin email:', error);
+                    safeShowToast('Failed to remove admin email', 'error');
+                }
+            }
+        }
+
+        // Legal Documents Functions
+        async function loadLegalDocuments() {
+            try {
+                console.log('Loading legal documents...');
+                const documents = await apiRequest('/api/admin/legal-documents');
+                console.log('Legal documents loaded:', documents);
+                
+                // Update Terms of Service card
+                const tosDoc = documents.find(doc => doc.document_type === 'terms_of_service' && doc.is_active);
+                if (tosDoc) {
+                    document.getElementById('tosStatus').textContent = 'Active';
+                    document.getElementById('tosStatus').className = 'badge badge-success';
+                    document.getElementById('tosVersion').textContent = tosDoc.version;
+                    document.getElementById('tosLastUpdated').textContent = formatDate(tosDoc.updated_at);
+                } else {
+                    document.getElementById('tosStatus').textContent = 'Not Set';
+                    document.getElementById('tosStatus').className = 'badge badge-warning';
+                    document.getElementById('tosVersion').textContent = '-';
+                    document.getElementById('tosLastUpdated').textContent = '-';
+                }
+                
+                // Update Privacy Policy card
+                const privacyDoc = documents.find(doc => doc.document_type === 'privacy_policy' && doc.is_active);
+                if (privacyDoc) {
+                    document.getElementById('privacyStatus').textContent = 'Active';
+                    document.getElementById('privacyStatus').className = 'badge badge-success';
+                    document.getElementById('privacyVersion').textContent = privacyDoc.version;
+                    document.getElementById('privacyLastUpdated').textContent = formatDate(privacyDoc.updated_at);
+                } else {
+                    document.getElementById('privacyStatus').textContent = 'Not Set';
+                    document.getElementById('privacyStatus').className = 'badge badge-warning';
+                    document.getElementById('privacyVersion').textContent = '-';
+                    document.getElementById('privacyLastUpdated').textContent = '-';
+                }
+                
+                // Load document history
+                loadLegalDocumentHistory();
+                
+            } catch (error) {
+                console.error('Error loading legal documents:', error);
+                safeShowToast('Failed to load legal documents', 'error');
+            }
+        }
+
+        async function loadLegalDocumentHistory() {
+            try {
+                console.log('Loading legal document history...');
+                const history = await apiRequest('/api/admin/legal-documents/history');
+                console.log('Legal document history loaded:', history);
+                
+                const tbody = document.querySelector('#legalDocumentsHistoryTable tbody');
+                
+                if (history.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center text-black opacity-60">No document history found</td></tr>';
+                    return;
+                }
+                
+                tbody.innerHTML = history.map(doc => `
+                    <tr>
+                        <td class="font-medium">${doc.document_type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}</td>
+                        <td>${doc.version}</td>
+                        <td>${doc.title}</td>
+                        <td><span class="badge ${doc.is_active ? 'badge-success' : 'badge-info'}">${doc.is_active ? 'Active' : 'Archived'}</span></td>
+                        <td>${formatDate(doc.effective_date)}</td>
+                        <td>${formatDate(doc.created_at)}</td>
+                        <td>
+                            <div class="flex gap-2">
+                                <button class="modern-btn modern-btn-sm modern-btn-success" onclick="viewLegalDocumentById(${doc.id})">View</button>
+                                ${doc.is_active ? `<button class="modern-btn modern-btn-sm" onclick="editLegalDocument('${doc.document_type}')">Edit</button>` : ''}
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Error loading legal document history:', error);
+                safeShowToast('Failed to load document history', 'error');
+            }
+        }
+
+        async function viewLegalDocument(documentType) {
+            try {
+                console.log('Loading legal document for view:', documentType);
+                const docData = await apiRequest(`/api/admin/legal-documents/${documentType}`);
+                console.log('Legal document loaded for view:', docData);
+                
+                // Set modal title
+                const titleText = documentType === 'terms_of_service' ? 'Terms of Service' : 'Privacy Policy';
+                document.getElementById('viewLegalDocumentTitle').textContent = `View ${titleText}`;
+                
+                // Set document content
+                document.getElementById('viewLegalDocumentText').textContent = docData.content || 'No content available';
+                document.getElementById('viewLegalDocumentVersion').textContent = docData.version || '-';
+                document.getElementById('viewLegalDocumentEffective').textContent = formatDate(docData.effective_date);
+                
+                // Set status
+                const statusElement = document.getElementById('viewLegalDocumentStatus');
+                statusElement.innerHTML = `<span class="badge badge-success">Active</span>`;
+                
+                // Show modal
+                document.getElementById('viewLegalDocumentModal').classList.add('active');
+                safeShowToast('Document loaded successfully', 'success');
+                
+            } catch (error) {
+                console.error('Error loading legal document:', error);
+                safeShowToast('Failed to load document: ' + error.message, 'error');
+            }
+        }
+
+        async function viewLegalDocumentById(id) {
+            try {
+                console.log('Loading legal document by ID for view:', id);
+                const docData = await apiRequest(`/api/admin/legal-documents/by-id/${id}`);
+                console.log('Legal document loaded for view:', docData);
+                
+                // Set modal title
+                const titleText = docData.document_type === 'terms_of_service' ? 'Terms of Service' : 'Privacy Policy';
+                document.getElementById('viewLegalDocumentTitle').textContent = `View ${titleText} (Version ${docData.version})`;
+                
+                // Set document content
+                document.getElementById('viewLegalDocumentText').textContent = docData.content || 'No content available';
+                document.getElementById('viewLegalDocumentVersion').textContent = docData.version || '-';
+                document.getElementById('viewLegalDocumentEffective').textContent = formatDate(docData.effective_date);
+                
+                // Set status
+                const statusElement = document.getElementById('viewLegalDocumentStatus');
+                const statusClass = docData.is_active ? 'badge-success' : 'badge-info';
+                const statusText = docData.is_active ? 'Active' : 'Archived';
+                statusElement.innerHTML = `<span class="badge ${statusClass}">${statusText}</span>`;
+                
+                // Show modal
+                document.getElementById('viewLegalDocumentModal').classList.add('active');
+                safeShowToast('Document loaded successfully', 'success');
+                
+            } catch (error) {
+                console.error('Error loading legal document:', error);
+                safeShowToast('Failed to load document: ' + error.message, 'error');
+            }
+        }
+
+        async function editLegalDocument(documentType) {
+            try {
+                console.log('Loading legal document for edit:', documentType);
+                const docData = await apiRequest(`/api/admin/legal-documents/${documentType}`);
+                console.log('Legal document loaded for edit:', docData);
+                
+                // Set modal title
+                const titleText = documentType === 'terms_of_service' ? 'Terms of Service' : 'Privacy Policy';
+                document.getElementById('editLegalDocumentTitle').textContent = `Edit ${titleText}`;
+                
+                // Set form values
+                document.getElementById('editLegalDocumentType').value = documentType;
+                document.getElementById('editLegalDocumentTitleInput').value = docData.title || titleText;
+                document.getElementById('editLegalDocumentContent').value = docData.content || '';
+                
+                // Set effective date to today by default for new version
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('editLegalDocumentEffectiveDate').value = today;
+                
+                // Show modal
+                document.getElementById('editLegalDocumentModal').classList.add('active');
+                safeShowToast('Document loaded for editing', 'success');
+                
+            } catch (error) {
+                console.error('Error loading legal document for edit:', error);
+                safeShowToast('Failed to load document for editing: ' + error.message, 'error');
+            }
+        }
+
+        // Edit Legal Document form submission
+        document.getElementById('editLegalDocumentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const documentType = document.getElementById('editLegalDocumentType').value;
+            const title = document.getElementById('editLegalDocumentTitleInput').value.trim();
+            const content = document.getElementById('editLegalDocumentContent').value.trim();
+            const effectiveDate = document.getElementById('editLegalDocumentEffectiveDate').value;
+            
+            // Validate required fields
+            if (!title) {
+                safeShowToast('Document title is required', 'error');
+                return;
+            }
+            if (!content) {
+                safeShowToast('Document content is required', 'error');
+                return;
+            }
+            if (!effectiveDate) {
+                safeShowToast('Effective date is required', 'error');
+                return;
+            }
+            
+            // Confirm the update
+            if (!confirm('This will create a new version and archive the current one. Are you sure you want to continue?')) {
+                return;
+            }
+            
+            try {
+                console.log('Updating legal document:', documentType);
+                const response = await apiRequest(`/api/admin/legal-documents/${documentType}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        title: title,
+                        content: content,
+                        effective_date: effectiveDate
+                    })
+                });
+                
+                console.log('Legal document update response:', response);
+                safeShowToast('Legal document updated successfully!', 'success');
+                closeModal('editLegalDocumentModal');
+                document.getElementById('editLegalDocumentForm').reset();
+                loadLegalDocuments();
+            } catch (error) {
+                console.error('Error updating legal document:', error);
+                safeShowToast('Failed to update legal document: ' + (error.message || 'Unknown error'), 'error');
+            }
+        });
+
+        // Mobile Sidebar Functions
+        function toggleMobileSidebar() {
+            const mobileSidebar = document.getElementById('mobileSidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const hamburgerMenu = document.querySelector('.hamburger-menu');
+            
+            if (mobileSidebar && sidebarOverlay && hamburgerMenu) {
+                const isActive = mobileSidebar.classList.contains('active');
+                
+                if (isActive) {
+                    closeMobileSidebar();
+                } else {
+                    openMobileSidebar();
+                }
+            }
+        }
+
+        function openMobileSidebar() {
+            const mobileSidebar = document.getElementById('mobileSidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const hamburgerMenu = document.querySelector('.hamburger-menu');
+            
+            if (mobileSidebar && sidebarOverlay && hamburgerMenu) {
+                mobileSidebar.classList.add('active');
+                sidebarOverlay.classList.add('active');
+                hamburgerMenu.classList.add('active');
+                
+                // Prevent body scroll when sidebar is open
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeMobileSidebar() {
+            const mobileSidebar = document.getElementById('mobileSidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const hamburgerMenu = document.querySelector('.hamburger-menu');
+            
+            if (mobileSidebar && sidebarOverlay && hamburgerMenu) {
+                mobileSidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+                hamburgerMenu.classList.remove('active');
+                
+                // Restore body scroll
+                document.body.style.overflow = '';
+            }
+        }
+
+        function handleMobileSidebarClick(element) {
+            // Handle the sidebar navigation
+            const sectionId = element.dataset.section;
+            
+            // Update active states for both desktop and mobile sidebars
+            const allSidebarItems = document.querySelectorAll('.sidebar-item');
+            const sections = document.querySelectorAll('.admin-section');
+            
+            allSidebarItems.forEach(item => item.classList.remove('active'));
+            
+            // Set active for both desktop and mobile items with same section
+            const desktopItem = document.querySelector(`#desktopSidebar .sidebar-item[data-section="${sectionId}"]`);
+            const mobileItem = document.querySelector(`#mobileSidebar .sidebar-item[data-section="${sectionId}"]`);
+            
+            if (desktopItem) desktopItem.classList.add('active');
+            if (mobileItem) mobileItem.classList.add('active');
+            
+            sections.forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            
+            currentSection = sectionId;
+            loadSectionData(sectionId);
+            
+            // Close mobile sidebar after selection
+            closeMobileSidebar();
+        }
+
+        // Close mobile sidebar when clicking outside or on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeMobileSidebar();
+            }
+        });
+
+        // Handle window resize to close mobile sidebar on larger screens
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                closeMobileSidebar();
+            }
+        });
+
+        // Update the existing setupSidebarNavigation function to handle both sidebars
+        function setupSidebarNavigation() {
+            const desktopSidebarItems = document.querySelectorAll('#desktopSidebar .sidebar-item');
+            const mobileSidebarItems = document.querySelectorAll('#mobileSidebar .sidebar-item');
+            const sections = document.querySelectorAll('.admin-section');
+
+            // Handle desktop sidebar clicks
+            desktopSidebarItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const sectionId = this.dataset.section;
+                    
+                    // Update active states for both sidebars
+                    const allSidebarItems = document.querySelectorAll('.sidebar-item');
+                    allSidebarItems.forEach(i => i.classList.remove('active'));
+                    
+                    const desktopItem = document.querySelector(`#desktopSidebar .sidebar-item[data-section="${sectionId}"]`);
+                    const mobileItem = document.querySelector(`#mobileSidebar .sidebar-item[data-section="${sectionId}"]`);
+                    
+                    if (desktopItem) desktopItem.classList.add('active');
+                    if (mobileItem) mobileItem.classList.add('active');
+                    
+                    sections.forEach(s => s.classList.remove('active'));
+                    document.getElementById(sectionId).classList.add('active');
+                    
+                    currentSection = sectionId;
+                    loadSectionData(sectionId);
+                });
+            });
+
+            // Mobile sidebar clicks are handled by the onclick attribute in HTML
+        }
+    </script>
+</body>
+</html>

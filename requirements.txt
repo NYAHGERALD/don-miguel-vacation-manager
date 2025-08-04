@@ -36,3 +36,9 @@ flake8==6.1.0
 
 # Production Dependencies
 gunicorn==21.2.0
+
+bcrypt==4.1.2
+
+# SMS Notification Dependencies
+twilio==8.10.0
+APScheduler==3.10.4

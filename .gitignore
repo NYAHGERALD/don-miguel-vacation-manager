@@ -1,16 +1,27 @@
 # Virtual environment
 venv/
+env/
+.venv/
 
 # Python cache
 __pycache__/
 *.py[cod]
 *.pyo
+*.pyd
+.Python
 
 # Environment variables
 .env
+.env.local
+.env.production
+.env.staging
+.env.example
 
 # Node modules
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Compiled Tailwind CSS
 static/css/output.css
@@ -20,17 +31,89 @@ firebase-service-account.json
 firebase_config.py
 firebase-config.js
 
+# Database files (for local development)
+*.db
+*.sqlite
+*.sqlite3
+
 # System files
 .DS_Store
 Thumbs.db
+*.swp
+*.swo
+*~
 
-# VSCode project files (optional)
+# IDE files
 .vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
 
 # Logs
 *.log
+logs/
 
 # Coverage / test / temp
 coverage/
 *.coverage
-.env.*
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Test files (exclude from production)
+test_*.py
+test_*.html
+*_test.py
+tests/
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Deployment specific
+.deployment
+.azure/
+
+# Local configuration overrides
+config.local.py
+settings.local.py
+
+# Project-specific files to ignore
+# Database migration/setup scripts (keep in repo but ignore if they contain sensitive data)
+database/add_password_hash_column.sql
+database/create_notification_preferences.sql
+
+# Setup scripts with potential sensitive data
+setup_admin_table.py
+setup_legal_documents_table.py
+
+# Development and testing files
+test_employee_creation.py
+test_db_connection_debug.py
+test_employee_retrieval.py
+test_responsive_admin.html
+test_vacation_print.py
+test_vacation_print_validation.py
+test_excel_pdf_implementation.py
+
+# Package lock file (optional - some prefer to include it)
+# package-lock.json
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Local development database dumps
+*.sql.backup
+*.dump
+
+# Runtime files
+*.pid

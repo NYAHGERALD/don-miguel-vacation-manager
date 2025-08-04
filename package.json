@@ -9,7 +9,8 @@
     "build-css-prod": "tailwindcss -i static/css/input.css -o static/css/output.css --minify",
     "start": "python backend/app.py",
     "install-deps": "pip install -r requirements.txt",
-    "setup-db": "psql -d vacation_manager -f database/schema.sql"
+    "setup-db": "psql -U vacation_user -d vacation_manager -f database/schema.sql",
+    "grant-permissions": "psql -U vacation_user -d vacation_manager -f database/grant_permissions.sql"
   },
   "keywords": [
     "vacation",

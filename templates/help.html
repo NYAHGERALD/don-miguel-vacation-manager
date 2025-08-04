@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Center - Don Miguel Vacation Manager</title>
+    <link href="../static/css/output.css" rel="stylesheet">
+    <link href="../static/css/toast-notifications.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <style>
+        /* Modern Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 1; transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200px 0; }
+            100% { background-position: calc(200px + 100%) 0; }
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.8), 0 0 30px rgba(59, 130, 246, 0.6); }
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Animation Classes */
+        .animate-fadeIn { animation: fadeIn 0.6s ease-out forwards; }
+        .animate-slideUp { animation: slideUp 0.5s ease-out forwards; }
+        .animate-bounceIn { animation: bounceIn 0.7s ease-out forwards; }
+        .animate-shimmer { animation: shimmer 2s infinite linear; }
+        .animate-pulseGlow { animation: pulseGlow 2s ease-in-out infinite; }
+        .animate-gradientShift { animation: gradientShift 3s ease infinite; }
+        .animate-float { animation: float 3s ease-in-out infinite; }
+        
+        /* Modern Gradient Backgrounds */
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .bg-gradient-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .bg-gradient-success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .bg-gradient-warning {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+        
+        .bg-gradient-danger {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        
+        .bg-gradient-info {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+        
+        /* Modern Card Styles */
+        .modern-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .modern-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+            background-size: 200% 100%;
+            animation: gradientShift 3s ease infinite;
+        }
+        
+        .modern-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Modern Button Styles */
+        .modern-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            padding: 12px 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .modern-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .modern-btn:active {
+            transform: translateY(0);
+        }
+        
+        .modern-btn-success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .modern-btn-success:hover {
+            box-shadow: 0 10px 25px rgba(79, 172, 254, 0.4);
+        }
+        
+        .modern-btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .modern-btn-secondary:hover {
+            box-shadow: 0 10px 25px rgba(240, 147, 251, 0.4);
+        }
+        
+        /* Modern Input Styles */
+        .modern-input {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-radius: 12px;
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .modern-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            outline: none;
+        }
+        
+        /* Modern Tab Styles */
+        .modern-tab {
+            position: relative;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .modern-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .modern-tab:not(.active) {
+            color: #6b7280;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+        }
+        
+        .modern-tab:not(.active):hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            transform: translateY(-1px);
+        }
+        
+        /* Modern Avatar Styles */
+        .modern-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .modern-avatar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+        
+        .modern-avatar:hover::before {
+            opacity: 1;
+            animation: shimmer 1.5s ease-in-out;
+        }
+        
+        /* Modern Modal Styles */
+        .modern-modal {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Modern Navigation */
+        .modern-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+        
+        .nav-link:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        .nav-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        /* FAQ Styles */
+        .faq-item {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .faq-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .faq-question {
+            font-weight: 600;
+            color: #374151;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-question:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+        
+        .faq-answer {
+            padding: 0 20px 20px 20px;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+        
+        /* Announcement Banner */
+        .announcement-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .announcement-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: shimmer 3s infinite;
+        }
+        
+        /* Category Button Styles */
+        .category-btn {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(102, 126, 234, 0.1);
+            border-radius: 12px;
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .category-btn:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        /* Search Bar Styles */
+        .search-container {
+            position: relative;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .search-container:focus-within {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        /* Star Rating Styles */
+        .star-rating button {
+            transition: all 0.2s ease;
+            font-size: 1.5rem;
+        }
+        
+        .star-rating button:hover {
+            transform: scale(1.2);
+        }
+        
+        /* Loading Animation */
+        .loading-shimmer {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        
+        /* Help Icon Styles */
+        .help-icon {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-bottom: 16px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .modern-card {
+                border-radius: 16px;
+                margin: 8px;
+            }
+            
+            .modern-btn {
+                padding: 10px 20px;
+                border-radius: 10px;
+            }
+            
+            .modern-tab {
+                padding: 8px 16px;
+                border-radius: 8px;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <!-- Navigation -->
+    <nav class="modern-nav sticky top-0 z-50 animate-fadeIn">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo and Brand -->
+                <div class="flex items-center animate-slideUp">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Don Miguel</h1>
+                        <p class="text-xs text-gray-500 -mt-1">Vacation Manager</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="hidden md:block animate-slideUp" style="animation-delay: 0.1s;">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="/dashboard" class="nav-link text-gray-600 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2 2z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v4H8V5z"></path>
+                            </svg>
+                            Dashboard
+                        </a>
+                        <a href="/employees" class="nav-link text-gray-600 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                            </svg>
+                            Employees
+                        </a>
+                        <a href="/vacation-requests" class="nav-link text-gray-600 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            Requests
+                        </a>
+                        <a href="/help" class="nav-link active px-3 py-2 rounded-md text-sm font-medium flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Help Center
+                        </a>
+                    </div>
+                </div>
+
+                <!-- User Menu -->
+                <div class="flex items-center space-x-4 animate-slideUp" style="animation-delay: 0.2s;">
+                    <div class="relative">
+                        <button id="userMenuButton" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 hover:scale-105">
+                            <div class="modern-avatar w-8 h-8">
+                                <span id="userInitials" class="text-sm font-medium">--</span>
+                            </div>
+                            <span id="userName" class="ml-2 text-gray-700 font-medium hidden sm:block">Loading...</span>
+                            <svg class="ml-1 h-4 w-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        
+                        <!-- Dropdown Menu -->
+                        <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 modern-modal z-50 animate-bounceIn">
+                            <div class="py-1">
+                                <div class="px-4 py-2 border-b border-gray-200">
+                                    <p class="text-sm font-medium text-gray-900" id="userMenuName">Loading...</p>
+                                    <p class="text-sm text-gray-500" id="userMenuEmail">Loading...</p>
+                                </div>
+                                <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200 flex items-center">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                    Profile Settings
+                                </a>
+                                <a href="/help" class="block px-4 py-2 text-sm text-blue-600 bg-blue-50 transition-colors duration-200 flex items-center">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    Help Center
+                                </a>
+                                <button id="logoutButton" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200 flex items-center">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                    </svg>
+                                    Sign Out
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile menu button -->
+                    <div class="md:hidden">
+                        <button type="button" class="mobile-menu-button bg-white/80 backdrop-blur-sm inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-700 hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-all duration-200">
+                            <span class="sr-only">Open main menu</span>
+                            <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div class="mobile-menu hidden md:hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white/95 backdrop-blur-sm border-t border-gray-200">
+                <a href="/dashboard" class="nav-link text-gray-600 hover:text-gray-700 block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+                <a href="/employees" class="nav-link text-gray-600 hover:text-gray-700 block px-3 py-2 rounded-md text-base font-medium">Employees</a>
+                <a href="/vacation-requests" class="nav-link text-gray-600 hover:text-gray-700 block px-3 py-2 rounded-md text-base font-medium">Requests</a>
+                <a href="/help" class="nav-link active block px-3 py-2 rounded-md text-base font-medium">Help Center</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header -->
+        <div class="text-center mb-12 animate-fadeIn" style="animation-delay: 0.3s;">
+            <div class="help-icon mx-auto">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-8 h-8">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Help Center</h1>
+            <p class="mt-4 text-xl text-gray-600">Find answers to your questions and get the support you need</p>
+        </div>
+        
+        <!-- Search Bar -->
+        <div class="mb-8 animate-slideUp" style="animation-delay: 0.4s;">
+            <div class="search-container max-w-2xl mx-auto">
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <input type="text" id="searchInput" class="w-full pl-12 pr-4 py-4 bg-transparent border-none focus:outline-none text-lg placeholder-gray-500" placeholder="Search help articles...">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Announcements -->
+        <div id="announcementsContainer" class="mb-8 animate-slideUp" style="animation-delay: 0.5s;">
+            <!-- Announcements will be loaded here -->
+        </div>
+        
+        <!-- Tabs -->
+        <div class="flex justify-center mb-8 animate-slideUp" style="animation-delay: 0.6s;">
+            <div class="flex space-x-4 bg-white/80 backdrop-blur-sm p-2 rounded-2xl border border-gray-200">
+                <button id="faqTab" class="modern-tab active flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    FAQ
+                </button>
+                <button id="supportTab" class="modern-tab flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                    Support
+                </button>
+                <button id="feedbackTab" class="modern-tab flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V7a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+                    </svg>
+                    Feedback
+                </button>
+            </div>
+        </div>
+        
+        <!-- FAQ Tab -->
+        <div id="faqTabContent" class="animate-slideUp" style="animation-delay: 0.7s;">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                <!-- Categories Sidebar -->
+                <div class="lg:col-span-1">
+                    <div class="modern-card">
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                                </svg>
+                                Categories
+                            </h3>
+                            <ul id="categoriesList" class="space-y-2">
+                                <!-- Categories will be loaded here -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- FAQ Content -->
+                <div class="lg:col-span-3">
+                    <div class="modern-card">
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Frequently Asked Questions
+                            </h3>
+                            <div id="faqContent">
+                                <!-- FAQ items will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Support Tab -->
+        <div id="supportTabContent" class="modern-card hidden animate-slideUp" style="animation-delay: 0.7s;">
+            <div class="p-8">
+                <div class="text-center mb-8">
+                    <div class="help-icon mx-auto">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-8 h-8">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Submit Support Ticket</h3>
+                    <p class="text-gray-600">Need help? Our support team is here to assist you.</p>
+                </div>
+                
+                <form id="supportTicketForm" class="max-w-2xl mx-auto">
+                    <div class="grid grid-cols-1 gap-6">
+                        <div>
+                            <label for="ticketSubject" class="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+                            <input type="text" id="ticketSubject" class="modern-input w-full" required placeholder="Brief description of your issue">
+                        </div>
+                        <div>
+                            <label for="ticketCategory" class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                            <select id="ticketCategory" class="modern-input w-full" required>
+                                <option value="">Select a category</option>
+                                <option value="account">Account Issues</option>
+                                <option value="technical">Technical Problems</option>
+                                <option value="feature">Feature Request</option>
+                                <option value="billing">Billing</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="ticketMessage" class="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                            <textarea id="ticketMessage" rows="6" class="modern-input w-full" placeholder="Please describe your issue in detail..." required></textarea>
+                        </div>
+                    </div>
+                    <div class="mt-8 text-center">
+                        <button type="submit" class="modern-btn">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                            </svg>
+                            Submit Support Ticket
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Feedback Tab -->
+        <div id="feedbackTabContent" class="modern-card hidden animate-slideUp" style="animation-delay: 0.7s;">
+            <div class="p-8">
+                <div class="text-center mb-8">
+                    <div class="help-icon mx-auto">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-8 h-8">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V7a2 2 0 012-2h4l4 4v5a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Share Your Feedback</h3>
+                    <p class="text-gray-600">Help us improve by sharing your thoughts and suggestions.</p>
+                </div>
+                
+                <form id="helpFeedbackForm" class="max-w-2xl mx-auto">
+                    <div class="grid grid-cols-1 gap-6">
+                        <div>
+                            <label for="helpFeedbackCategory" class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                            <select id="helpFeedbackCategory" class="modern-input w-full" required>
+                                <option value="">Select a category</option>
+                                <option value="bug_report">Bug Report</option>
+                                <option value="feature_request">Feature Request</option>
+                                <option value="general_feedback">General Feedback</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="helpFeedbackRating" class="block text-sm font-medium text-gray-700 mb-2">Overall Experience</label>
+                            <div class="flex items-center justify-center">
+                                <div class="star-rating flex">
+                                    <!-- 5-star rating system -->
+                                    <button type="button" class="text-2xl text-gray-300 hover:text-yellow-400 focus:outline-none transition-all duration-200" data-rating="1">★</button>
+                                    <button type="button" class="text-2xl text-gray-300 hover:text-yellow-400 focus:outline-none transition-all duration-200" data-rating="2">★</button>
+                                    <button type="button" class="text-2xl text-gray-300 hover:text-yellow-400 focus:outline-none transition-all duration-200" data-rating="3">★</button>
+                                    <button type="button" class="text-2xl text-gray-300 hover:text-yellow-400 focus:outline-none transition-all duration-200" data-rating="4">★</button>
+                                    <button type="button" class="text-2xl text-gray-300 hover:text-yellow-400 focus:outline-none transition-all duration-200" data-rating="5">★</button>
+                                </div>
+                                <span id="helpRatingValue" class="ml-4 text-sm text-gray-500 font-medium"></span>
+                            </div>
+                            <input type="hidden" id="helpFeedbackRatingValue" name="rating">
+                        </div>
+                        <div>
+                            <label for="helpFeedbackMessage" class="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                            <textarea id="helpFeedbackMessage" rows="5" class="modern-input w-full" placeholder="Please provide detailed feedback..." required></textarea>
+                        </div>
+                    </div>
+                    <div class="mt-8 text-center">
+                        <button type="submit" class="modern-btn modern-btn-success">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                            </svg>
+                            Submit Feedback
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+        <div class="modern-modal p-8 flex items-center space-x-4">
+            <div class="loading-shimmer w-8 h-8 rounded-full"></div>
+            <span class="text-gray-700 font-medium">Loading...</span>
+        </div>
+    </div>
+    
+    <!-- Toast Notifications Container -->
+    <div id="toast-container"></div>
+    
+    <!-- Include Toast Notifications Script -->
+    <script src="../static/js/toast-notifications.js"></script>
+    
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-RJTbmkbsOOTTt4DreNG_XhKHeypfm40",
+            authDomain: "vacation-request-84a27.firebaseapp.com",
+            projectId: "vacation-request-84a27",
+            storageBucket: "vacation-request-84a27.firebasestorage.app",
+            messagingSenderId: "231546887371",
+            appId: "1:231546887371:web:ab9668bb0c944481a9cf4e",
+            measurementId: "G-S5838440J0"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        
+        // Global variables
+        let currentUser = null;
+        let faqArticles = [];
+        let categories = [];
+        
+        // DOM elements
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const userInitials = document.getElementById('userInitials');
+        const userName = document.getElementById('userName');
+        const userMenuName = document.getElementById('userMenuName');
+        const userMenuEmail = document.getElementById('userMenuEmail');
+        const userMenuButton = document.getElementById('userMenuButton');
+        const userMenu = document.getElementById('userMenu');
+        const logoutButton = document.getElementById('logoutButton');
+        const mobileMenuButton = document.querySelector('.mobile-menu-button');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        
+        // Tab elements
+        const faqTab = document.getElementById('faqTab');
+        const supportTab = document.getElementById('supportTab');
+        const feedbackTab = document.getElementById('feedbackTab');
+        const faqTabContent = document.getElementById('faqTabContent');
+        const supportTabContent = document.getElementById('supportTabContent');
+        const feedbackTabContent = document.getElementById('feedbackTabContent');
+        
+        // Form elements
+        const searchInput = document.getElementById('searchInput');
+        const supportTicketForm = document.getElementById('supportTicketForm');
+        const helpFeedbackForm = document.getElementById('helpFeedbackForm');
+        
+        // Authentication state handler
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                
+                // Check if supervisor exists in database
+                try {
+                    const idToken = await user.getIdToken();
+                    const supervisorCheckResponse = await fetch(`/api/supervisor/exists/${user.uid}`, {
+                        headers: {
+                            'Authorization': `Bearer ${idToken}`
+                        }
+                    });
+                    
+                    if (supervisorCheckResponse.ok) {
+                        const supervisorCheck = await supervisorCheckResponse.json();
+                        
+                        if (supervisorCheck.exists) {
+                            // Supervisor exists, load help center data
+                            await initializeHelpCenter();
+                        } else {
+                            // Supervisor doesn't exist, redirect to registration
+                            window.location.href = '/register';
+                        }
+                    } else {
+                        throw new Error('Failed to check supervisor status');
+                    }
+                } catch (error) {
+                    console.error('Error checking supervisor status:', error);
+                    safeShowToast('Failed to verify account status. Please try logging in again.', 'error');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 3000);
+                }
+            } else {
+                window.location.href = '/login';
+            }
+        });
+        
+        // Initialize help center
+        async function initializeHelpCenter() {
+            try {
+                showLoading();
+                
+                // Update user info
+                updateUserInfo();
+                
+                // Load help center data
+                await Promise.all([
+                    loadAnnouncements(),
+                    loadFAQArticles()
+                ]);
+                
+                hideLoading();
+            } catch (error) {
+                console.error('Help center initialization error:', error);
+                safeShowToast('Failed to load help center data. Please refresh the page.', 'error');
+                hideLoading();
+            }
+        }
+        
+        // Update user info in UI
+        function updateUserInfo() {
+            const displayName = currentUser.displayName || 'User';
+            const email = currentUser.email || '';
+            
+            // Get initials
+            const names = displayName.split(' ');
+            const initials = names.map(name => name.charAt(0)).join('').toUpperCase().substring(0, 2);
+            
+            userInitials.textContent = initials;
+            userName.textContent = displayName;
+            userMenuName.textContent = displayName;
+            userMenuEmail.textContent = email;
+        }
+        
+        // Load announcements
+        async function loadAnnouncements() {
+            try {
+                const token = await currentUser.getIdToken();
+                const response = await fetch('/api/help/announcements', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to load announcements');
+                }
+                
+                const announcements = await response.json();
+                displayAnnouncements(announcements);
+            } catch (error) {
+                console.error('Error loading announcements:', error);
+                // Don't show error to user, just continue
+            }
+        }
+        
+        // Display announcements
+        function displayAnnouncements(announcements) {
+            const container = document.getElementById('announcementsContainer');
+            
+            if (announcements && announcements.length > 0) {
+                const announcementsHTML = announcements.map(announcement => `
+                    <div class="announcement-banner">
+                        <h4 class="font-semibold text-white text-lg">${announcement.title}</h4>
+                        <p class="text-blue-100 mt-2">${announcement.content}</p>
+                        <p class="text-xs text-blue-200 mt-3">${new Date(announcement.created_at).toLocaleDateString()}</p>
+                    </div>
+                `).join('');
+                
+                container.innerHTML = announcementsHTML;
+            } else {
+                container.innerHTML = '';
+            }
+        }
+        
+        // Load FAQ articles
+        async function loadFAQArticles() {
+            try {
+                const token = await currentUser.getIdToken();
+                const response = await fetch('/api/help/faq', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to load FAQ articles');
+                }
+                
+                faqArticles = await response.json();
+                
+                // Extract unique categories
+                categories = [...new Set(faqArticles.map(article => article.category))];
+                
+                // Display categories and articles
+                displayCategories();
+                displayFAQArticles(faqArticles);
+            } catch (error) {
+                console.error('Error loading FAQ articles:', error);
+                safeShowToast('Failed to load FAQ articles. Please refresh the page.', 'error');
+            }
+        }
+        
+        // Display categories
+        function displayCategories() {
+            const categoriesList = document.getElementById('categoriesList');
+            
+            if (categories && categories.length > 0) {
+                const categoriesHTML = categories.map(category => `
+                    <li>
+                        <button class="category-btn w-full text-left" data-category="${category}">
+                            ${category}
+                        </button>
+                    </li>
+                `).join('');
+                
+                categoriesList.innerHTML = categoriesHTML;
+                
+                // Add event listeners to category buttons
+                document.querySelectorAll('[data-category]').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const category = this.dataset.category;
+                        const filteredArticles = faqArticles.filter(article => article.category === category);
+                        displayFAQArticles(filteredArticles);
+                    });
+                });
+            } else {
+                categoriesList.innerHTML = '<li class="px-3 py-2 text-sm text-gray-500">No categories found</li>';
+            }
+        }
+        
+        // Display FAQ articles
+        function displayFAQArticles(articles) {
+            const faqContent = document.getElementById('faqContent');
+            
+            if (articles && articles.length > 0) {
+                const articlesHTML = articles.map(article => `
+                    <div class="faq-item">
+                        <div class="faq-question" data-article-id="${article.id}">
+                            ${article.title}
+                            <svg class="h-5 w-5 text-gray-400 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                        <div class="faq-answer hidden">
+                            ${article.content}
+                            <div class="mt-6 flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <span class="text-sm text-gray-500 font-medium">Was this helpful?</span>
+                                    <button class="modern-btn-success px-4 py-2 text-sm" data-article-id="${article.id}" data-rating="true">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
+                                        </svg>
+                                        Yes
+                                    </button>
+                                    <button class="modern-btn-secondary px-4 py-2 text-sm" data-article-id="${article.id}" data-rating="false">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018c.163 0 .326.02.485.06L17 4m-7 10v2a2 2 0 002 2h.095c.5 0 .905-.405.905-.905 0-.714.211-1.412.608-2.006L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5"></path>
+                                        </svg>
+                                        No
+                                    </button>
+                                </div>
+                                <span class="text-xs text-gray-400">${new Date(article.created_at).toLocaleDateString()}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                faqContent.innerHTML = articlesHTML;
+                
+                // Add event listeners to FAQ questions
+                document.querySelectorAll('.faq-question').forEach(question => {
+                    question.addEventListener('click', function() {
+                        const answer = this.nextElementSibling;
+                        const icon = this.querySelector('svg');
+                        
+                        answer.classList.toggle('hidden');
+                        icon.classList.toggle('rotate-180');
+                    });
+                });
+                
+                // Add event listeners to rating buttons
+                document.querySelectorAll('[data-article-id][data-rating]').forEach(button => {
+                    button.addEventListener('click', async function() {
+                        const articleId = this.dataset.articleId;
+                        const rating = this.dataset.rating === 'true';
+                        
+                        try {
+                            const token = await currentUser.getIdToken();
+                            const response = await fetch('/api/help/rate-article', {
+                                method: 'POST',
+                                headers: {
+                                    'Authorization': `Bearer ${token}`,
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ article_id: articleId, rating: rating })
+                            });
+                            
+                            if (!response.ok) {
+                                const errorData = await response.json();
+                                throw new Error(errorData.error || 'Failed to submit rating');
+                            }
+                            
+                            // Show success message
+                            safeShowToast('Thank you for your feedback!', 'success');
+                        } catch (error) {
+                            console.error('Error rating article:', error);
+                            safeShowToast(error.message || 'Failed to submit rating. Please try again.', 'error');
+                        }
+                    });
+                });
+            } else {
+                faqContent.innerHTML = '<div class="text-center py-12"><p class="text-gray-500 text-lg">No FAQ articles found</p></div>';
+            }
+        }
+        
+        // Search FAQ articles
+        searchInput.addEventListener('input', function() {
+            const query = this.value.trim();
+            
+            if (query.length > 0) {
+                // In a real implementation, we would call the search API
+                // For now, we'll filter the existing articles
+                const filteredArticles = faqArticles.filter(article => 
+                    article.title.toLowerCase().includes(query.toLowerCase()) ||
+                    article.content.toLowerCase().includes(query.toLowerCase())
+                );
+                
+                displayFAQArticles(filteredArticles);
+            } else {
+                // Display all articles if search is cleared
+                displayFAQArticles(faqArticles);
+            }
+        });
+        
+        // Tab switching functionality
+        function switchTab(activeTab, activeContent) {
+            // Remove active class from all tabs
+            [faqTab, supportTab, feedbackTab].forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Hide all content
+            [faqTabContent, supportTabContent, feedbackTabContent].forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Activate selected tab and content
+            activeTab.classList.add('active');
+            activeContent.classList.remove('hidden');
+        }
+        
+        faqTab.addEventListener('click', () => switchTab(faqTab, faqTabContent));
+        supportTab.addEventListener('click', () => switchTab(supportTab, supportTabContent));
+        feedbackTab.addEventListener('click', () => switchTab(feedbackTab, feedbackTabContent));
+        
+        // Support ticket form submission
+        supportTicketForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            try {
+                const data = {
+                    subject: document.getElementById('ticketSubject').value,
+                    category: document.getElementById('ticketCategory').value,
+                    message: document.getElementById('ticketMessage').value
+                };
+                
+                // Validate required fields
+                if (!data.subject || !data.category || !data.message) {
+                    safeShowToast('Please fill in all required fields.', 'error');
+                    return;
+                }
+                
+                showLoading();
+                
+                const token = await currentUser.getIdToken();
+                const response = await fetch('/api/help/ticket', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to submit support ticket');
+                }
+                
+                hideLoading();
+                safeShowToast('Support ticket submitted successfully! We\'ll get back to you soon.', 'success');
+                
+                // Reset form
+                supportTicketForm.reset();
+            } catch (error) {
+                console.error('Error submitting support ticket:', error);
+                hideLoading();
+                safeShowToast(error.message || 'Failed to submit support ticket. Please try again.', 'error');
+            }
+        });
+        
+        // Help feedback rating system
+        const helpRatingButtons = document.querySelectorAll('#helpFeedbackForm [data-rating]');
+        const helpRatingValue = document.getElementById('helpRatingValue');
+        const helpFeedbackRatingValue = document.getElementById('helpFeedbackRatingValue');
+        
+        helpRatingButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const rating = parseInt(this.dataset.rating);
+                
+                // Update button styles
+                helpRatingButtons.forEach((btn, index) => {
+                    if (index < rating) {
+                        btn.classList.remove('text-gray-300');
+                        btn.classList.add('text-yellow-400');
+                    } else {
+                        btn.classList.remove('text-yellow-400');
+                        btn.classList.add('text-gray-300');
+                    }
+                });
+                
+                // Update rating value
+                helpRatingValue.textContent = `${rating} star${rating !== 1 ? 's' : ''}`;
+                helpFeedbackRatingValue.value = rating;
+            });
+        });
+        
+        // Help feedback form submission
+        helpFeedbackForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            try {
+                const data = {
+                    category: document.getElementById('helpFeedbackCategory').value,
+                    rating: parseInt(helpFeedbackRatingValue.value) || null,
+                    message: document.getElementById('helpFeedbackMessage').value
+                };
+                
+                // Validate required fields
+                if (!data.category) {
+                    safeShowToast('Please select a feedback category.', 'error');
+                    return;
+                }
+                
+                if (!data.message) {
+                    safeShowToast('Please provide a feedback message.', 'error');
+                    return;
+                }
+                
+                showLoading();
+                
+                const token = await currentUser.getIdToken();
+                const response = await fetch('/api/help/feedback', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to submit feedback');
+                }
+                
+                hideLoading();
+                safeShowToast('Thank you! Your feedback has been submitted successfully.', 'success');
+                
+                // Reset form
+                helpFeedbackForm.reset();
+                
+                // Reset star rating
+                helpRatingButtons.forEach(btn => {
+                    btn.classList.remove('text-yellow-400');
+                    btn.classList.add('text-gray-300');
+                });
+                helpRatingValue.textContent = '';
+                helpFeedbackRatingValue.value = '';
+            } catch (error) {
+                console.error('Error submitting feedback:', error);
+                hideLoading();
+                safeShowToast(error.message || 'Failed to submit feedback. Please try again.', 'error');
+            }
+        });
+        
+        // User menu functionality
+        userMenuButton.addEventListener('click', function() {
+            userMenu.classList.toggle('hidden');
+        });
+        
+        // Close user menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!userMenuButton.contains(event.target) && !userMenu.contains(event.target)) {
+                userMenu.classList.add('hidden');
+            }
+        });
+        
+        // Mobile menu functionality
+        mobileMenuButton.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Logout functionality
+        logoutButton.addEventListener('click', async function() {
+            try {
+                await signOut(auth);
+                safeShowToast('Logged out successfully', 'success');
+                window.location.href = '/login';
+            } catch (error) {
+                console.error('Logout error:', error);
+                safeShowToast('Failed to logout. Please try again.', 'error');
+            }
+        });
+        
+        // Utility functions
+        function showLoading() {
+            loadingOverlay.classList.remove('hidden');
+        }
+        
+        function hideLoading() {
+            loadingOverlay.classList.add('hidden');
+        }
+        
+        // Helper function to safely show toast messages
+        function safeShowToast(message, type) {
+            try {
+                // Check if the toast notification system is loaded
+                if (typeof window.toast !== 'undefined' && window.toast) {
+                    // Use the toast notification system
+                    switch(type) {
+                        case 'success':
+                            window.toast.success(message);
+                            break;
+                        case 'error':
+                            window.toast.error(message);
+                            break;
+                        case 'warning':
+                            window.toast.warning(message);
+                            break;
+                        case 'info':
+                        default:
+                            window.toast.info(message);
+                            break;
+                    }
+                } else if (typeof showSuccess === 'function') {
+                    // Fallback to global convenience functions
+                    switch(type) {
+                        case 'success':
+                            showSuccess(message);
+                            break;
+                        case 'error':
+                            showError(message);
+                            break;
+                        case 'warning':
+                            showWarning(message);
+                            break;
+                        case 'info':
+                        default:
+                            showInfo(message);
+                            break;
+                    }
+                } else {
+                    // Final fallback: console and alert
+                    console.log(`Toast (${type}): ${message}`);
+                    if (type === 'error') {
+                        alert('Error: ' + message);
+                    } else if (type === 'success') {
+                        // Create a simple visual success message
+                        const successDiv = document.createElement('div');
+                        successDiv.style.cssText = `
+                            position: fixed;
+                            top: 20px;
+                            right: 20px;
+                            background: #10b981;
+                            color: white;
+                            padding: 12px 20px;
+                            border-radius: 8px;
+                            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                            z-index: 10000;
+                            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                            font-size: 14px;
+                            max-width: 300px;
+                        `;
+                        successDiv.textContent = message;
+                        document.body.appendChild(successDiv);
+                        
+                        // Remove after 5 seconds
+                        setTimeout(() => {
+                            if (successDiv.parentNode) {
+                                successDiv.parentNode.removeChild(successDiv);
+                            }
+                        }, 5000);
+                    }
+                }
+            } catch (error) {
+                console.error('Error showing toast:', error);
+                console.log(`Fallback message (${type}): ${message}`);
+            }
+        }
+        
+        // Initialize floating help icon animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const helpIcon = document.querySelector('.help-icon');
+            if (helpIcon) {
+                helpIcon.style.animation = 'float 3s ease-in-out infinite';
+            }
+        });
+    </script>
+</body>
+</html>

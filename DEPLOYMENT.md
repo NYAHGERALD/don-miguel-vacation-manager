@@ -1,496 +1,301 @@
 # Don Miguel Vacation Manager - Deployment Guide
 
-This guide provides step-by-step instructions for deploying the Don Miguel Vacation Manager application to production.
+## Overview
+This guide provides step-by-step instructions for deploying the Don Miguel Vacation Manager application, which includes employee vacation management, SMS notifications, and administrative features.
 
-## Prerequisites
+## System Requirements
 
-- Node.js 18+ and npm
-- Python 3.9+ and pip
-- PostgreSQL 12+
-- Firebase project with Authentication enabled
-- Domain name (optional but recommended)
+### Production Environment
+- **Python**: 3.8 or higher
+- **PostgreSQL**: 12 or higher
+- **Node.js**: 14 or higher (for CSS building)
+- **Operating System**: Linux (Ubuntu 20.04+ recommended), macOS, or Windows Server
 
-## Environment Setup
+### External Services
+- **Firebase**: For user authentication
+- **Twilio**: For SMS notifications
+- **PostgreSQL Database**: Local or cloud-hosted
 
-### 1. Clone and Setup Repository
+## Quick Start
 
+### 1. Clone and Setup
 ```bash
-git clone https://github.com/your-username/don-miguel-vacation-manager.git
+git clone <your-repository-url>
 cd don-miguel-vacation-manager
-```
 
-### 2. Install Dependencies
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-```bash
-# Install Node.js dependencies
-npm install
-
-# Install Python dependencies
+# Install dependencies
 pip install -r requirements.txt
+npm install
 ```
 
-### 3. Environment Configuration
-
+### 2. Environment Configuration
 ```bash
 # Copy environment template
 cp .env.example .env
 
-# Edit .env with your actual values
+# Edit .env with your configuration
 nano .env
 ```
 
 Required environment variables:
-- `SECRET_KEY`: Strong secret key for Flask sessions
-- `DATABASE_URL`: PostgreSQL connection string
-- `FIREBASE_*`: Firebase service account credentials
-- `MAIL_*`: Email configuration for notifications
+```env
+SECRET_KEY=your-secret-key-here
+DATABASE_URL=postgresql://username:password@localhost:5432/vacation_manager
+TWILIO_ACCOUNT_SID=your-twilio-account-sid
+TWILIO_AUTH_TOKEN=your-twilio-auth-token
+TWILIO_PHONE_NUMBER=+1234567890
+```
 
-## Database Setup
-
-### 1. Create PostgreSQL Database
-
+### 3. Database Setup
 ```bash
-# Connect to PostgreSQL
-psql -U postgres
+# Create database
+createdb vacation_manager
 
-# Create database and user
+# Run schema
+psql -U postgres -d vacation_manager -f database/schema.sql
+psql -U postgres -d vacation_manager -f database/grant_permissions.sql
+psql -U postgres -d vacation_manager -f database/create_notification_preferences.sql
+
+# Set up admin accounts
+python setup_admin_table.py
+```
+
+### 4. Firebase Configuration
+1. Create Firebase project at https://console.firebase.google.com
+2. Enable Authentication with Email/Password provider
+3. Download service account key as `firebase-service-account.json`
+4. Place file in project root directory
+
+### 5. Build and Run
+```bash
+# Build CSS assets
+npm run build-css
+
+# Run application
+python backend/app.py
+```
+
+## Detailed Configuration
+
+### Database Configuration
+
+#### PostgreSQL Setup
+```sql
+-- Create database and user
 CREATE DATABASE vacation_manager;
 CREATE USER vacation_user WITH PASSWORD 'secure_password';
 GRANT ALL PRIVILEGES ON DATABASE vacation_manager TO vacation_user;
-\q
+
+-- Connect to database and grant schema permissions
+\c vacation_manager
+GRANT ALL ON SCHEMA public TO vacation_user;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO vacation_user;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO vacation_user;
 ```
 
-### 2. Run Database Schema
+#### Database Schema
+The application uses the following main tables:
+- `employees` - Employee information and authentication
+- `vacation_requests` - Vacation request records
+- `notification_preferences` - SMS notification settings
+- `notification_history` - SMS delivery tracking
 
-```bash
-psql -d vacation_manager -U vacation_user -f database/schema.sql
-```
+### Firebase Authentication Setup
 
-### 3. Verify Database Setup
+1. **Create Firebase Project**
+   - Go to https://console.firebase.google.com
+   - Click "Create a project"
+   - Follow setup wizard
 
-```bash
-psql -d vacation_manager -U vacation_user -c "\dt"
-```
+2. **Enable Authentication**
+   - Navigate to Authentication > Sign-in method
+   - Enable "Email/Password" provider
+   - Configure authorized domains
 
-## Firebase Configuration
+3. **Generate Service Account**
+   - Go to Project Settings > Service accounts
+   - Click "Generate new private key"
+   - Save as `firebase-service-account.json` in project root
 
-### 1. Create Firebase Project
+### Twilio SMS Configuration
 
-1. Go to [Firebase Console](https://console.firebase.google.com)
-2. Create a new project
-3. Enable Authentication with Email/Password and Google providers
-4. Generate service account key
+1. **Create Twilio Account**
+   - Sign up at https://www.twilio.com
+   - Verify your account
 
-### 2. Update Firebase Configuration
+2. **Get Credentials**
+   - Find Account SID and Auth Token in Console Dashboard
+   - Purchase a phone number for sending SMS
 
-1. Download service account JSON file
-2. Update `firebase-config.js` with your project configuration
-3. Set Firebase environment variables in `.env`
-
-### 3. Configure Authentication
-
-1. Set up authorized domains in Firebase Console
-2. Configure OAuth redirect URIs
-3. Set up email templates (optional)
-
-## Build and Compile Assets
-
-### 1. Build CSS
-
-```bash
-# Development build
-npm run build-css
-
-# Production build (minified)
-npm run build-css-prod
-```
-
-### 2. Optimize Images and Assets
-
-```bash
-# Create optimized favicon
-# Add any image optimization steps here
-```
-
-## Local Testing
-
-### 1. Start Development Server
-
-```bash
-# Start Flask development server
-python backend/app.py
-
-# Or use npm script
-npm run dev
-```
-
-### 2. Test Application
-
-1. Open browser to `http://localhost:5000`
-2. Test registration and login
-3. Test all major features
-4. Verify database connections
-5. Test email notifications (if configured)
-
-## Production Deployment Options
-
-### Option 1: Railway Deployment
-
-#### Backend Deployment
-
-1. **Create Railway Account**
-   - Sign up at [railway.app](https://railway.app)
-   - Connect your GitHub repository
-
-2. **Deploy Backend**
-   ```bash
-   # Install Railway CLI
-   npm install -g @railway/cli
-   
-   # Login and deploy
-   railway login
-   railway init
-   railway up
+3. **Configure Environment**
+   ```env
+   TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+   TWILIO_AUTH_TOKEN=your_auth_token_here
+   TWILIO_PHONE_NUMBER=+1234567890
    ```
 
-3. **Configure Environment Variables**
-   - Add all environment variables from `.env`
-   - Set `PORT` to Railway's provided port
-   - Update `DATABASE_URL` to Railway PostgreSQL
+## Production Deployment
 
-4. **Setup Database**
-   ```bash
-   # Add PostgreSQL service
-   railway add postgresql
-   
-   # Run migrations
-   railway run python -c "import psycopg2; # run schema"
-   ```
-
-#### Frontend Deployment (Vercel)
-
-1. **Deploy to Vercel**
-   ```bash
-   # Install Vercel CLI
-   npm install -g vercel
-   
-   # Deploy
-   vercel --prod
-   ```
-
-2. **Configure Build Settings**
-   - Build Command: `npm run build-css-prod`
-   - Output Directory: `static`
-   - Install Command: `npm install`
-
-### Option 2: DigitalOcean Droplet
-
-#### 1. Create and Configure Droplet
-
+### Using Gunicorn (Recommended)
 ```bash
-# Create Ubuntu 22.04 droplet
-# SSH into droplet
-ssh root@your-droplet-ip
+# Install Gunicorn
+pip install gunicorn
 
-# Update system
-apt update && apt upgrade -y
-
-# Install dependencies
-apt install -y python3 python3-pip nodejs npm postgresql postgresql-contrib nginx certbot python3-certbot-nginx
+# Run with Gunicorn
+gunicorn --bind 0.0.0.0:5000 --workers 4 backend.app:app
 ```
 
-#### 2. Setup Application
+### Using Docker
+```dockerfile
+FROM python:3.9-slim
 
-```bash
-# Clone repository
-git clone https://github.com/your-username/don-miguel-vacation-manager.git
-cd don-miguel-vacation-manager
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
-# Install dependencies
-pip3 install -r requirements.txt
-npm install
+COPY . .
+RUN npm install && npm run build-css
 
-# Build assets
-npm run build-css-prod
-
-# Setup systemd service
-sudo cp deployment/vacation-manager.service /etc/systemd/system/
-sudo systemctl enable vacation-manager
-sudo systemctl start vacation-manager
+EXPOSE 5000
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "backend.app:app"]
 ```
 
-#### 3. Configure Nginx
+### Nginx Configuration
+```nginx
+server {
+    listen 80;
+    server_name your-domain.com;
 
-```bash
-# Copy nginx configuration
-sudo cp deployment/nginx.conf /etc/nginx/sites-available/vacation-manager
-sudo ln -s /etc/nginx/sites-available/vacation-manager /etc/nginx/sites-enabled/
-sudo rm /etc/nginx/sites-enabled/default
+    location / {
+        proxy_pass http://127.0.0.1:5000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
 
-# Test and reload nginx
-sudo nginx -t
-sudo systemctl reload nginx
+    location /static {
+        alias /path/to/your/app/static;
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+}
 ```
 
-#### 4. Setup SSL Certificate
+## Features Overview
 
-```bash
-# Get SSL certificate
-sudo certbot --nginx -d vacationmanager.donmiguelfoods.com
+### Core Features
+- **Employee Management**: Registration, authentication, profile management
+- **Vacation Requests**: Create, submit, approve/deny vacation requests
+- **Dashboard**: Overview of vacation statistics and pending requests
+- **Admin Panel**: User management and system administration
 
-# Test auto-renewal
-sudo certbot renew --dry-run
-```
+### SMS Notification System
+- **Automated Reminders**: Configurable notifications for upcoming vacations
+- **Supervisor Preferences**: Individual notification settings per supervisor
+- **Notification History**: Complete tracking of sent messages
+- **Twilio Integration**: Reliable SMS delivery with status tracking
 
-### Option 3: Heroku Deployment
-
-#### 1. Prepare for Heroku
-
-```bash
-# Install Heroku CLI
-# Create Procfile
-echo "web: gunicorn backend.app:app" > Procfile
-
-# Create runtime.txt
-echo "python-3.9.16" > runtime.txt
-```
-
-#### 2. Deploy to Heroku
-
-```bash
-# Login and create app
-heroku login
-heroku create don-miguel-vacation-manager
-
-# Add PostgreSQL addon
-heroku addons:create heroku-postgresql:hobby-dev
-
-# Set environment variables
-heroku config:set SECRET_KEY=your-secret-key
-heroku config:set FLASK_ENV=production
-# ... set all other environment variables
-
-# Deploy
-git push heroku main
-
-# Run database migrations
-heroku run python -c "exec(open('database/schema.sql').read())"
-```
-
-## Post-Deployment Configuration
-
-### 1. Domain Configuration
-
-```bash
-# Configure custom domain (if using)
-# Update DNS records to point to your deployment
-# Update Firebase authorized domains
-# Update CORS settings if needed
-```
-
-### 2. SSL/TLS Setup
-
-```bash
-# Ensure HTTPS is enforced
-# Configure security headers
-# Test SSL configuration
-```
-
-### 3. Monitoring Setup
-
-```bash
-# Setup application monitoring
-# Configure error tracking (Sentry, etc.)
-# Setup uptime monitoring
-# Configure log aggregation
-```
-
-### 4. Backup Configuration
-
-```bash
-# Setup automated database backups
-# Configure file backup if needed
-# Test backup restoration process
-```
-
-## Security Checklist
-
-- [ ] All environment variables are set securely
-- [ ] Database connections are encrypted
-- [ ] HTTPS is enforced
-- [ ] Firebase security rules are configured
-- [ ] Rate limiting is enabled
-- [ ] Input validation is implemented
-- [ ] CORS is properly configured
-- [ ] Security headers are set
-- [ ] Regular security updates are planned
-
-## Performance Optimization
-
-### 1. Database Optimization
-
-```sql
--- Add database indexes for better performance
-CREATE INDEX CONCURRENTLY idx_vacation_requests_status_date 
-ON vacation_requests(status, start_date);
-
-CREATE INDEX CONCURRENTLY idx_employees_supervisor_department 
-ON employees(supervisor_id, department);
-```
-
-### 2. Caching Setup
-
-```python
-# Add Redis caching for frequently accessed data
-# Configure Flask-Caching
-# Implement query result caching
-```
-
-### 3. CDN Configuration
-
-```bash
-# Setup CDN for static assets
-# Configure asset versioning
-# Implement asset compression
-```
+### Security Features
+- **Firebase Authentication**: Secure user authentication and session management
+- **Role-Based Access**: Different permissions for employees, supervisors, and admins
+- **Data Validation**: Input sanitization and validation throughout the application
 
 ## Monitoring and Maintenance
 
-### 1. Application Monitoring
-
-- Setup health check endpoints
-- Monitor response times
-- Track error rates
-- Monitor database performance
-
-### 2. Log Management
-
+### Application Logs
 ```bash
-# Configure structured logging
-# Setup log rotation
-# Implement log analysis
+# View application logs
+tail -f logs/app.log
+
+# Monitor error logs
+tail -f logs/error.log
 ```
 
-### 3. Regular Maintenance
+### Database Maintenance
+```sql
+-- Check notification history size
+SELECT COUNT(*) FROM notification_history;
 
-- Database maintenance and optimization
-- Security updates
-- Dependency updates
-- Performance monitoring
-- Backup verification
+-- Clean old notification history (older than 90 days)
+DELETE FROM notification_history 
+WHERE created_at < NOW() - INTERVAL '90 days';
+
+-- Vacuum database
+VACUUM ANALYZE;
+```
+
+### SMS Monitoring
+- Monitor Twilio console for delivery status
+- Check notification_history table for failed messages
+- Review SMS usage and billing
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **Database Connection Issues**
-   ```bash
-   # Check database connectivity
-   psql $DATABASE_URL -c "SELECT 1;"
-   
-   # Verify environment variables
-   echo $DATABASE_URL
+1. **Database Connection Errors**
    ```
+   Error: could not connect to server
+   ```
+   - Check PostgreSQL is running
+   - Verify DATABASE_URL format
+   - Check firewall settings
 
 2. **Firebase Authentication Issues**
-   ```bash
-   # Verify Firebase configuration
-   # Check authorized domains
-   # Validate service account credentials
+   ```
+   Error: Firebase Admin SDK not initialized
+   ```
+   - Verify `firebase-service-account.json` exists
+   - Check file permissions
+   - Validate Firebase project configuration
+
+3. **SMS Not Sending**
+   ```
+   Error: Unable to create record
+   ```
+   - Verify Twilio credentials
+   - Check account balance
+   - Validate phone number format
+
+4. **Static Files Not Loading**
+   - Run `npm run build-css`
+   - Check file permissions
+   - Verify static file paths in templates
+
+### Performance Optimization
+
+1. **Database Indexing**
+   ```sql
+   CREATE INDEX idx_vacation_requests_employee_id ON vacation_requests(employee_id);
+   CREATE INDEX idx_notification_history_created_at ON notification_history(created_at);
    ```
 
-3. **Static Asset Issues**
-   ```bash
-   # Rebuild CSS
-   npm run build-css-prod
-   
-   # Check file permissions
-   ls -la static/css/
-   ```
+2. **Caching**
+   - Implement Redis for session storage
+   - Cache frequently accessed data
+   - Use CDN for static assets
 
-4. **Email Notification Issues**
-   ```bash
-   # Test SMTP configuration
-   # Check email credentials
-   # Verify firewall settings
-   ```
-
-### Debug Mode
-
-```bash
-# Enable debug mode for troubleshooting
-export FLASK_DEBUG=True
-export LOG_LEVEL=DEBUG
-
-# Run with verbose logging
-python backend/app.py
-```
+3. **Background Jobs**
+   - Monitor APScheduler job execution
+   - Optimize notification checking frequency
+   - Implement job failure handling
 
 ## Support and Documentation
 
-- **Technical Documentation**: See README.md
-- **API Documentation**: Available at `/api/docs` (if implemented)
-- **User Guide**: Create user documentation for supervisors
-- **Support Contact**: support@donmiguelfoods.com
+### Additional Resources
+- [Flask Documentation](https://flask.palletsprojects.com/)
+- [PostgreSQL Documentation](https://www.postgresql.org/docs/)
+- [Firebase Admin SDK](https://firebase.google.com/docs/admin/setup)
+- [Twilio SMS API](https://www.twilio.com/docs/sms)
 
-## Rollback Procedures
+### Getting Help
+1. Check application logs for detailed error messages
+2. Review database logs for connection issues
+3. Monitor Twilio console for SMS delivery status
+4. Consult the troubleshooting section above
 
-### 1. Application Rollback
-
-```bash
-# Rollback to previous version
-git checkout previous-stable-tag
-# Redeploy using your chosen method
-```
-
-### 2. Database Rollback
-
-```bash
-# Restore from backup
-pg_restore -d vacation_manager backup_file.sql
-```
-
-### 3. Configuration Rollback
-
-```bash
-# Restore previous environment variables
-# Rollback nginx/web server configuration
-# Restore previous SSL certificates if needed
-```
-
----
-
-## Quick Deployment Commands
-
-### Railway + Vercel (Recommended)
-
-```bash
-# Backend (Railway)
-railway login
-railway init
-railway add postgresql
-railway up
-
-# Frontend (Vercel)
-vercel --prod
-```
-
-### DigitalOcean Droplet
-
-```bash
-# One-time setup script
-curl -sSL https://raw.githubusercontent.com/your-repo/deployment/setup.sh | bash
-```
-
-### Heroku
-
-```bash
-# Quick Heroku deployment
-heroku create don-miguel-vacation-manager
-heroku addons:create heroku-postgresql:hobby-dev
-git push heroku main
-```
-
----
-
-**Note**: Always test deployments in a staging environment before deploying to production. Keep backups of your database and configuration files.
+For additional support, refer to the project documentation or contact the development team.
