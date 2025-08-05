@@ -12,8 +12,7 @@ from dotenv import load_dotenv
 import logging
 import bcrypt
 import secrets
-import openpyxl
-from openpyxl import load_workbook
+
 import tempfile
 import shutil
 import base64
