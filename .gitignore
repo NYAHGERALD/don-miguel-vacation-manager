@@ -23,8 +23,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Compiled Tailwind CSS
-static/css/output.css
+
 
 # Firebase service accounts & credentials
 firebase-service-account.json

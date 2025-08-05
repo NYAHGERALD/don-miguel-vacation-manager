@@ -29,7 +29,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__, template_folder='../templates', static_folder='../static')
-app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
+app.secret_key = os.environ.get('SECRET_KEY', 'j5gXHnC0c&3Vb7Qf@8KpM9wZyT!rLx2Nd4Pq6Rs8Uv0Wx3Yz5Ab7Cd9Ef1Gh3Jk5Mn7')
 CORS(app)
 
 # Twilio Configuration
@@ -63,7 +63,8 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 # Go up one level to the project root
 project_root = os.path.dirname(current_dir)
 # Path to firebase service account file
-firebase_service_account_path = os.path.join(project_root, 'firebase-service-account.json')
+#firebase_service_account_path = os.path.join(project_root, 'firebase-service-account.json')
+firebase_service_account_path = os.path.join(project_root, '/etc/secrets/firebase-service-account.json')
 
 # Check if the file exists
 if not os.path.exists(firebase_service_account_path):
@@ -76,7 +77,7 @@ firebase_admin.initialize_app(cred)
 
 # Database configuration
 #DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://vacation_user:vacation_pass@localhost:5432/vacation_manager')
-DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://vacation_user:QZgwvm9xM8D9hZcteyfk9RMdcLm5QRzp@dpg-d28iqds9c44c73bcch80-a.oregon-postgres.render.com/vacation_manager_wl7h')
+DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://vacation_user:QZgwvm9xM8D9hZcteyfk9RMdcLm5QRzp@dpg-d28iqds9c44c73bcch80-a/vacation_manager_wl7h')
 
 def get_db_connection():
     """Get database connection"""
